@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Autor — ARCANA</title>
+<link rel="stylesheet" href="css/arcana.css">
+<style>
+.dash-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh;padding-top:64px;}
+.dash-sidebar{background:var(--bg2);border-right:1px solid var(--border2);padding:2rem 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;}
+.dash-nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.7rem 1.5rem;font-size:0.82rem;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all 0.2s;background:none;border-top:none;border-right:none;border-bottom:none;width:100%;text-align:left;}
+.dash-nav-item:hover,.dash-nav-item.active{color:var(--text);background:rgba(138,100,255,0.06);border-left-color:var(--purple);}
+.dash-nav-item .icon{font-size:1rem;}
+.dash-nav-section{padding:0.5rem 1.5rem;font-size:0.6rem;letter-spacing:0.3em;color:var(--text3);text-transform:uppercase;margin-top:1rem;}
+.dash-main{padding:2.5rem;position:relative;z-index:1;}
+.dash-main-inner{max-width:860px;}
+.dash-title{font-family:var(--display);font-size:1.6rem;font-weight:900;color:var(--text);letter-spacing:0.04em;margin-bottom:0.3rem;}
+.dash-sub{color:var(--text2);font-size:0.88rem;margin-bottom:2rem;}
+
+/* ── STATS CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2.5rem;}
+.stat-card{padding:1.3rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);}
+.stat-card-n{font-family:var(--display);font-size:1.8rem;font-weight:900;color:var(--text);display:block;margin-bottom:0.2rem;}
+.stat-card-l{font-size:0.68rem;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;}
+.stat-card-trend{font-size:0.72rem;color:var(--teal);margin-top:0.3rem;}
+
+/* ── FORM ── */
+.publish-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-section-title{font-family:var(--display);font-size:0.9rem;font-weight:600;color:var(--text);letter-spacing:0.06em;margin:1.5rem 0 1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border2);}
+.form-textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.8rem;color:var(--text);font-family:var(--sans);font-size:0.88rem;resize:vertical;min-height:120px;transition:border-color 0.2s;}
+.form-textarea:focus{outline:none;border-color:var(--purple);}
+.form-textarea::placeholder{color:var(--text3);}
+.form-select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.65rem 0.9rem;color:var(--text2);font-family:var(--sans);font-size:0.88rem;}
+.form-select:focus{outline:none;border-color:var(--purple);}
+.genre-checkboxes{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;}
+.genre-check{display:none;}
+.genre-check-label{padding:0.25rem 0.7rem;border-radius:50px;font-size:0.68rem;font-weight:500;letter-spacing:0.08em;cursor:pointer;border:1px solid var(--border);color:var(--text3);transition:all 0.2s;}
+.genre-check:checked+.genre-check-label{background:rgba(138,100,255,0.15);border-color:var(--purple);color:var(--purple3);}
+.form-actions{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;}
+
+/* ── MY NOVELS TABLE ── */
+.my-novels-table{width:100%;border-collapse:collapse;}
+.mnt thead tr{border-bottom:1px solid var(--border2);}
+.mnt th{font-size:0.65rem;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;padding:0.6rem 0.8rem;text-align:left;font-weight:600;}
+.mnt td{padding:0.8rem;border-bottom:1px solid var(--border2);font-size:0.82rem;color:var(--text2);}
+.mnt tr:last-child td{border-bottom:none;}
+.mnt tr:hover td{background:rgba(138,100,255,0.03);}
+.mnt .novel-name{color:var(--text);font-weight:500;font-family:var(--display);font-size:0.8rem;letter-spacing:0.03em;}
+.tbl-badge{padding:0.15rem 0.5rem;border-radius:50px;font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}
+.tbl-edit{padding:0.3rem 0.7rem;font-size:0.68rem;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
+.tbl-edit:hover{border-color:var(--purple3);color:var(--purple3);}
+
+@media(max-width:768px){
+  .dash-layout{grid-template-columns:1fr;}
+  .dash-sidebar{position:static;height:auto;display:flex;flex-direction:row;overflow-x:auto;padding:0;}
+  .dash-nav-section{display:none;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<nav id="navbar"></nav>
+
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="dash-nav-section">Principal</div>
+    <button class="dash-nav-item active" onclick="showPanel('overview')"><span class="icon">📊</span>Resumen</button>
+    <button class="dash-nav-item" onclick="showPanel('novels')"><span class="icon">📚</span>Mis novelas</button>
+    <button class="dash-nav-item" onclick="showPanel('publish')"><span class="icon">✍️</span>Publicar novela</button>
+    <button class="dash-nav-item" onclick="showPanel('chapters')"><span class="icon">📝</span>Añadir capítulo</button>
+    <div class="dash-nav-section">Cuenta</div>
+    <button class="dash-nav-item" onclick="showPanel('profile')"><span class="icon">👤</span>Mi perfil</button>
+    <button class="dash-nav-item" onclick="showPanel('analytics')"><span class="icon">📈</span>Estadísticas</button>
+    <button class="dash-nav-item" onclick="window.location.href='index.html'"><span class="icon">🏠</span>Ir a ARCANA</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main" style="background:var(--bg);">
+    <div class="dash-main-inner" id="dashContent">
+      <!-- Se renderiza con JS -->
+    </div>
+  </main>
+</div>
+
+<div id="auth-modal">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+    </div>
+    <div id="auth-form-login">
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
+      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
+    </div>
+    <div id="auth-form-register" style="display:none">
+      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text"></div>
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
+      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="js/data.js"></script>
+<script>
+initCanvas('bg-canvas');
+renderNavbar('dashboard');
+initModals();
+
+const PANELS = {
+  overview: ()=>`
+    <h1 class="dash-title">Panel de Autor</h1>
+    <p class="dash-sub">Bienvenido a tu espacio de creación en ARCANA.</p>
+    <div class="stats-row">
+      <div class="stat-card"><span class="stat-card-n">1</span><span class="stat-card-l">Novelas</span><div class="stat-card-trend">↑ Activa</div></div>
+      <div class="stat-card"><span class="stat-card-n">16</span><span class="stat-card-l">Capítulos</span><div class="stat-card-trend">↑ Último hace 2 días</div></div>
+      <div class="stat-card"><span class="stat-card-n">2.4K</span><span class="stat-card-l">Lecturas</span><div class="stat-card-trend">↑ +120 esta semana</div></div>
+      <div class="stat-card"><span class="stat-card-n">847</span><span class="stat-card-l">Favoritos</span><div class="stat-card-trend">↑ +34 esta semana</div></div>
+      <div class="stat-card"><span class="stat-card-n">4.9</span><span class="stat-card-l">Valoración</span><div class="stat-card-trend">★★★★★</div></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;">
+      <h3 style="font-family:var(--display);font-size:0.9rem;color:var(--text);letter-spacing:0.06em;margin-bottom:1rem;">Acciones rápidas</h3>
+      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="showPanel('publish')">✍️ Nueva novela</button>
+        <button class="btn-ghost" onclick="showPanel('chapters')">📝 Añadir capítulo</button>
+        <a href="novel.html?id=1" class="btn-ghost" style="display:inline-flex;align-items:center;">👁 Ver mi novela</a>
+      </div>
+    </div>`,
+
+  novels: ()=>`
+    <h1 class="dash-title">Mis Novelas</h1>
+    <p class="dash-sub">Gestiona tus obras publicadas en ARCANA.</p>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+      <button class="btn-primary" onclick="showPanel('publish')">+ Nueva novela</button>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
+      <table class="my-novels-table mnt">
+        <thead><tr>
+          <th>Novela</th><th>Estado</th><th>Capítulos</th><th>Lecturas</th><th>Favoritos</th><th>Valoración</th><th>Acción</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="novel-name">Quartetas del Destino</span></td>
+            <td><span class="tbl-badge status-ongoing">En curso</span></td>
+            <td>16</td><td>2.4K</td><td>847</td>
+            <td>⭐ 4.9</td>
+            <td><button class="tbl-edit" onclick="showPanel('chapters')">Editar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`,
+
+  publish: ()=>`
+    <h1 class="dash-title">Publicar Nueva Novela</h1>
+    <p class="dash-sub">Comparte tu historia con la comunidad de ARCANA.</p>
+    <div class="publish-form">
+      <div class="form-section-title">Información básica</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Título de la novela *</label><input class="form-input" type="text" placeholder="El título de tu obra"></div>
+        <div class="form-group"><label class="form-label">Subtítulo / Volumen</label><input class="form-input" type="text" placeholder="Vol. I — Subtítulo opcional"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea class="form-textarea" placeholder="Describe tu novela en 2-4 párrafos. Este texto aparecerá en la página de la novela y en el catálogo."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input class="form-input" type="text" placeholder="Una línea para el catálogo (máx. 100 caracteres)"></div>
+        <div class="form-group"><label class="form-label">Estado</label>
+          <select class="form-select">
+            <option>En curso</option>
+            <option>Completada</option>
+            <option>Pausada</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-section-title">Géneros y etiquetas</div>
+      <div class="form-group">
+        <label class="form-label">Géneros (selecciona los que apliquen)</label>
+        <div class="genre-checkboxes">
+          ${['Ciencia Ficción','Fantasía','Romance','Thriller','Terror','Acción','Histórico','Isekai','Psicológico','Sobrenatural','Misterio','Aventura'].map(g=>`
+            <input type="checkbox" class="genre-check" id="g_${g}" name="genre">
+            <label class="genre-check-label" for="g_${g}">${g}</label>`).join('')}
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Etiquetas (separadas por coma)</label><input class="form-input" type="text" placeholder="IA, colombia, himalaya, misterio..."></div>
+      <div class="form-section-title">Portada</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Ícono de portada (emoji)</label><input class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
+        <div class="form-group"><label class="form-label">Color de portada</label>
+          <select class="form-select">
+            <option value="cover-1">Púrpura oscuro</option>
+            <option value="cover-2">Azul noche</option>
+            <option value="cover-3">Rojo sangre</option>
+            <option value="cover-4">Verde bosque</option>
+            <option value="cover-5">Dorado antiguo</option>
+            <option value="cover-6">Teal profundo</option>
+            <option value="cover-7">Violeta místico</option>
+            <option value="cover-8">Ámbar crepúsculo</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="submitNovel()">✦ Publicar novela</button>
+        <button class="btn-ghost" onclick="showToast('Borrador guardado')">💾 Guardar borrador</button>
+      </div>
+    </div>`,
+
+  chapters: ()=>`
+    <h1 class="dash-title">Añadir Capítulo</h1>
+    <p class="dash-sub">Escribe y publica un nuevo capítulo para tu novela.</p>
+    <div class="publish-form">
+      <div class="form-section-title">Seleccionar novela</div>
+      <div class="form-group"><label class="form-label">Novela</label>
+        <select class="form-select"><option>Quartetas del Destino</option></select>
+      </div>
+      <div class="form-section-title">Información del capítulo</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Número / Etiqueta</label><input class="form-input" type="text" placeholder="Capítulo XVII · o · Epílogo"></div>
+        <div class="form-group"><label class="form-label">Título del capítulo *</label><input class="form-input" type="text" placeholder="El título del capítulo"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Subtítulo / Ubicación</label><input class="form-input" type="text" placeholder="Bogotá · Tres meses después · etc."></div>
+      <div class="form-section-title">Contenido</div>
+      <div class="form-group"><label class="form-label">Texto del capítulo *</label>
+        <textarea class="form-textarea" id="chapterContent" style="min-height:400px;" placeholder="Escribe aquí el contenido de tu capítulo...
+
+Puedes usar texto plano. El formato se aplicará automáticamente.
+La primera letra de la primera palabra del capítulo tendrá drop cap automáticamente.
+
+Consejos:
+• Usa líneas en blanco para separar párrafos
+• Las cursivas y negritas se pueden agregar con *cursiva* y **negrita**
+• Separa escenas con: · · · ·"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Estado</label>
+          <select class="form-select"><option>Publicar ahora</option><option>Guardar borrador</option><option>Programar publicación</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Nota del autor (opcional)</label><input class="form-input" type="text" placeholder="Un mensaje para tus lectores"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="submitChapter()">📝 Publicar capítulo</button>
+        <button class="btn-ghost" onclick="showToast('Borrador guardado')">💾 Guardar borrador</button>
+        <button class="btn-ghost" onclick="previewChapter()">👁 Vista previa</button>
+      </div>
+    </div>`,
+
+  profile: ()=>`
+    <h1 class="dash-title">Mi Perfil</h1>
+    <p class="dash-sub">Personaliza cómo te ven los lectores de ARCANA.</p>
+    <div class="publish-form">
+      <div class="form-section-title">Información pública</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nombre de autor</label><input class="form-input" type="text" value="Duban L." placeholder="Tu nombre público"></div>
+        <div class="form-group"><label class="form-label">Nombre de usuario</label><input class="form-input" type="text" value="dubanl1997" placeholder="@usuario"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Biografía</label><textarea class="form-textarea" placeholder="Cuéntales a tus lectores sobre ti...">Apasionado por el misterio, la IA y las historias que mezclan ciencia con lo ancestral.</textarea></div>
+      <div class="form-group"><label class="form-label">Ícono de perfil (emoji)</label><input class="form-input" type="text" value="🔮" maxlength="4"></div>
+      <div class="form-section-title">Cuenta</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
+        <div class="form-group"><label class="form-label">Nueva contraseña</label><input class="form-input" type="password" placeholder="Dejar vacío para no cambiar"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="showToast('✦ Perfil actualizado')">Guardar cambios</button>
+      </div>
+    </div>`,
+
+  analytics: ()=>`
+    <h1 class="dash-title">Estadísticas</h1>
+    <p class="dash-sub">Así va el rendimiento de tus novelas en ARCANA.</p>
+    <div class="stats-row">
+      <div class="stat-card"><span class="stat-card-n">2.4K</span><span class="stat-card-l">Lecturas totales</span><div class="stat-card-trend">↑ +120 esta semana</div></div>
+      <div class="stat-card"><span class="stat-card-n">847</span><span class="stat-card-l">Favoritos</span><div class="stat-card-trend">↑ +34 esta semana</div></div>
+      <div class="stat-card"><span class="stat-card-n">4.9</span><span class="stat-card-l">Valoración media</span><div class="stat-card-trend">★★★★★</div></div>
+      <div class="stat-card"><span class="stat-card-n">156</span><span class="stat-card-l">Comentarios</span><div class="stat-card-trend">↑ +12 esta semana</div></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-top:1rem;">
+      <h3 style="font-family:var(--display);font-size:0.88rem;color:var(--text);letter-spacing:0.06em;margin-bottom:1.2rem;">Lecturas por capítulo</h3>
+      ${Array.from({length:16},(_,i)=>{
+        const reads = Math.floor(2400 - i*60 + Math.random()*100);
+        const pct = (reads/2400*100).toFixed(0);
+        return `<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;">
+          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text3);min-width:60px;">Cap. ${i===0?'Pról.':i}</span>
+          <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;">
+            <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--purple2),var(--purple));border-radius:3px;"></div>
+          </div>
+          <span style="font-size:0.68rem;color:var(--text2);min-width:40px;text-align:right;">${reads}</span>
+        </div>`;
+      }).join('')}
+    </div>`
+};
+
+let activePanel = 'overview';
+
+function showPanel(panel){
+  activePanel = panel;
+  document.querySelectorAll('.dash-nav-item').forEach(btn=>{
+    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(panel));
+  });
+  document.getElementById('dashContent').innerHTML = PANELS[panel]?.() || PANELS.overview();
+}
+
+function submitNovel(){
+  const title = document.querySelector('.form-input')?.value?.trim();
+  if(!title){showToast('Escribe el título de tu novela');return;}
+  showToast(`✦ "${title}" publicada en ARCANA`);
+  setTimeout(()=>showPanel('novels'),1500);
+}
+function submitChapter(){
+  const content = document.getElementById('chapterContent')?.value?.trim();
+  if(!content){showToast('Escribe el contenido del capítulo');return;}
+  showToast('✦ Capítulo publicado correctamente');
+}
+function previewChapter(){
+  showToast('Vista previa próximamente');
+}
+
+showPanel('overview');
+</script>
+</body>
+</html>

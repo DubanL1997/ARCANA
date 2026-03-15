@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCANA — Novelas que Trascienden</title>
+<link rel="stylesheet" href="css/arcana.css">
+<style>
+/* ── HERO ── */
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 2rem 4rem;text-align:center;overflow:hidden;}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(138,100,255,0.1) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);pointer-events:none;}
+.hero-content{position:relative;max-width:800px;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.9rem;border:1px solid rgba(138,100,255,0.3);border-radius:50px;font-size:0.68rem;font-weight:500;letter-spacing:0.15em;color:var(--purple3);text-transform:uppercase;margin-bottom:2rem;background:rgba(138,100,255,0.07);opacity:0;animation:aUp 0.6s 0.3s forwards;}
+.hero-title{font-family:var(--display);font-size:clamp(4rem,11vw,7.5rem);font-weight:900;line-height:0.88;letter-spacing:0.05em;margin-bottom:1rem;opacity:0;animation:aUp 0.7s 0.5s forwards;}
+.hero-t1{display:block;background:linear-gradient(135deg,#fff 0%,var(--purple3) 40%,var(--rose) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(138,100,255,0.2));}
+.hero-t2{display:block;font-size:0.28em;font-family:var(--serif);font-style:italic;font-weight:400;color:var(--text2);letter-spacing:0.2em;margin-top:0.6rem;}
+.hero-sub{font-size:clamp(0.95rem,2vw,1.1rem);color:var(--text2);line-height:1.75;max-width:500px;margin:0 auto 2.5rem;font-family:var(--serif);font-style:italic;opacity:0;animation:aUp 0.7s 0.8s forwards;}
+.hero-sub em{color:var(--purple3);font-style:normal;}
+.hero-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:0.8rem;margin-bottom:3.5rem;opacity:0;animation:aUp 0.7s 1s forwards;}
+.hero-stats{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;opacity:0;animation:aFade 0.8s 1.3s forwards;}
+.hero-stat-n{font-family:var(--display);font-size:1.8rem;font-weight:900;color:var(--text);display:block;}
+.hero-stat-l{font-size:0.65rem;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.1rem;}
+
+/* ── FEATURED ── */
+.featured-card{display:grid;grid-template-columns:260px 1fr;gap:2.5rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;position:relative;overflow:hidden;}
+.featured-card::before{content:'';position:absolute;top:0;right:0;width:350px;height:350px;background:radial-gradient(circle,rgba(138,100,255,0.08),transparent 70%);pointer-events:none;}
+.feat-cover{aspect-ratio:2/3;border-radius:var(--r2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.feat-cover-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(138,100,255,0.18),transparent 60%);}
+.feat-icon{font-size:4.5rem;filter:drop-shadow(0 0 20px rgba(138,100,255,0.5));position:relative;z-index:1;}
+.feat-cover-label{font-family:var(--display);font-size:0.7rem;font-weight:900;color:var(--purple3);letter-spacing:0.1em;text-align:center;padding:0 1rem;margin-top:0.8rem;position:relative;z-index:1;}
+.feat-title{font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:var(--text);letter-spacing:0.04em;margin-bottom:0.3rem;}
+.feat-author{font-size:0.8rem;color:var(--text2);margin-bottom:1rem;}
+.feat-author span{color:var(--purple3);font-weight:600;}
+.feat-desc{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--text2);line-height:1.75;margin-bottom:1.5rem;}
+.feat-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.meta-item{display:flex;align-items:center;gap:0.35rem;font-size:0.75rem;color:var(--text3);}
+.meta-item span{color:var(--text2);font-weight:600;}
+.feat-btns{display:flex;gap:0.8rem;flex-wrap:wrap;}
+.btn-read{padding:0.6rem 1.5rem;font-size:0.8rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;letter-spacing:0.05em;box-shadow:0 3px 14px rgba(138,100,255,0.3);transition:all 0.2s;}
+.btn-read:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(138,100,255,0.45);}
+.btn-fav{padding:0.6rem 1rem;font-size:1rem;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
+.btn-fav:hover{border-color:var(--rose);color:var(--rose);}
+.btn-fav.active{color:var(--rose);border-color:var(--rose);}
+
+/* ── SECTION HEADER ROW ── */
+.sh-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+.see-all{font-size:0.75rem;font-weight:600;color:var(--purple3);letter-spacing:0.1em;text-transform:uppercase;background:none;border:none;padding:0.3rem 0;border-bottom:1px solid transparent;transition:border-color 0.2s;}
+.see-all:hover{border-bottom-color:var(--purple3);}
+
+/* ── GENRES GRID ── */
+.genres-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;}
+.genre-card{padding:1.2rem;border-radius:var(--r);background:var(--surface);border:1px solid var(--border2);text-align:center;cursor:pointer;transition:all 0.25s;}
+.genre-card:hover{background:var(--surface2);border-color:rgba(138,100,255,0.25);transform:translateY(-2px);}
+.genre-icon{font-size:1.8rem;margin-bottom:0.5rem;display:block;}
+.genre-name{font-family:var(--display);font-size:0.72rem;font-weight:600;color:var(--text);letter-spacing:0.05em;margin-bottom:0.15rem;}
+.genre-count{font-size:0.6rem;color:var(--text3);}
+
+/* ── CTA ── */
+.cta-banner{background:linear-gradient(135deg,var(--surface) 0%,rgba(138,100,255,0.07) 50%,var(--surface) 100%);border:1px solid rgba(138,100,255,0.2);border-radius:var(--r);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;}
+.cta-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(138,100,255,0.05),transparent 60%);pointer-events:none;}
+.cta-title{font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:var(--text);letter-spacing:0.05em;margin-bottom:0.6rem;}
+.cta-sub{font-family:var(--serif);font-style:italic;color:var(--text2);font-size:1rem;margin-bottom:2rem;}
+
+@media(max-width:768px){
+  .featured-card{grid-template-columns:1fr;}
+  .feat-cover{max-width:180px;margin:0 auto;}
+  .hero-stats{gap:1.5rem;}
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<nav id="navbar"></nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ La plataforma de novelas ligeras en español</div>
+    <h1 class="hero-title">
+      <span class="hero-t1">ARCANA</span>
+      <span class="hero-t2">Novelas que trascienden lo ordinario</span>
+    </h1>
+    <p class="hero-sub">Sumérgete en mundos únicos.<br><em>Ciencia ficción, fantasía, romance, misterio</em> — todo en un solo lugar.</p>
+    <div class="hero-btns">
+      <a href="catalog.html" class="btn-lg btn-lg-primary">📚 Explorar catálogo</a>
+      <button class="btn-lg btn-lg-ghost" onclick="openAuth('register')">✦ Crear cuenta gratis</button>
+    </div>
+    <div class="hero-stats">
+      <div><span class="hero-stat-n" id="statNovels">12</span><span class="hero-stat-l">Novelas</span></div>
+      <div><span class="hero-stat-n">200+</span><span class="hero-stat-l">Capítulos</span></div>
+      <div><span class="hero-stat-n">12</span><span class="hero-stat-l">Géneros</span></div>
+      <div><span class="hero-stat-n">100%</span><span class="hero-stat-l">Gratis</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURED ── -->
+<section class="section" style="background:var(--bg2);padding-top:2rem;">
+  <div class="section-inner">
+    <div class="sh-row">
+      <div><div class="section-label">Destacado</div><h2 class="section-title">Novela del Mes</h2></div>
+      <a href="catalog.html" class="see-all">Ver catálogo →</a>
+    </div>
+    <div class="featured-card" id="featuredCard"></div>
+  </div>
+</section>
+
+<!-- ── TRENDING ── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="sh-row">
+      <div><div class="section-label">En Tendencia</div><h2 class="section-title">Más Leídas Esta Semana</h2></div>
+      <a href="catalog.html" class="see-all">Ver todas →</a>
+    </div>
+    <div class="novels-grid" id="trendingGrid"></div>
+  </div>
+</section>
+
+<!-- ── GENRES ── -->
+<section class="section" id="genres" style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="section-label">Explorar</div>
+    <h2 class="section-title" style="margin-bottom:1.5rem;">Géneros</h2>
+    <div class="genres-grid" id="genresGrid"></div>
+  </div>
+</section>
+
+<!-- ── NEW ── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="sh-row">
+      <div><div class="section-label">Recién llegadas</div><h2 class="section-title">Nuevas Novelas</h2></div>
+      <a href="catalog.html?filter=new" class="see-all">Ver nuevas →</a>
+    </div>
+    <div class="novels-grid" id="newGrid"></div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="section" style="background:var(--bg2);">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <h2 class="cta-title">¿Tienes una historia que contar?</h2>
+      <p class="cta-sub">ARCANA abre sus puertas a nuevos autores. Publica tu novela ligera gratis.</p>
+      <a href="dashboard.html" class="btn-lg btn-lg-primary">✦ Publicar mi novela</a>
+    </div>
+  </div>
+</section>
+
+<footer id="footer"></footer>
+<div id="auth-modal">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <h2 class="auth-title">ARCANA</h2>
+    <p class="auth-sub">Tu portal a historias que trascienden</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+    </div>
+    <div id="auth-form-login">
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="showToast('✦ Bienvenido a ARCANA');closeAuth()">Iniciar sesión</button>
+    </div>
+    <div id="auth-form-register" style="display:none">
+      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text" placeholder="Tu nombre de lector"></div>
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="Mínimo 8 caracteres"></div>
+      <button class="btn-auth" onclick="showToast('✦ Cuenta creada. Bienvenido!');closeAuth()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="js/data.js"></script>
+<script>
+initCanvas('bg-canvas');
+renderNavbar('home');
+renderFooter();
+initModals();
+
+// Featured
+const f=ARCANA_NOVELS[0];
+document.getElementById('featuredCard').innerHTML=`
+  <div class="feat-cover ${f.cover}">
+    <div class="feat-cover-glow"></div>
+    <span class="feat-icon">${f.icon}</span>
+    <div class="feat-cover-label">${f.title.toUpperCase()}</div>
+  </div>
+  <div>
+    <div style="margin-bottom:1rem">${f.genres.map((g,i)=>`<span class="genre-tag ${['purple','rose','teal','gold'][i%4]}">${g}</span>`).join('')}</div>
+    <h3 class="feat-title">${f.title}</h3>
+    <p class="feat-author">por <span>${f.author}</span> · Vol. I — El Umbral</p>
+    <p class="feat-desc">${f.desc}</p>
+    <div class="feat-meta">
+      <div class="meta-item">📖 <span>${f.chapters} capítulos</span></div>
+      <div class="meta-item">⭐ <span>${f.rating}</span></div>
+      <div class="meta-item">👁 <span>${f.views} lectores</span></div>
+      <div class="meta-item">❤️ <span>${f.favorites} favoritos</span></div>
+    </div>
+    <div class="feat-btns">
+      <a href="reader.html?id=1&ch=0" class="btn-read">📖 Leer ahora — Gratis</a>
+      <button class="btn-fav" id="featFav" onclick="toggleFav(this)">♡</button>
+    </div>
+  </div>`;
+
+// Trending
+document.getElementById('trendingGrid').innerHTML=getTopNovels('views',6).map(n=>novelCardHTML(n)).join('');
+
+// Genres
+document.getElementById('genresGrid').innerHTML=ARCANA_GENRES.map(g=>`
+  <div class="genre-card" onclick="window.location.href='catalog.html?genre=${encodeURIComponent(g.name)}'">
+    <span class="genre-icon">${g.icon}</span>
+    <div class="genre-name">${g.name}</div>
+    <div class="genre-count">${g.count} novela${g.count!==1?'s':''}</div>
+  </div>`).join('');
+
+// New
+document.getElementById('newGrid').innerHTML=ARCANA_NOVELS.filter(n=>n.badge==='new').concat(ARCANA_NOVELS.slice(0,4)).slice(0,6).map(n=>novelCardHTML(n)).join('');
+
+// Stats
+document.getElementById('statNovels').textContent=ARCANA_NOVELS.length;
+
+function toggleFav(btn){
+  btn.classList.toggle('active');
+  btn.textContent=btn.classList.contains('active')?'♥':'♡';
+  showToast(btn.classList.contains('active')?'❤️ Añadido a favoritos':'Eliminado de favoritos');
+}
+</script>
+</body>
+</html>

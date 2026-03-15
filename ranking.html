@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranking — ARCANA</title>
+<link rel="stylesheet" href="css/arcana.css">
+<style>
+.rank-hero{position:relative;z-index:1;padding:6rem 2rem 3rem;background:linear-gradient(180deg,var(--bg),var(--bg2));}
+.rank-hero-inner{max-width:1100px;margin:0 auto;}
+.rank-tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:2.5rem;}
+.rank-tab{padding:0.7rem 1.4rem;font-size:0.82rem;font-weight:600;background:none;border:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;letter-spacing:0.05em;}
+.rank-tab.active{color:var(--purple3);border-bottom-color:var(--purple);}
+.rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.rank-section-title{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--text);letter-spacing:0.08em;margin-bottom:1rem;}
+.rank-list{display:flex;flex-direction:column;gap:0.6rem;}
+.rank-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);cursor:pointer;transition:all 0.2s;}
+.rank-item:hover{background:var(--surface2);border-color:rgba(138,100,255,0.2);}
+.rank-num{font-family:var(--display);font-size:1.2rem;font-weight:900;min-width:36px;text-align:center;}
+.rank-cover{width:44px;height:60px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.rank-info{flex:1;min-width:0;}
+.rank-title{font-family:var(--display);font-size:0.82rem;font-weight:600;color:var(--text);letter-spacing:0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-author{font-size:0.65rem;color:var(--text3);margin-top:0.1rem;}
+.rank-genres{display:flex;gap:0.2rem;margin-top:0.3rem;}
+.rank-stat{font-size:0.78rem;font-weight:600;text-align:right;white-space:nowrap;flex-shrink:0;}
+@media(max-width:768px){.rank-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<nav id="navbar"></nav>
+<div class="rank-hero">
+  <div class="rank-hero-inner">
+    <div class="section-label">Clasificación</div>
+    <h1 class="section-title" style="margin-bottom:0.3rem;">🏆 Ranking ARCANA</h1>
+    <p class="section-sub" style="margin-bottom:2rem;">Las novelas más populares de la plataforma</p>
+    <div class="rank-tabs">
+      <button class="rank-tab active" onclick="showRank('views',this)">👁 Más Leídas</button>
+      <button class="rank-tab" onclick="showRank('rating',this)">⭐ Mejor Valoradas</button>
+      <button class="rank-tab" onclick="showRank('favorites',this)">❤️ Más Favoriteadas</button>
+      <button class="rank-tab" onclick="showRank('new',this)">🆕 Más Nuevas</button>
+    </div>
+    <div class="rank-grid">
+      <div><div class="rank-section-title" id="rankTitle1">🔥 Top Leídas</div><div class="rank-list" id="rankList1"></div></div>
+      <div><div class="rank-section-title">✦ Top Completas</div><div class="rank-list" id="rankList2"></div></div>
+    </div>
+  </div>
+</div>
+<footer id="footer"></footer>
+<div id="auth-modal">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+    </div>
+    <div id="auth-form-login">
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
+      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
+    </div>
+    <div id="auth-form-register" style="display:none">
+      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text"></div>
+      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
+      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
+      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="js/data.js"></script>
+<script>
+initCanvas('bg-canvas');
+renderNavbar('ranking');
+renderFooter();
+initModals();
+
+const colors=['#d4a040','#9890c0','#cd7f32','#504870','#504870','#504870'];
+
+function rankItem(n,i){
+  return `<div class="rank-item" onclick="window.location.href='novel.html?id=${n.id}'">
+    <span class="rank-num" style="color:${colors[i]||'var(--text3)'}">#${i+1}</span>
+    <div class="rank-cover ${n.cover}">${n.icon}</div>
+    <div class="rank-info">
+      <div class="rank-title">${n.title}</div>
+      <div class="rank-author">${n.author}</div>
+      <div class="rank-genres">${n.genres.slice(0,2).map(g=>`<span class="genre-mini">${g}</span>`).join('')}</div>
+    </div>
+    <span class="rank-stat" style="color:var(--purple3)">👁 ${n.views}</span>
+  </div>`;
+}
+
+function showRank(by, btn){
+  document.querySelectorAll('.rank-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const sorted=[...ARCANA_NOVELS].sort((a,b)=>by==='views'?b.viewsNum-a.viewsNum:by==='rating'?b.rating-a.rating:by==='favorites'?b.favorites-a.favorites:b.id-a.id);
+  const completed=ARCANA_NOVELS.filter(n=>n.status==='completada');
+  document.getElementById('rankList1').innerHTML=sorted.slice(0,8).map(rankItem).join('');
+  document.getElementById('rankList2').innerHTML=[...completed,...sorted.filter(n=>n.status!=='completada')].slice(0,6).map(rankItem).join('');
+}
+
+showRank('views', document.querySelector('.rank-tab'));
+</script>
+</body>
+</html>
