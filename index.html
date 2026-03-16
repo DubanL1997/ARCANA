@@ -4,228 +4,1279 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARCANA — Novelas que Trascienden</title>
-<link rel="stylesheet" href="css/arcana.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a1a">
+<meta name="description" content="ARCANA — La plataforma de novelas ligeras en español. Lee, escribe y comparte historias que trascienden.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-/* ── HERO ── */
-#hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 2rem 4rem;text-align:center;overflow:hidden;}
-.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(138,100,255,0.1) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%);pointer-events:none;}
-.hero-content{position:relative;max-width:800px;}
-.hero-badge{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.9rem;border:1px solid rgba(138,100,255,0.3);border-radius:50px;font-size:0.68rem;font-weight:500;letter-spacing:0.15em;color:var(--purple3);text-transform:uppercase;margin-bottom:2rem;background:rgba(138,100,255,0.07);opacity:0;animation:aUp 0.6s 0.3s forwards;}
-.hero-title{font-family:var(--display);font-size:clamp(4rem,11vw,7.5rem);font-weight:900;line-height:0.88;letter-spacing:0.05em;margin-bottom:1rem;opacity:0;animation:aUp 0.7s 0.5s forwards;}
-.hero-t1{display:block;background:linear-gradient(135deg,#fff 0%,var(--purple3) 40%,var(--rose) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(138,100,255,0.2));}
-.hero-t2{display:block;font-size:0.28em;font-family:var(--serif);font-style:italic;font-weight:400;color:var(--text2);letter-spacing:0.2em;margin-top:0.6rem;}
-.hero-sub{font-size:clamp(0.95rem,2vw,1.1rem);color:var(--text2);line-height:1.75;max-width:500px;margin:0 auto 2.5rem;font-family:var(--serif);font-style:italic;opacity:0;animation:aUp 0.7s 0.8s forwards;}
-.hero-sub em{color:var(--purple3);font-style:normal;}
-.hero-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:0.8rem;margin-bottom:3.5rem;opacity:0;animation:aUp 0.7s 1s forwards;}
-.hero-stats{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;opacity:0;animation:aFade 0.8s 1.3s forwards;}
-.hero-stat-n{font-family:var(--display);font-size:1.8rem;font-weight:900;color:var(--text);display:block;}
-.hero-stat-l{font-size:0.65rem;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.1rem;}
+/* ═══════════════════════════════════════
+   ARCANA v2.0 — Design System
+═══════════════════════════════════════ */
+:root {
+  /* Fondos */
+  --bg-0: #03030a;
+  --bg-1: #07071a;
+  --bg-2: #0c0c20;
+  --bg-3: #111128;
+  --bg-4: #181832;
 
-/* ── FEATURED ── */
-.featured-card{display:grid;grid-template-columns:260px 1fr;gap:2.5rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem;position:relative;overflow:hidden;}
-.featured-card::before{content:'';position:absolute;top:0;right:0;width:350px;height:350px;background:radial-gradient(circle,rgba(138,100,255,0.08),transparent 70%);pointer-events:none;}
-.feat-cover{aspect-ratio:2/3;border-radius:var(--r2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.feat-cover-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(138,100,255,0.18),transparent 60%);}
-.feat-icon{font-size:4.5rem;filter:drop-shadow(0 0 20px rgba(138,100,255,0.5));position:relative;z-index:1;}
-.feat-cover-label{font-family:var(--display);font-size:0.7rem;font-weight:900;color:var(--purple3);letter-spacing:0.1em;text-align:center;padding:0 1rem;margin-top:0.8rem;position:relative;z-index:1;}
-.feat-title{font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:var(--text);letter-spacing:0.04em;margin-bottom:0.3rem;}
-.feat-author{font-size:0.8rem;color:var(--text2);margin-bottom:1rem;}
-.feat-author span{color:var(--purple3);font-weight:600;}
-.feat-desc{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--text2);line-height:1.75;margin-bottom:1.5rem;}
-.feat-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.meta-item{display:flex;align-items:center;gap:0.35rem;font-size:0.75rem;color:var(--text3);}
-.meta-item span{color:var(--text2);font-weight:600;}
-.feat-btns{display:flex;gap:0.8rem;flex-wrap:wrap;}
-.btn-read{padding:0.6rem 1.5rem;font-size:0.8rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;letter-spacing:0.05em;box-shadow:0 3px 14px rgba(138,100,255,0.3);transition:all 0.2s;}
-.btn-read:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(138,100,255,0.45);}
-.btn-fav{padding:0.6rem 1rem;font-size:1rem;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
-.btn-fav:hover{border-color:var(--rose);color:var(--rose);}
-.btn-fav.active{color:var(--rose);border-color:var(--rose);}
+  /* Superficies */
+  --s-1: #141430;
+  --s-2: #1c1c3a;
+  --s-3: #242448;
 
-/* ── SECTION HEADER ROW ── */
-.sh-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
-.see-all{font-size:0.75rem;font-weight:600;color:var(--purple3);letter-spacing:0.1em;text-transform:uppercase;background:none;border:none;padding:0.3rem 0;border-bottom:1px solid transparent;transition:border-color 0.2s;}
-.see-all:hover{border-bottom-color:var(--purple3);}
+  /* Bordes */
+  --b-1: rgba(120,80,255,0.12);
+  --b-2: rgba(120,80,255,0.2);
+  --b-3: rgba(120,80,255,0.35);
 
-/* ── GENRES GRID ── */
-.genres-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;}
-.genre-card{padding:1.2rem;border-radius:var(--r);background:var(--surface);border:1px solid var(--border2);text-align:center;cursor:pointer;transition:all 0.25s;}
-.genre-card:hover{background:var(--surface2);border-color:rgba(138,100,255,0.25);transform:translateY(-2px);}
-.genre-icon{font-size:1.8rem;margin-bottom:0.5rem;display:block;}
-.genre-name{font-family:var(--display);font-size:0.72rem;font-weight:600;color:var(--text);letter-spacing:0.05em;margin-bottom:0.15rem;}
-.genre-count{font-size:0.6rem;color:var(--text3);}
+  /* Colores principales */
+  --violet:    #7850ff;
+  --violet-l:  #a080ff;
+  --violet-d:  #5030cc;
+  --rose:      #ff4d80;
+  --rose-l:    #ff80a0;
+  --teal:      #00d4b8;
+  --gold:      #e0a830;
+  --gold-l:    #f5c850;
+  --amber:     #ff8800;
+  --emerald:   #00cc80;
 
-/* ── CTA ── */
-.cta-banner{background:linear-gradient(135deg,var(--surface) 0%,rgba(138,100,255,0.07) 50%,var(--surface) 100%);border:1px solid rgba(138,100,255,0.2);border-radius:var(--r);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;}
-.cta-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(138,100,255,0.05),transparent 60%);pointer-events:none;}
-.cta-title{font-family:var(--display);font-size:clamp(1.4rem,3vw,2rem);font-weight:900;color:var(--text);letter-spacing:0.05em;margin-bottom:0.6rem;}
-.cta-sub{font-family:var(--serif);font-style:italic;color:var(--text2);font-size:1rem;margin-bottom:2rem;}
+  /* Texto */
+  --t-1: #f0ecff;
+  --t-2: #a090c8;
+  --t-3: #604880;
+  --t-4: #382858;
 
-@media(max-width:768px){
-  .featured-card{grid-template-columns:1fr;}
-  .feat-cover{max-width:180px;margin:0 auto;}
-  .hero-stats{gap:1.5rem;}
+  /* Tipografía */
+  --f-display: 'Cinzel', serif;
+  --f-serif:   'Crimson Pro', Georgia, serif;
+  --f-sans:    'DM Sans', sans-serif;
+  --f-mono:    'Share Tech Mono', monospace;
+
+  /* Radios */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --shadow-violet: 0 4px 20px rgba(120,80,255,0.3);
+  --shadow-rose: 0 4px 20px rgba(255,77,128,0.3);
+
+  /* Gradientes */
+  --grad-violet: linear-gradient(135deg, var(--violet-d), var(--violet));
+  --grad-rose: linear-gradient(135deg, #cc2060, var(--rose));
+  --grad-gold: linear-gradient(135deg, #b08020, var(--gold));
+  --grad-aurora: linear-gradient(135deg, var(--violet-d) 0%, var(--violet) 40%, var(--rose) 100%);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--bg-0);
+  color: var(--t-1);
+  font-family: var(--f-sans);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: var(--f-sans); border: none; background: none; }
+img { display: block; max-width: 100%; }
+input, textarea, select { font-family: var(--f-sans); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--s-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--violet); }
+
+/* ── CANVAS ── */
+#bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem;
+  background: rgba(3,3,10,0.88);
+  border-bottom: 1px solid var(--b-1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--f-display); font-size: 1.3rem; font-weight: 900;
+  letter-spacing: 0.1em; color: var(--t-1);
+  text-decoration: none;
+}
+.nav-logo-gem { font-size: 1rem; filter: drop-shadow(0 0 8px rgba(120,80,255,0.7)); }
+.nav-logo-text span {
+  background: var(--grad-aurora);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.nav-center { display: flex; align-items: center; gap: 0.2rem; }
+.nav-link {
+  padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: 500;
+  color: var(--t-2); border-radius: var(--r-sm);
+  transition: color 0.2s, background 0.2s;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--t-1); background: rgba(120,80,255,0.1);
+}
+.nav-right { display: flex; align-items: center; gap: 0.6rem; }
+
+/* Botones navbar */
+.btn-nav-ghost {
+  padding: 0.38rem 1rem; font-size: 0.78rem; font-weight: 500;
+  border: 1px solid var(--b-2); border-radius: var(--r-sm);
+  color: var(--t-2); transition: all 0.2s;
+}
+.btn-nav-ghost:hover { border-color: var(--violet); color: var(--t-1); }
+.btn-nav-solid {
+  padding: 0.38rem 1rem; font-size: 0.78rem; font-weight: 700;
+  background: var(--grad-violet); border-radius: var(--r-sm);
+  color: #fff; letter-spacing: 0.04em;
+  box-shadow: var(--shadow-violet); transition: all 0.2s;
+}
+.btn-nav-solid:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(120,80,255,0.4); }
+
+/* User avatar navbar */
+.nav-user {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.4rem;
+  background: var(--s-1); border: 1px solid var(--b-1);
+  border-radius: var(--r-full); cursor: pointer;
+  transition: border-color 0.2s;
+}
+.nav-user:hover { border-color: var(--violet); }
+.nav-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--grad-violet);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff;
+  overflow: hidden; flex-shrink: 0;
+}
+.nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.nav-username { font-size: 0.78rem; font-weight: 600; color: var(--t-1); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Dropdown menú usuario */
+.user-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--bg-2); border: 1px solid var(--b-2);
+  border-radius: var(--r-md); padding: 0.5rem;
+  min-width: 200px; z-index: 300;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+.user-dropdown.open { display: block; animation: dropIn 0.2s ease; }
+@keyframes dropIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.dropdown-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.55rem 0.8rem; border-radius: var(--r-sm);
+  font-size: 0.82rem; color: var(--t-2); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+}
+.dropdown-item:hover { background: rgba(120,80,255,0.08); color: var(--t-1); }
+.dropdown-item.danger:hover { background: rgba(255,77,128,0.08); color: var(--rose); }
+.dropdown-divider { height: 1px; background: var(--b-1); margin: 0.3rem 0; }
+.dropdown-user-info { padding: 0.7rem 0.8rem 0.5rem; }
+.dropdown-username { font-size: 0.85rem; font-weight: 700; color: var(--t-1); }
+.dropdown-email { font-size: 0.7rem; color: var(--t-3); margin-top: 0.1rem; }
+
+/* Mobile menu */
+.nav-hamburger { display: none; flex-direction: column; gap: 4px; padding: 8px; }
+.nav-hamburger span { display: block; width: 18px; height: 1.5px; background: var(--t-2); border-radius: 2px; transition: 0.3s; }
+#mobile-nav {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 199;
+  background: rgba(3,3,10,0.97); border-bottom: 1px solid var(--b-1);
+  padding: 1rem 1.5rem; display: none; flex-direction: column; gap: 0.3rem;
+  backdrop-filter: blur(20px);
+}
+#mobile-nav.open { display: flex; }
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════ */
+#page-progress {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: var(--grad-aurora); z-index: 300;
+  width: 0%; transition: width 0.15s;
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 5rem 1.5rem 4rem;
+  overflow: hidden;
+}
+.hero-orb {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  filter: blur(80px); opacity: 0.12;
+}
+.hero-orb-1 { width: 600px; height: 600px; background: var(--violet); top: 10%; left: 20%; }
+.hero-orb-2 { width: 400px; height: 400px; background: var(--rose); bottom: 10%; right: 15%; }
+.hero-orb-3 { width: 300px; height: 300px; background: var(--teal); top: 40%; right: 30%; }
+.hero-inner { position: relative; max-width: 860px; text-align: center; }
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.3rem 1rem; border-radius: var(--r-full);
+  background: rgba(120,80,255,0.1); border: 1px solid rgba(120,80,255,0.25);
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em;
+  color: var(--violet-l); text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+}
+.hero-chip::before { content: '✦'; font-size: 0.55rem; }
+.hero-title {
+  font-family: var(--f-display); font-weight: 900;
+  font-size: clamp(4rem, 12vw, 8.5rem);
+  line-height: 0.88; letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+  opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+}
+.hero-title-main {
+  display: block;
+  background: linear-gradient(135deg, #fff 0%, var(--violet-l) 35%, var(--rose-l) 70%, #fff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 6s ease-in-out infinite 1s;
+}
+@keyframes shimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+.hero-title-sub {
+  display: block; font-size: 0.3em;
+  font-family: var(--f-serif); font-style: italic; font-weight: 400;
+  color: var(--t-2); letter-spacing: 0.15em; margin-top: 0.5rem;
+}
+.hero-desc {
+  font-family: var(--f-serif); font-style: italic;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  color: var(--t-2); line-height: 1.8;
+  max-width: 520px; margin: 0 auto 2.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.7s forwards;
+}
+.hero-desc em { color: var(--violet-l); font-style: normal; }
+.hero-actions {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem;
+  margin-bottom: 3.5rem;
+  opacity: 0; animation: fadeUp 0.7s 0.9s forwards;
+}
+.btn-hero-primary {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 2rem; font-size: 0.88rem; font-weight: 700;
+  background: var(--grad-violet); border-radius: var(--r-md);
+  color: #fff; letter-spacing: 0.04em;
+  box-shadow: var(--shadow-violet); transition: all 0.25s;
+}
+.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(120,80,255,0.45); }
+.btn-hero-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 2rem; font-size: 0.88rem; font-weight: 500;
+  background: none; border: 1px solid var(--b-2);
+  border-radius: var(--r-md); color: var(--t-2);
+  transition: all 0.25s;
+}
+.btn-hero-ghost:hover { border-color: var(--violet-l); color: var(--t-1); background: rgba(120,80,255,0.06); }
+.hero-stats {
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeIn 0.8s 1.2s forwards;
+}
+.hstat { text-align: center; }
+.hstat-n {
+  display: block; font-family: var(--f-display);
+  font-size: 1.8rem; font-weight: 900; color: var(--t-1);
+  line-height: 1;
+}
+.hstat-l { font-size: 0.65rem; color: var(--t-3); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 0.25rem; }
+
+/* ═══════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════ */
+.section { position: relative; z-index: 1; padding: 5rem 1.5rem; }
+.section-alt { background: linear-gradient(180deg, transparent, rgba(120,80,255,0.03), transparent); }
+.section-inner { max-width: 1280px; margin: 0 auto; }
+.section-header { margin-bottom: 2rem; }
+.section-eyebrow {
+  display: flex; align-items: center; gap: 0.7rem;
+  font-size: 0.62rem; letter-spacing: 0.5em; color: var(--violet-l);
+  text-transform: uppercase; font-weight: 600; margin-bottom: 0.4rem;
+}
+.section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--violet-l); }
+.section-title {
+  font-family: var(--f-display); font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 900; color: var(--t-1); letter-spacing: 0.04em;
+}
+.section-subtitle { font-family: var(--f-serif); font-style: italic; font-size: 0.98rem; color: var(--t-2); margin-top: 0.3rem; }
+.section-header-row { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.see-all {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--violet-l); text-transform: uppercase;
+  background: none; border: none;
+  display: flex; align-items: center; gap: 0.4rem;
+  transition: gap 0.2s;
+}
+.see-all:hover { gap: 0.7rem; }
+
+/* ═══════════════════════════════════════
+   FEATURED NOVEL
+═══════════════════════════════════════ */
+.featured-wrap {
+  display: grid; grid-template-columns: 240px 1fr;
+  gap: 2.5rem; align-items: center;
+  background: var(--s-1); border: 1px solid var(--b-2);
+  border-radius: var(--r-lg); padding: 2.5rem;
+  position: relative; overflow: hidden;
+}
+.featured-wrap::after {
+  content: ''; position: absolute; top: -30%; right: -5%;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(120,80,255,0.08), transparent 70%);
+  pointer-events: none;
+}
+.feat-cover {
+  aspect-ratio: 2/3; border-radius: var(--r-md);
+  border: 1px solid var(--b-2);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.feat-cover-glow { position: absolute; inset: 0; background: radial-gradient(circle at 50% 35%, rgba(120,80,255,0.22), transparent 65%); }
+.feat-cover-icon { font-size: 5rem; filter: drop-shadow(0 0 24px rgba(120,80,255,0.5)); position: relative; z-index: 1; }
+.feat-cover-name { font-family: var(--f-display); font-size: 0.68rem; font-weight: 900; color: var(--violet-l); letter-spacing: 0.1em; text-align: center; padding: 0 0.8rem; margin-top: 0.8rem; position: relative; z-index: 1; }
+.feat-vol { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; color: var(--gold-l); text-transform: uppercase; margin-bottom: 0.8rem; }
+.feat-title { font-family: var(--f-display); font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 900; color: var(--t-1); letter-spacing: 0.04em; line-height: 1.1; margin-bottom: 0.35rem; }
+.feat-author { font-size: 0.82rem; color: var(--t-2); margin-bottom: 1rem; }
+.feat-author a { color: var(--violet-l); font-weight: 600; }
+.feat-genres { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+.genre-pill {
+  padding: 0.2rem 0.7rem; border-radius: var(--r-full);
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.pill-v { background: rgba(120,80,255,0.14); color: var(--violet-l); border: 1px solid rgba(120,80,255,0.25); }
+.pill-r { background: rgba(255,77,128,0.12); color: var(--rose-l); border: 1px solid rgba(255,77,128,0.2); }
+.pill-t { background: rgba(0,212,184,0.1); color: var(--teal); border: 1px solid rgba(0,212,184,0.2); }
+.pill-g { background: rgba(224,168,48,0.1); color: var(--gold-l); border: 1px solid rgba(224,168,48,0.2); }
+.feat-desc { font-family: var(--f-serif); font-style: italic; font-size: 1rem; color: var(--t-2); line-height: 1.75; margin-bottom: 1.5rem; }
+.feat-metas { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-bottom: 1.5rem; }
+.feat-meta { font-size: 0.75rem; color: var(--t-3); display: flex; align-items: center; gap: 0.3rem; }
+.feat-meta strong { color: var(--t-1); font-weight: 700; }
+.feat-btns { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.btn-read {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.6rem 1.5rem; font-size: 0.82rem; font-weight: 700;
+  background: var(--grad-violet); border-radius: var(--r-sm);
+  color: #fff; letter-spacing: 0.04em;
+  box-shadow: var(--shadow-violet); transition: all 0.2s;
+}
+.btn-read:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(120,80,255,0.45); }
+.btn-fav-toggle {
+  padding: 0.6rem 1rem; font-size: 1.1rem;
+  background: none; border: 1px solid var(--b-2);
+  border-radius: var(--r-sm); color: var(--t-2);
+  transition: all 0.2s;
+}
+.btn-fav-toggle:hover, .btn-fav-toggle.active { border-color: var(--rose); color: var(--rose); }
+
+/* ═══════════════════════════════════════
+   NOVEL CARDS GRID
+═══════════════════════════════════════ */
+.novels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 1.2rem; }
+.novel-card {
+  border-radius: var(--r-md); background: var(--s-1);
+  border: 1px solid var(--b-1); overflow: hidden;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  cursor: pointer;
+}
+.novel-card:hover { transform: translateY(-5px); border-color: var(--b-3); box-shadow: var(--shadow-violet); }
+.novel-cover {
+  aspect-ratio: 2/3; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.novel-cover-icon { font-size: 2.8rem; filter: drop-shadow(0 0 14px rgba(120,80,255,0.4)); position: relative; z-index: 1; }
+.novel-cover-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+}
+.novel-badge {
+  position: absolute; top: 0.5rem; left: 0.5rem;
+  padding: 0.15rem 0.5rem; border-radius: var(--r-full);
+  font-size: 0.52rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+  z-index: 2;
+}
+.badge-hot { background: var(--amber); color: #000; }
+.badge-new { background: var(--rose); color: #fff; }
+.badge-completed { background: var(--teal); color: #000; }
+.novel-info { padding: 0.85rem; }
+.novel-title {
+  font-family: var(--f-display); font-size: 0.76rem; font-weight: 600;
+  color: var(--t-1); letter-spacing: 0.02em; line-height: 1.3;
+  margin-bottom: 0.2rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.novel-author { font-size: 0.65rem; color: var(--t-3); margin-bottom: 0.5rem; }
+.novel-stats-row { display: flex; justify-content: space-between; }
+.novel-stat { font-size: 0.62rem; color: var(--t-3); display: flex; align-items: center; gap: 0.15rem; }
+.novel-genres-row { display: flex; gap: 0.25rem; flex-wrap: wrap; margin-top: 0.45rem; }
+.genre-micro { font-size: 0.52rem; padding: 0.1rem 0.4rem; border-radius: var(--r-full); background: rgba(120,80,255,0.1); color: var(--violet-l); font-weight: 600; letter-spacing: 0.05em; }
+
+/* Cover color themes */
+.cv-1{background:linear-gradient(160deg,#12042a,#2a0860,#050012);}
+.cv-2{background:linear-gradient(160deg,#04122a,#082860,#000810);}
+.cv-3{background:linear-gradient(160deg,#1a0408,#601018,#100004);}
+.cv-4{background:linear-gradient(160deg,#04160a,#085818,#001004);}
+.cv-5{background:linear-gradient(160deg,#16140a,#585018,#100c00);}
+.cv-6{background:linear-gradient(160deg,#041616,#085858,#001010);}
+.cv-7{background:linear-gradient(160deg,#140816,#501060,#0c0014);}
+.cv-8{background:linear-gradient(160deg,#160e04,#583818,#0c0600);}
+
+/* ═══════════════════════════════════════
+   GENRE CARDS
+═══════════════════════════════════════ */
+.genres-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 0.9rem; }
+.genre-card {
+  padding: 1.3rem 1rem; border-radius: var(--r-md);
+  background: var(--s-1); border: 1px solid var(--b-1);
+  text-align: center; cursor: pointer;
+  transition: all 0.22s;
+}
+.genre-card:hover { background: var(--s-2); border-color: var(--b-3); transform: translateY(-3px); box-shadow: var(--shadow-violet); }
+.genre-emoji { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
+.genre-name { font-family: var(--f-display); font-size: 0.7rem; font-weight: 600; color: var(--t-1); letter-spacing: 0.04em; margin-bottom: 0.15rem; }
+.genre-count { font-size: 0.58rem; color: var(--t-3); }
+
+/* ═══════════════════════════════════════
+   RANKING
+═══════════════════════════════════════ */
+.rank-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.rank-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--s-1); border: 1px solid var(--b-1);
+  border-radius: var(--r-sm); cursor: pointer; transition: all 0.2s;
+}
+.rank-item:hover { background: var(--s-2); border-color: var(--b-2); }
+.rank-pos { font-family: var(--f-display); font-size: 1.1rem; font-weight: 900; min-width: 32px; text-align: center; }
+.pos-1 { color: var(--gold-l); }
+.pos-2 { color: var(--t-2); }
+.pos-3 { color: var(--amber); }
+.pos-n { color: var(--t-3); }
+.rank-cover { width: 40px; height: 56px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--b-1); }
+.rank-info { flex: 1; min-width: 0; }
+.rank-title { font-family: var(--f-display); font-size: 0.8rem; font-weight: 600; color: var(--t-1); letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-author { font-size: 0.63rem; color: var(--t-3); margin-top: 0.1rem; }
+.rank-stat { font-size: 0.75rem; font-weight: 700; color: var(--violet-l); white-space: nowrap; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════
+   CTA BANNER
+═══════════════════════════════════════ */
+.cta-wrap {
+  background: var(--s-1); border: 1px solid var(--b-2);
+  border-radius: var(--r-lg); padding: 3.5rem 2rem;
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-wrap::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(120,80,255,0.1), transparent 60%);
+  pointer-events: none;
+}
+.cta-label { font-size: 0.62rem; letter-spacing: 0.4em; color: var(--violet-l); text-transform: uppercase; font-weight: 600; margin-bottom: 0.8rem; display: block; }
+.cta-title { font-family: var(--f-display); font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 900; color: var(--t-1); letter-spacing: 0.04em; margin-bottom: 0.6rem; }
+.cta-desc { font-family: var(--f-serif); font-style: italic; color: var(--t-2); font-size: 1rem; margin-bottom: 2rem; }
+
+/* ═══════════════════════════════════════
+   AUTH MODAL
+═══════════════════════════════════════ */
+#auth-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.85);
+  display: none; align-items: center; justify-content: center;
+  padding: 1rem; backdrop-filter: blur(8px);
+}
+#auth-overlay.open { display: flex; }
+.auth-modal {
+  background: var(--bg-2); border: 1px solid var(--b-2);
+  border-radius: var(--r-lg); padding: 2.5rem;
+  width: 100%; max-width: 420px;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.3s ease;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.96) translateY(12px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.auth-close {
+  position: absolute; top: 1rem; right: 1rem;
+  color: var(--t-3); font-size: 1.1rem;
+  transition: color 0.2s;
+}
+.auth-close:hover { color: var(--t-1); }
+.auth-logo { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+.auth-logo span { font-family: var(--f-display); font-size: 1.1rem; font-weight: 900; letter-spacing: 0.08em; }
+.auth-logo span em { font-style: normal; background: var(--grad-aurora); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.auth-title { font-family: var(--f-display); font-size: 1.3rem; font-weight: 900; color: var(--t-1); letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+.auth-sub { font-size: 0.8rem; color: var(--t-2); margin-bottom: 1.8rem; }
+.auth-tabs { display: flex; border-bottom: 1px solid var(--b-1); margin-bottom: 1.8rem; }
+.auth-tab {
+  flex: 1; padding: 0.6rem; font-size: 0.8rem; font-weight: 600;
+  color: var(--t-3); border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all 0.2s; letter-spacing: 0.04em;
+}
+.auth-tab.active { color: var(--violet-l); border-bottom-color: var(--violet); }
+
+/* Google button */
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+  width: 100%; padding: 0.65rem; font-size: 0.85rem; font-weight: 600;
+  background: var(--s-2); border: 1px solid var(--b-2);
+  border-radius: var(--r-sm); color: var(--t-1);
+  transition: all 0.2s; margin-bottom: 1rem;
+}
+.btn-google:hover { background: var(--s-3); border-color: var(--b-3); }
+.btn-google-icon { font-size: 1rem; }
+.auth-divider {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1rem; font-size: 0.72rem; color: var(--t-3);
+}
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--b-1); }
+
+/* Form elements */
+.form-group { margin-bottom: 1rem; }
+.form-label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--t-2); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.form-input {
+  width: 100%; padding: 0.65rem 1rem;
+  background: var(--bg-1); border: 1px solid var(--b-1);
+  border-radius: var(--r-sm); color: var(--t-1);
+  font-size: 0.88rem; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus { outline: none; border-color: var(--violet); box-shadow: 0 0 0 3px rgba(120,80,255,0.12); }
+.form-input::placeholder { color: var(--t-4); }
+.form-error { font-size: 0.72rem; color: var(--rose); margin-top: 0.3rem; display: none; }
+.form-error.show { display: block; }
+.btn-auth-submit {
+  width: 100%; padding: 0.72rem; font-size: 0.88rem; font-weight: 700;
+  background: var(--grad-violet); border-radius: var(--r-sm);
+  color: #fff; letter-spacing: 0.04em; margin-top: 0.5rem;
+  box-shadow: var(--shadow-violet); transition: all 0.2s;
+}
+.btn-auth-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(120,80,255,0.45); }
+.btn-auth-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.auth-forgot { font-size: 0.72rem; color: var(--violet-l); background: none; border: none; margin-top: 0.5rem; display: block; text-align: right; transition: color 0.2s; }
+.auth-forgot:hover { color: var(--violet-l); text-decoration: underline; }
+.auth-terms { font-size: 0.68rem; color: var(--t-3); text-align: center; margin-top: 1rem; line-height: 1.5; }
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 500; display: flex; flex-direction: column; gap: 0.5rem; }
+.toast {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.75rem 1.2rem; min-width: 260px; max-width: 360px;
+  background: var(--s-2); border: 1px solid var(--b-2);
+  border-radius: var(--r-md);
+  font-size: 0.82rem; color: var(--t-1);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(120%); opacity: 0;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.toast-success { border-left: 3px solid var(--emerald); }
+.toast.toast-error { border-left: 3px solid var(--rose); }
+.toast.toast-info { border-left: 3px solid var(--violet); }
+.toast-icon { font-size: 1rem; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+#footer {
+  position: relative; z-index: 1;
+  background: var(--bg-1); border-top: 1px solid var(--b-1);
+  padding: 3rem 1.5rem 2rem;
+}
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+.footer-brand-logo { margin-bottom: 0.8rem; }
+.footer-brand-desc { font-family: var(--f-serif); font-style: italic; font-size: 0.88rem; color: var(--t-2); line-height: 1.65; max-width: 260px; }
+.footer-col-title { font-family: var(--f-display); font-size: 0.68rem; font-weight: 600; color: var(--t-1); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+.footer-links a { font-size: 0.8rem; color: var(--t-3); transition: color 0.2s; }
+.footer-links a:hover { color: var(--violet-l); }
+.footer-bottom { border-top: 1px solid var(--b-1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-copy { font-size: 0.7rem; color: var(--t-3); }
+.footer-copy span { color: var(--violet-l); }
+
+/* ═══════════════════════════════════════
+   KEYFRAMES & UTILS
+═══════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px) {
+  .nav-center { display: none; }
+  .nav-hamburger { display: flex; }
+  .featured-wrap { grid-template-columns: 1fr; }
+  .feat-cover { max-width: 180px; margin: 0 auto; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1/-1; }
+}
+@media(max-width:600px) {
+  .section { padding: 3.5rem 1rem; }
+  .novels-grid { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
+  .genres-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero-stats { gap: 1.5rem; }
+  .footer-grid { grid-template-columns: 1fr; }
+  #toast-container { left: 1rem; right: 1rem; }
+  .toast { min-width: unset; }
 }
 </style>
 </head>
 <body>
-<canvas id="bg-canvas"></canvas>
-<nav id="navbar"></nav>
 
-<!-- ── HERO ── -->
+<canvas id="bg-canvas"></canvas>
+<div id="page-progress"></div>
+
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-gem">🔮</span>
+    <div class="nav-logo-text"><span>ARC<span>ANA</span></span></div>
+  </a>
+  <div class="nav-center">
+    <a href="index.html" class="nav-link active">Inicio</a>
+    <a href="catalog.html" class="nav-link">Catálogo</a>
+    <a href="ranking.html" class="nav-link">Ranking</a>
+    <a href="index.html#genres" class="nav-link">Géneros</a>
+    <a href="dashboard.html" class="nav-link">Publicar</a>
+  </div>
+  <div class="nav-right" id="navRight">
+    <!-- Se renderiza con JS según estado auth -->
+  </div>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <a href="index.html" class="nav-link" style="font-size:0.88rem;">🏠 Inicio</a>
+  <a href="catalog.html" class="nav-link" style="font-size:0.88rem;">📚 Catálogo</a>
+  <a href="ranking.html" class="nav-link" style="font-size:0.88rem;">🏆 Ranking</a>
+  <a href="dashboard.html" class="nav-link" style="font-size:0.88rem;">✍️ Publicar</a>
+</div>
+
+<!-- ══ HERO ══ -->
 <section id="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-badge">✦ La plataforma de novelas ligeras en español</div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-inner">
+    <div class="hero-chip">La plataforma de novelas ligeras en español</div>
     <h1 class="hero-title">
-      <span class="hero-t1">ARCANA</span>
-      <span class="hero-t2">Novelas que trascienden lo ordinario</span>
+      <span class="hero-title-main">ARCANA</span>
+      <span class="hero-title-sub">Historias que trascienden lo ordinario</span>
     </h1>
-    <p class="hero-sub">Sumérgete en mundos únicos.<br><em>Ciencia ficción, fantasía, romance, misterio</em> — todo en un solo lugar.</p>
-    <div class="hero-btns">
-      <a href="catalog.html" class="btn-lg btn-lg-primary">📚 Explorar catálogo</a>
-      <button class="btn-lg btn-lg-ghost" onclick="openAuth('register')">✦ Crear cuenta gratis</button>
+    <p class="hero-desc">
+      Lee, escribe y comparte historias únicas.<br>
+      <em>Ciencia ficción, fantasía, romance, terror</em> — todo en un solo lugar.
+    </p>
+    <div class="hero-actions">
+      <a href="catalog.html" class="btn-hero-primary">📚 Explorar catálogo</a>
+      <button class="btn-hero-ghost" onclick="openAuth('register')">✦ Crear cuenta gratis</button>
     </div>
     <div class="hero-stats">
-      <div><span class="hero-stat-n" id="statNovels">12</span><span class="hero-stat-l">Novelas</span></div>
-      <div><span class="hero-stat-n">200+</span><span class="hero-stat-l">Capítulos</span></div>
-      <div><span class="hero-stat-n">12</span><span class="hero-stat-l">Géneros</span></div>
-      <div><span class="hero-stat-n">100%</span><span class="hero-stat-l">Gratis</span></div>
+      <div class="hstat"><span class="hstat-n" id="statNovels">32</span><span class="hstat-l">Novelas</span></div>
+      <div class="hstat"><span class="hstat-n">400+</span><span class="hstat-l">Capítulos</span></div>
+      <div class="hstat"><span class="hstat-n">12</span><span class="hstat-l">Géneros</span></div>
+      <div class="hstat"><span class="hstat-n">100%</span><span class="hstat-l">Gratis</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── FEATURED ── -->
-<section class="section" style="background:var(--bg2);padding-top:2rem;">
+<!-- ══ FEATURED ══ -->
+<section class="section section-alt">
   <div class="section-inner">
-    <div class="sh-row">
-      <div><div class="section-label">Destacado</div><h2 class="section-title">Novela del Mes</h2></div>
-      <a href="catalog.html" class="see-all">Ver catálogo →</a>
+    <div class="section-header-row" style="margin-bottom:2rem;">
+      <div class="section-header">
+        <div class="section-eyebrow">Destacado del mes</div>
+        <h2 class="section-title">Novela Recomendada</h2>
+      </div>
+      <a href="catalog.html" class="see-all">Ver todas →</a>
     </div>
-    <div class="featured-card" id="featuredCard"></div>
+    <div class="featured-wrap" id="featuredCard"></div>
   </div>
 </section>
 
-<!-- ── TRENDING ── -->
+<!-- ══ TRENDING ══ -->
 <section class="section">
   <div class="section-inner">
-    <div class="sh-row">
-      <div><div class="section-label">En Tendencia</div><h2 class="section-title">Más Leídas Esta Semana</h2></div>
-      <a href="catalog.html" class="see-all">Ver todas →</a>
+    <div class="section-header-row" style="margin-bottom:2rem;">
+      <div class="section-header">
+        <div class="section-eyebrow">En tendencia</div>
+        <h2 class="section-title">Más Leídas Esta Semana</h2>
+      </div>
+      <a href="catalog.html" class="see-all">Ver más →</a>
     </div>
     <div class="novels-grid" id="trendingGrid"></div>
   </div>
 </section>
 
-<!-- ── GENRES ── -->
-<section class="section" id="genres" style="background:var(--bg2);">
+<!-- ══ GENRES ══ -->
+<section class="section section-alt" id="genres">
   <div class="section-inner">
-    <div class="section-label">Explorar</div>
-    <h2 class="section-title" style="margin-bottom:1.5rem;">Géneros</h2>
+    <div class="section-header" style="margin-bottom:2rem;">
+      <div class="section-eyebrow">Explorar</div>
+      <h2 class="section-title">Géneros</h2>
+      <p class="section-subtitle">Encuentra tu próxima historia favorita</p>
+    </div>
     <div class="genres-grid" id="genresGrid"></div>
   </div>
 </section>
 
-<!-- ── NEW ── -->
+<!-- ══ RANKING ══ -->
 <section class="section">
   <div class="section-inner">
-    <div class="sh-row">
-      <div><div class="section-label">Recién llegadas</div><h2 class="section-title">Nuevas Novelas</h2></div>
+    <div class="section-header" style="margin-bottom:2rem;">
+      <div class="section-eyebrow">Clasificación</div>
+      <h2 class="section-title">🏆 Top ARCANA</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;" id="rankingWrap">
+      <div>
+        <p style="font-size:0.72rem;letter-spacing:0.2em;color:var(--t-3);text-transform:uppercase;margin-bottom:1rem;">👁 Por lecturas</p>
+        <div class="rank-list" id="rankViews"></div>
+      </div>
+      <div>
+        <p style="font-size:0.72rem;letter-spacing:0.2em;color:var(--t-3);text-transform:uppercase;margin-bottom:1rem;">⭐ Por valoración</p>
+        <div class="rank-list" id="rankRating"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEW ══ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-header-row" style="margin-bottom:2rem;">
+      <div class="section-header">
+        <div class="section-eyebrow">Recién llegadas</div>
+        <h2 class="section-title">Nuevas Publicaciones</h2>
+      </div>
       <a href="catalog.html?filter=new" class="see-all">Ver nuevas →</a>
     </div>
     <div class="novels-grid" id="newGrid"></div>
   </div>
 </section>
 
-<!-- ── CTA ── -->
-<section class="section" style="background:var(--bg2);">
+<!-- ══ CTA ══ -->
+<section class="section">
   <div class="section-inner">
-    <div class="cta-banner">
+    <div class="cta-wrap">
+      <span class="cta-label">Para escritores</span>
       <h2 class="cta-title">¿Tienes una historia que contar?</h2>
-      <p class="cta-sub">ARCANA abre sus puertas a nuevos autores. Publica tu novela ligera gratis.</p>
-      <a href="dashboard.html" class="btn-lg btn-lg-primary">✦ Publicar mi novela</a>
+      <p class="cta-desc">Publica tu novela ligera gratis y llega a miles de lectores en ARCANA.</p>
+      <button class="btn-hero-primary" onclick="openAuth('register')">✦ Empezar a publicar</button>
     </div>
   </div>
 </section>
 
-<footer id="footer"></footer>
-<div id="auth-modal">
-  <div class="auth-card">
+<!-- ══ FOOTER ══ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">
+          <a href="index.html" class="nav-logo" style="font-size:1.1rem;">
+            <span class="nav-logo-gem">🔮</span>
+            <div class="nav-logo-text"><span>ARC<span>ANA</span></span></div>
+          </a>
+        </div>
+        <p class="footer-brand-desc">La plataforma de novelas ligeras en español. Historias que trascienden lo ordinario, autores que crean mundos, lectores que los viven.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Explorar</div>
+        <ul class="footer-links">
+          <li><a href="catalog.html">Catálogo</a></li>
+          <li><a href="ranking.html">Ranking</a></li>
+          <li><a href="catalog.html?filter=new">Nuevas</a></li>
+          <li><a href="catalog.html?status=completada">Completadas</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Autores</div>
+        <ul class="footer-links">
+          <li><a href="dashboard.html">Publicar novela</a></li>
+          <li><a href="dashboard.html">Mi panel</a></li>
+          <li><a href="#">Comunidad</a></li>
+          <li><a href="#">Guía de estilo</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">ARCANA</div>
+        <ul class="footer-links">
+          <li><a href="#">Nosotros</a></li>
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Términos</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 <span>ARCANA</span> · Todos los derechos reservados</p>
+      <p class="footer-copy" style="font-size:0.65rem;">Plataforma de novelas ligeras en español · v2.0</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ AUTH MODAL ══ -->
+<div id="auth-overlay">
+  <div class="auth-modal">
     <button class="auth-close" onclick="closeAuth()">✕</button>
-    <h2 class="auth-title">ARCANA</h2>
-    <p class="auth-sub">Tu portal a historias que trascienden</p>
+    <div class="auth-logo">
+      <span>🔮</span>
+      <span style="font-family:var(--f-display);font-size:1rem;font-weight:900;letter-spacing:0.08em;">ARC<em>ANA</em></span>
+    </div>
+    <h2 class="auth-title" id="authTitle">Bienvenido de vuelta</h2>
+    <p class="auth-sub" id="authSub">Inicia sesión para continuar tu aventura</p>
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Registrarse</button>
     </div>
-    <div id="auth-form-login">
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"></div>
-      <button class="btn-auth" onclick="showToast('✦ Bienvenido a ARCANA');closeAuth()">Iniciar sesión</button>
+
+    <!-- Google -->
+    <button class="btn-google" onclick="handleGoogle()">
+      <span class="btn-google-icon">G</span>
+      Continuar con Google
+    </button>
+    <div class="auth-divider">o con correo</div>
+
+    <!-- Login form -->
+    <div id="formLogin">
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleLogin()">
+      </div>
+      <p class="form-error" id="loginError"></p>
+      <button class="btn-auth-submit" id="btnLogin" onclick="handleLogin()">Iniciar sesión</button>
+      <button class="auth-forgot" onclick="handleForgot()">¿Olvidaste tu contraseña?</button>
     </div>
-    <div id="auth-form-register" style="display:none">
-      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text" placeholder="Tu nombre de lector"></div>
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="Mínimo 8 caracteres"></div>
-      <button class="btn-auth" onclick="showToast('✦ Cuenta creada. Bienvenido!');closeAuth()">Crear cuenta</button>
+
+    <!-- Register form -->
+    <div id="formRegister" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Nombre de usuario</label>
+        <input class="form-input" type="text" id="regUsername" placeholder="Tu nombre en ARCANA">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" id="regEmail" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="regPassword" placeholder="Mínimo 8 caracteres" onkeydown="if(event.key==='Enter')handleRegister()">
+      </div>
+      <p class="form-error" id="registerError"></p>
+      <button class="btn-auth-submit" id="btnRegister" onclick="handleRegister()">Crear cuenta gratis</button>
+      <p class="auth-terms">Al registrarte aceptas los <a href="#" style="color:var(--violet-l)">Términos de uso</a> y la <a href="#" style="color:var(--violet-l)">Política de privacidad</a> de ARCANA.</p>
     </div>
   </div>
 </div>
-<div id="toast"></div>
-<script src="js/data.js"></script>
-<script>
-initCanvas('bg-canvas');
-renderNavbar('home');
-renderFooter();
-initModals();
 
-// Featured
-const f=ARCANA_NOVELS[0];
-document.getElementById('featuredCard').innerHTML=`
-  <div class="feat-cover ${f.cover}">
+<!-- ══ TOAST ══ -->
+<div id="toast-container"></div>
+
+<!-- ══ USER DROPDOWN ══ -->
+<div id="userDropdown" class="user-dropdown"></div>
+
+<script src="js/data.js"></script>
+<script type="module">
+// ── FIREBASE IMPORTS ──
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+// ── FIREBASE CONFIG ──
+const firebaseConfig = {
+  apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+  authDomain: "arcana-553dd.firebaseapp.com",
+  projectId: "arcana-553dd",
+  storageBucket: "arcana-553dd.firebasestorage.app",
+  messagingSenderId: "674195855924",
+  appId: "1:674195855924:web:1f88f303c99cf6a4b0c861",
+  measurementId: "G-1806EVTC3F"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+// ── AUTH STATE ──
+onAuthStateChanged(auth, user => {
+  renderNavUser(user);
+  window._currentUser = user;
+});
+
+// ── RENDER NAV USER ──
+function renderNavUser(user) {
+  const navRight = document.getElementById('navRight');
+  if (user) {
+    const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+    navRight.innerHTML = `
+      <div class="nav-user" onclick="toggleUserDropdown()" id="navUserBtn">
+        <div class="nav-avatar" id="navAvatar">
+          ${user.photoURL ? `<img src="${user.photoURL}" alt="avatar">` : initials}
+        </div>
+        <span class="nav-username">${user.displayName || 'Mi cuenta'}</span>
+        <span style="font-size:0.6rem;color:var(--t-3);">▾</span>
+      </div>`;
+    renderDropdown(user);
+  } else {
+    navRight.innerHTML = `
+      <button class="btn-nav-ghost" onclick="openAuth('login')">Iniciar sesión</button>
+      <button class="btn-nav-solid" onclick="openAuth('register')">Registrarse</button>`;
+  }
+}
+
+function renderDropdown(user) {
+  document.getElementById('userDropdown').innerHTML = `
+    <div class="dropdown-user-info">
+      <div class="dropdown-username">${user.displayName || 'Mi cuenta'}</div>
+      <div class="dropdown-email">${user.email}</div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <a href="profile.html?uid=${user.uid}" class="dropdown-item">👤 Mi perfil</a>
+    <a href="dashboard.html" class="dropdown-item">✍️ Mis novelas</a>
+    <a href="profile.html?tab=favorites" class="dropdown-item">❤️ Favoritos</a>
+    <a href="profile.html?tab=progress" class="dropdown-item">📖 Progreso de lectura</a>
+    <div class="dropdown-divider"></div>
+    <div class="dropdown-item danger" onclick="handleLogout()">🚪 Cerrar sesión</div>`;
+}
+
+window.toggleUserDropdown = function() {
+  const dd = document.getElementById('userDropdown');
+  const btn = document.getElementById('navUserBtn');
+  if (!btn) return;
+  const rect = btn.getBoundingClientRect();
+  dd.style.top = (rect.bottom + 8) + 'px';
+  dd.style.right = (window.innerWidth - rect.right) + 'px';
+  dd.style.position = 'fixed';
+  dd.classList.toggle('open');
+};
+
+document.addEventListener('click', e => {
+  const dd = document.getElementById('userDropdown');
+  if (!e.target.closest('#navUserBtn') && !e.target.closest('#userDropdown')) {
+    dd?.classList.remove('open');
+  }
+});
+
+// ── AUTH HANDLERS ──
+window.handleLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('btnLogin');
+  const err = document.getElementById('loginError');
+
+  if (!email || !password) { showFormError('loginError', 'Completa todos los campos'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span>';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    closeAuth();
+    showToast('✦ Bienvenido de vuelta', 'success');
+  } catch(e) {
+    showFormError('loginError', getAuthError(e.code));
+    btn.disabled = false;
+    btn.textContent = 'Iniciar sesión';
+  }
+};
+
+window.handleRegister = async function() {
+  const username = document.getElementById('regUsername').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const btn = document.getElementById('btnRegister');
+
+  if (!username || !email || !password) { showFormError('registerError', 'Completa todos los campos'); return; }
+  if (password.length < 8) { showFormError('registerError', 'La contraseña debe tener al menos 8 caracteres'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span>';
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(cred.user, { displayName: username });
+    await setDoc(doc(db, 'users', cred.user.uid), {
+      uid: cred.user.uid, username, email,
+      photoURL: null, bio: '', role: 'reader',
+      favorites: [], readingProgress: {},
+      novelsPublished: 0, createdAt: serverTimestamp()
+    });
+    closeAuth();
+    showToast('✦ Cuenta creada. ¡Bienvenido a ARCANA!', 'success');
+  } catch(e) {
+    showFormError('registerError', getAuthError(e.code));
+    btn.disabled = false;
+    btn.textContent = 'Crear cuenta gratis';
+  }
+};
+
+window.handleGoogle = async function() {
+  try {
+    const cred = await signInWithPopup(auth, googleProvider);
+    const userRef = doc(db, 'users', cred.user.uid);
+    const existing = await getDoc(userRef);
+    if (!existing.exists()) {
+      await setDoc(userRef, {
+        uid: cred.user.uid,
+        username: cred.user.displayName,
+        email: cred.user.email,
+        photoURL: cred.user.photoURL,
+        bio: '', role: 'reader',
+        favorites: [], readingProgress: {},
+        novelsPublished: 0, createdAt: serverTimestamp()
+      });
+    }
+    closeAuth();
+    showToast('✦ Sesión iniciada con Google', 'success');
+  } catch(e) {
+    showToast('Error al iniciar con Google', 'error');
+  }
+};
+
+window.handleLogout = async function() {
+  await signOut(auth);
+  showToast('Sesión cerrada', 'info');
+};
+
+window.handleForgot = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) { showFormError('loginError', 'Escribe tu correo primero'); return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showToast('📧 Correo de recuperación enviado', 'success');
+  } catch(e) {
+    showFormError('loginError', 'No encontramos esa cuenta');
+  }
+};
+
+function getAuthError(code) {
+  const errors = {
+    'auth/email-already-in-use': 'Ese correo ya está registrado',
+    'auth/invalid-email': 'Correo electrónico inválido',
+    'auth/weak-password': 'La contraseña es muy débil',
+    'auth/user-not-found': 'No encontramos esa cuenta',
+    'auth/wrong-password': 'Contraseña incorrecta',
+    'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde',
+    'auth/network-request-failed': 'Error de conexión. Verifica tu internet',
+  };
+  return errors[code] || 'Error al procesar. Intenta de nuevo';
+}
+
+function showFormError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+</script>
+
+<script>
+// ── CANVAS ──
+const cv = document.getElementById('bg-canvas');
+const cx = cv.getContext('2d');
+let W, H, stars = [], nebulas = [];
+function resize() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+for(let i=0;i<250;i++) stars.push({x:Math.random()*1e4,y:Math.random()*1e4,r:Math.random()*1.3+0.2,a:Math.random(),da:(Math.random()-0.5)*0.003,vy:Math.random()*0.04+0.005,c:Math.random()>0.75?'120,80,255':'255,255,255'});
+const nebs=[{x:.3,y:.2,c:'120,80,255'},{x:.7,y:.6,c:'255,77,128'},{x:.5,y:.8,c:'0,212,184'}];
+function drawBg(){
+  cx.clearRect(0,0,W,H);
+  nebs.forEach(n=>{const g=cx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,W*.4);g.addColorStop(0,`rgba(${n.c},0.06)`);g.addColorStop(1,'transparent');cx.fillStyle=g;cx.fillRect(0,0,W,H);});
+  stars.forEach(s=>{s.a+=s.da;if(s.a<=0.05||s.a>=0.85)s.da*=-1;s.y-=s.vy;if(s.y<0){s.y=H;s.x=Math.random()*W;}cx.beginPath();cx.arc(s.x%W,s.y,s.r,0,Math.PI*2);cx.fillStyle=`rgba(${s.c},${s.a})`;cx.fill();});
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── PROGRESS ──
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('page-progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+
+// ── AUTH MODAL ──
+function openAuth(tab = 'login') {
+  document.getElementById('auth-overlay').classList.add('open');
+  switchTab(tab);
+  document.body.style.overflow = 'hidden';
+}
+function closeAuth() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+  document.getElementById('formLogin').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('formRegister').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('authTitle').textContent = isLogin ? 'Bienvenido de vuelta' : 'Únete a ARCANA';
+  document.getElementById('authSub').textContent = isLogin ? 'Inicia sesión para continuar' : 'Crea tu cuenta gratis en segundos';
+}
+document.getElementById('auth-overlay').addEventListener('click', e => { if (e.target.id === 'auth-overlay') closeAuth(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAuth(); });
+
+// ── TOAST ──
+function showToast(msg, type = 'info', duration = 3000) {
+  const icons = { success: '✅', error: '❌', info: '✦' };
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(t);
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, duration);
+}
+window.showToast = showToast;
+
+// ── MOBILE NAV ──
+function toggleMobileNav() { document.getElementById('mobile-nav').classList.toggle('open'); }
+
+// ── NOVEL CARD HTML ──
+function novelCard(n) {
+  const pillColors = ['pill-v','pill-r','pill-t','pill-g'];
+  return `<div class="novel-card" onclick="window.location.href='novel.html?id=${n.id}'">
+    <div class="novel-cover cv-${((n.id-1)%8)+1}">
+      <div class="novel-cover-shine"></div>
+      ${n.badge ? `<span class="novel-badge badge-${n.badge}">${n.badge==='new'?'NUEVO':n.badge==='hot'?'🔥 POPULAR':'COMPLETA'}</span>` : ''}
+      <span class="novel-cover-icon">${n.icon}</span>
+    </div>
+    <div class="novel-info">
+      <div class="novel-title">${n.title}</div>
+      <div class="novel-author">${n.author}</div>
+      <div class="novel-stats-row">
+        <span class="novel-stat">⭐ ${n.rating}</span>
+        <span class="novel-stat">👁 ${n.views}</span>
+        <span class="novel-stat">📖 ${n.chapters}</span>
+      </div>
+      <div class="novel-genres-row">
+        ${n.genres.slice(0,2).map(g=>`<span class="genre-micro">${g}</span>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── RENDER FEATURED ──
+const f = ARCANA_NOVELS[0];
+document.getElementById('featuredCard').innerHTML = `
+  <div class="feat-cover cv-1">
     <div class="feat-cover-glow"></div>
-    <span class="feat-icon">${f.icon}</span>
-    <div class="feat-cover-label">${f.title.toUpperCase()}</div>
+    <span class="feat-cover-icon">${f.icon}</span>
+    <div class="feat-cover-name">${f.title.toUpperCase()}</div>
   </div>
   <div>
-    <div style="margin-bottom:1rem">${f.genres.map((g,i)=>`<span class="genre-tag ${['purple','rose','teal','gold'][i%4]}">${g}</span>`).join('')}</div>
+    <div class="feat-vol">Vol. I — El Umbral</div>
+    <div class="feat-genres">
+      ${f.genres.map((g,i)=>`<span class="genre-pill ${['pill-v','pill-r','pill-t','pill-g'][i%4]}">${g}</span>`).join('')}
+    </div>
     <h3 class="feat-title">${f.title}</h3>
-    <p class="feat-author">por <span>${f.author}</span> · Vol. I — El Umbral</p>
+    <p class="feat-author">por <a href="profile.html?id=${f.authorId}">${f.author}</a></p>
     <p class="feat-desc">${f.desc}</p>
-    <div class="feat-meta">
-      <div class="meta-item">📖 <span>${f.chapters} capítulos</span></div>
-      <div class="meta-item">⭐ <span>${f.rating}</span></div>
-      <div class="meta-item">👁 <span>${f.views} lectores</span></div>
-      <div class="meta-item">❤️ <span>${f.favorites} favoritos</span></div>
+    <div class="feat-metas">
+      <span class="feat-meta">📖 <strong>${f.chapters} cap.</strong></span>
+      <span class="feat-meta">⭐ <strong>${f.rating}</strong></span>
+      <span class="feat-meta">👁 <strong>${f.views}</strong></span>
+      <span class="feat-meta">❤️ <strong>${f.favorites}</strong></span>
     </div>
     <div class="feat-btns">
-      <a href="reader.html?id=1&ch=0" class="btn-read">📖 Leer ahora — Gratis</a>
-      <button class="btn-fav" id="featFav" onclick="toggleFav(this)">♡</button>
+      <a href="reader.html?id=1&ch=0" class="btn-read">📖 Leer gratis</a>
+      <button class="btn-fav-toggle" id="featFav" onclick="toggleFavBtn(this,'${f.id}')">♡</button>
     </div>
   </div>`;
 
-// Trending
-document.getElementById('trendingGrid').innerHTML=getTopNovels('views',6).map(n=>novelCardHTML(n)).join('');
+// ── RENDER GRIDS ──
+const top6 = [...ARCANA_NOVELS].sort((a,b)=>b.viewsNum-a.viewsNum).slice(0,6);
+document.getElementById('trendingGrid').innerHTML = top6.map(novelCard).join('');
 
-// Genres
-document.getElementById('genresGrid').innerHTML=ARCANA_GENRES.map(g=>`
+document.getElementById('genresGrid').innerHTML = ARCANA_GENRES.map(g=>`
   <div class="genre-card" onclick="window.location.href='catalog.html?genre=${encodeURIComponent(g.name)}'">
-    <span class="genre-icon">${g.icon}</span>
+    <span class="genre-emoji">${g.icon}</span>
     <div class="genre-name">${g.name}</div>
     <div class="genre-count">${g.count} novela${g.count!==1?'s':''}</div>
   </div>`).join('');
 
-// New
-document.getElementById('newGrid').innerHTML=ARCANA_NOVELS.filter(n=>n.badge==='new').concat(ARCANA_NOVELS.slice(0,4)).slice(0,6).map(n=>novelCardHTML(n)).join('');
+const newNovels = ARCANA_NOVELS.filter(n=>n.badge==='new').slice(0,6);
+document.getElementById('newGrid').innerHTML = newNovels.map(novelCard).join('');
 
-// Stats
-document.getElementById('statNovels').textContent=ARCANA_NOVELS.length;
-
-function toggleFav(btn){
-  btn.classList.toggle('active');
-  btn.textContent=btn.classList.contains('active')?'♥':'♡';
-  showToast(btn.classList.contains('active')?'❤️ Añadido a favoritos':'Eliminado de favoritos');
+// ── RANKING ──
+const posColors = ['pos-1','pos-2','pos-3','pos-n','pos-n','pos-n'];
+function renderRank(containerId, arr) {
+  document.getElementById(containerId).innerHTML = arr.slice(0,6).map((n,i)=>`
+    <div class="rank-item" onclick="window.location.href='novel.html?id=${n.id}'">
+      <span class="rank-pos ${posColors[i]}">#${i+1}</span>
+      <div class="rank-cover cv-${((n.id-1)%8)+1}">${n.icon}</div>
+      <div class="rank-info">
+        <div class="rank-title">${n.title}</div>
+        <div class="rank-author">${n.author}</div>
+      </div>
+      <span class="rank-stat">👁 ${n.views}</span>
+    </div>`).join('');
 }
+renderRank('rankViews', [...ARCANA_NOVELS].sort((a,b)=>b.viewsNum-a.viewsNum));
+renderRank('rankRating', [...ARCANA_NOVELS].sort((a,b)=>b.rating-a.rating));
+
+// ── STAT COUNT ──
+document.getElementById('statNovels').textContent = ARCANA_NOVELS.length;
+
+// ── FAV TOGGLE ──
+function toggleFavBtn(btn, novelId) {
+  if (!window._currentUser) { openAuth('register'); return; }
+  const active = btn.classList.toggle('active');
+  btn.textContent = active ? '♥' : '♡';
+  showToast(active ? '❤️ Añadido a favoritos' : 'Eliminado de favoritos', active ? 'success' : 'info');
+}
+window.toggleFavBtn = toggleFavBtn;
+
+// ── INTERSECTION OBSERVER ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section').forEach(s => {
+  s.style.opacity = '0'; s.style.transform = 'translateY(20px)';
+  s.style.transition = 'opacity 0.6s, transform 0.6s';
+  io.observe(s);
+});
+
+// ── PWA ──
+let deferredPrompt;
+addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  setTimeout(() => {
+    if (deferredPrompt) showToast('🔮 Instala ARCANA como app', 'info', 5000);
+  }, 5000);
+});
 </script>
 </body>
 </html>
