@@ -170,19 +170,12 @@ input, textarea, select { font-family: var(--f-sans); }
 
 /* Dropdown menú usuario */
 .user-dropdown {
-  position: fixed;
-  top: 68px;
-  right: 1rem;
-  left: auto;
-  background: #0d0d26;
-  border: 1px solid rgba(120,80,255,0.4);
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--bg-2); border: 1px solid var(--b-2);
   border-radius: var(--r-md); padding: 0.5rem;
-  min-width: 230px;
-  z-index: 9999;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.9);
+  min-width: 200px; z-index: 300;
+  box-shadow: var(--shadow-lg);
   display: none;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
 }
 .user-dropdown.open { display: block; animation: dropIn 0.2s ease; }
 @keyframes dropIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
@@ -909,64 +902,13 @@ input, textarea, select { font-family: var(--f-sans); }
   </div>
 </div>
 
-<!-- ══ USER DROPDOWN (fuera de todo contenedor) ══ -->
-<div id="userDropdown" class="user-dropdown"></div>
-
 <!-- ══ TOAST ══ -->
 <div id="toast-container"></div>
 
-<script>
-// ══ ARCANA — Datos de novelas (inline para compatibilidad con módulos) ══
-const ARCANA_NOVELS = [
-  {id:1,title:'Quartetas del Destino',slug:'quartetas-del-destino',author:'Duban L.',authorId:1,icon:'🔮',cover:'cv-1',genres:['Ciencia Ficción','Misterio','IA','Aventura'],chapters:16,views:'2.4K',viewsNum:2400,rating:4.9,favorites:847,badge:'hot',status:'en curso',desc:'Un estudiante en Bogotá recibe un correo imposible de un remitente que no existe. Una IA construida durante nueve años para un único propósito. Un manuscrito de 1555 que contiene instrucciones para el año 2026. Bajo el Himalaya, algo lleva siglos esperando ser encontrado — y la única manera de llegar es haciendo la pregunta correcta.',descShort:'Un manuscrito de 1555 y una IA que lleva siglos esperando las preguntas correctas.'},
-  {id:2,title:'El Último Dragón',slug:'el-ultimo-dragon',author:'Mireya V.',authorId:2,icon:'🐉',cover:'cv-2',genres:['Fantasía','Acción','Romance'],chapters:24,views:'1.8K',viewsNum:1800,rating:4.7,favorites:620,badge:'new',status:'en curso',desc:'El último dragón del mundo despierta en el siglo XXI después de mil años de sueño.',descShort:'El último dragón despierta en el siglo XXI y encuentra a alguien imposible.'},
-  {id:3,title:'Código Rojo',slug:'codigo-rojo',author:'Carlos M.',authorId:3,icon:'💻',cover:'cv-3',genres:['Thriller','Tecnología','Suspenso'],chapters:12,views:'990',viewsNum:990,rating:4.5,favorites:310,badge:'',status:'en curso',desc:'Un hacker descubre que el sistema de vigilancia más avanzado del mundo lleva años observándolo.',descShort:'Un hacker descubre que el sistema lleva años observándolo. ¿Por qué?'},
-  {id:4,title:'Entre Mundos',slug:'entre-mundos',author:'Sofía R.',authorId:4,icon:'🌀',cover:'cv-4',genres:['Isekai','Romance','Fantasía'],chapters:32,views:'3.1K',viewsNum:3100,rating:4.8,favorites:1200,badge:'hot',status:'en curso',desc:'Despertar en otro mundo con los recuerdos de dos vidas diferentes.',descShort:'Despertar en otro mundo con los recuerdos de dos vidas — ¿cuál es la tuya?'},
-  {id:5,title:'La Sombra del Rey',slug:'la-sombra-del-rey',author:'Andrés P.',authorId:5,icon:'👑',cover:'cv-5',genres:['Histórico','Política','Misterio'],chapters:18,views:'760',viewsNum:760,rating:4.4,favorites:228,badge:'',status:'en curso',desc:'En una corte donde cada alianza es una trampa y cada sonrisa esconde un cuchillo.',descShort:'Intriga política en una corte donde nadie es lo que parece.'},
-  {id:6,title:'Señales del Vacío',slug:'senales-del-vacio',author:'Luna K.',authorId:6,icon:'🌌',cover:'cv-6',genres:['Ciencia Ficción','Terror','Misterio'],chapters:9,views:'540',viewsNum:540,rating:4.6,favorites:190,badge:'new',status:'en curso',desc:'Las señales del espacio profundo contienen un mensaje del futuro: no busquéis más.',descShort:'Las señales del espacio profundo contienen un mensaje del futuro.'},
-  {id:7,title:'El Tejedor de Sueños',slug:'el-tejedor-de-suenos',author:'Marco A.',authorId:7,icon:'✨',cover:'cv-7',genres:['Fantasía','Romance','Psicológico'],chapters:28,views:'2.2K',viewsNum:2200,rating:4.7,favorites:880,badge:'',status:'en curso',desc:'Alguien puede entrar en los sueños de cualquier persona — hasta que ve algo que no debía.',descShort:'Alguien que puede entrar en sueños ajenos ve algo que nunca debió ver.'},
-  {id:8,title:'Cenizas del Imperio',slug:'cenizas-del-imperio',author:'Valentina C.',authorId:8,icon:'🔥',cover:'cv-8',genres:['Acción','Política','Fantasía'],chapters:22,views:'1.3K',viewsNum:1300,rating:4.5,favorites:445,badge:'completed',status:'completada',desc:'El imperio cae. Una soldado traicionada decide quién se levanta sobre las cenizas.',descShort:'El imperio cae. Una soldado traicionada decide quién se levanta.'},
-  {id:9,title:'La Herencia del Viento',slug:'la-herencia-del-viento',author:'Isabella M.',authorId:9,icon:'🌬️',cover:'cv-2',genres:['Fantasía','Aventura','Romance'],chapters:14,views:'680',viewsNum:680,rating:4.3,favorites:195,badge:'new',status:'en curso',desc:'La última heredera de los poderes del viento los está perdiendo. Y el mundo lo pagará.',descShort:'La última heredera de los poderes del viento los está perdiendo.'},
-  {id:10,title:'Memorias Robadas',slug:'memorias-robadas',author:'Diego F.',authorId:10,icon:'🧠',cover:'cv-3',genres:['Ciencia Ficción','Thriller','Romance'],chapters:20,views:'1.1K',viewsNum:1100,rating:4.6,favorites:390,badge:'',status:'en curso',desc:'En el futuro las memorias se venden. Alguien robó las tuyas y tú no lo sabes.',descShort:'En el futuro las memorias se venden. Alguien robó las tuyas.'},
-  {id:11,title:'El Jardín de los Espíritus',slug:'el-jardin-de-los-espiritus',author:'Camila R.',authorId:11,icon:'🌸',cover:'cv-7',genres:['Sobrenatural','Romance','Slice of Life'],chapters:30,views:'1.9K',viewsNum:1900,rating:4.8,favorites:720,badge:'',status:'en curso',desc:'Un jardín misterioso, un espíritu centenario, y una florista que finalmente preguntó cómo estaba.',descShort:'Un jardín misterioso y un espíritu que lleva un siglo esperando que alguien le pregunte cómo está.'},
-  {id:12,title:'Protocolo Omega',slug:'protocolo-omega',author:'Rafael T.',authorId:12,icon:'⚡',cover:'cv-5',genres:['Acción','Sci-Fi','Thriller'],chapters:16,views:'870',viewsNum:870,rating:4.4,favorites:260,badge:'new',status:'en curso',desc:'Una IA de último recurso decide que la mejor manera de salvar la civilización es eliminar a los más ricos.',descShort:'Una IA de último recurso toma la decisión más polémica de la historia.'},
-  {id:13,title:'El Trono de Ceniza',slug:'el-trono-de-ceniza',author:'Isabela Varga',authorId:13,icon:'👑',cover:'cv-1',genres:['Fantasía Épica','Acción','Política'],chapters:28,views:'3.8K',viewsNum:3800,rating:4.9,favorites:1340,badge:'hot',status:'en curso',desc:'Cinco casas, un trono vacío, y un bastardo con la única arma que importa.',descShort:'Cinco casas, un trono vacío, y un bastardo con la única arma que importa.'},
-  {id:14,title:'Amor en Frecuencia Muerta',slug:'amor-en-frecuencia-muerta',author:'Natalia Cross',authorId:14,icon:'📻',cover:'cv-7',genres:['Romance Oscuro','Sobrenatural','Misterio'],chapters:22,views:'2.9K',viewsNum:2900,rating:4.8,favorites:1180,badge:'hot',status:'en curso',desc:'Una frecuencia imposible, una voz de ultratumba, y un amor que sobrevivió a la muerte.',descShort:'Una frecuencia imposible y una voz que lleva treinta años muerta esperándola.'},
-  {id:15,title:'Sistema: Dios de Nivel Cero',slug:'sistema-dios-nivel-cero',author:'Marco Shin',authorId:15,icon:'⚡',cover:'cv-2',genres:['Isekai','Acción','Fantasía'],chapters:45,views:'5.2K',viewsNum:5200,rating:4.7,favorites:2100,badge:'hot',status:'en curso',desc:'Las peores estadísticas del mundo + copiar cualquier habilidad = el personaje más roto de la historia.',descShort:'El sistema más roto del mundo en las manos del personaje más débil.'},
-  {id:16,title:'La Detective que Murió Tres Veces',slug:'la-detective-que-murio-tres-veces',author:'Camila Orozco',authorId:16,icon:'🔍',cover:'cv-3',genres:['Misterio','Thriller','Sobrenatural'],chapters:18,views:'1.7K',viewsNum:1700,rating:4.8,favorites:690,badge:'new',status:'en curso',desc:'Una detective que revive con cada muerte — y un caso que parece no tener solución.',descShort:'Una detective que revive con cada muerte busca un caso sin solución.'},
-  {id:17,title:'Núcleo Oscuro',slug:'nucleo-oscuro',author:'Andrés Vega',authorId:17,icon:'🌑',cover:'cv-6',genres:['Ciencia Ficción','Terror','Thriller'],chapters:15,views:'1.1K',viewsNum:1100,rating:4.6,favorites:380,badge:'',status:'en curso',desc:'Una estación espacial, dieciséis tripulantes sin memoria, y algo en el reactor que los espera.',descShort:'Una estación espacial y algo en el reactor que lleva días esperándolos.'},
-  {id:18,title:'El Sanador Maldito',slug:'el-sanador-maldito',author:'Paulo Méndez',authorId:18,icon:'💚',cover:'cv-4',genres:['Fantasía Épica','Acción','Romance'],chapters:36,views:'4.1K',viewsNum:4100,rating:4.8,favorites:1560,badge:'hot',status:'en curso',desc:'Un sanador que absorbe el dolor ajeno. Una guerrera cuyo dolor es exactamente el antídoto.',descShort:'Un sanador que absorbe el dolor y la única guerrera que podría salvarlo.'},
-  {id:19,title:'Cuando el Monstruo Pregunta',slug:'cuando-el-monstruo-pregunta',author:'Luna Espinoza',authorId:19,icon:'🖤',cover:'cv-3',genres:['Romance Oscuro','Terror','Fantasía'],chapters:24,views:'2.6K',viewsNum:2600,rating:4.9,favorites:1090,badge:'',status:'en curso',desc:'El monstruo que lleva siglos liberando doncellas. La primera que se atrevió a preguntarle por qué.',descShort:'El monstruo del bosque y la primera doncella que le preguntó por qué las dejaba ir.'},
-  {id:20,title:'Hackeo al Destino',slug:'hackeo-al-destino',author:'Diego Ríos',authorId:20,icon:'💾',cover:'cv-5',genres:['Ciencia Ficción','Thriller','Romance'],chapters:20,views:'1.4K',viewsNum:1400,rating:4.6,favorites:510,badge:'new',status:'en curso',desc:'Una IA que controla el destino de todos. Un hacker que encuentra la forma de hackearlo.',descShort:'Una IA gubernamental controla el destino de todos. Un hacker encuentra el backdoor.'},
-  {id:21,title:'Artes Marciales del Fin del Mundo',slug:'artes-marciales-del-fin-del-mundo',author:'Tomás Wei',authorId:21,icon:'🥋',cover:'cv-8',genres:['Acción y Artes Marciales','Fantasía','Apocalíptico'],chapters:52,views:'6.3K',viewsNum:6300,rating:4.7,favorites:2480,badge:'hot',status:'en curso',desc:'El fin del mundo reveló que las artes marciales eran más reales de lo que parecían.',descShort:'El apocalipsis y el alumno más mediocre que conoce la técnica prohibida.'},
-  {id:22,title:'La Casa que Recuerda',slug:'la-casa-que-recuerda',author:'Valentina Ríos',authorId:22,icon:'🏚️',cover:'cv-7',genres:['Terror Sobrenatural','Misterio','Drama'],chapters:16,views:'980',viewsNum:980,rating:4.7,favorites:360,badge:'new',status:'en curso',desc:'Una casa que guarda memorias de todos los que vivieron en ella. Y una de esas versiones quiere salir.',descShort:'Una casa con memorias de vidas alternativas — y una versión que quiere escapar.'},
-  {id:23,title:'Reencarnación Nivel Dios',slug:'reencarnacion-nivel-dios',author:'Sofía Tanaka',authorId:23,icon:'✨',cover:'cv-1',genres:['Isekai','Fantasía','Comedia'],chapters:38,views:'4.8K',viewsNum:4800,rating:4.6,favorites:1820,badge:'hot',status:'en curso',desc:'Un programador reencarna como diosa del caos y descubre que el universo tiene bugs.',descShort:'Un programador reencarna como diosa del caos. El universo tiene código fuente.'},
-  {id:24,title:'El Último Caso del Detective Muerto',slug:'el-ultimo-caso-del-detective-muerto',author:'Rodrigo Vela',authorId:24,icon:'🕵️',cover:'cv-6',genres:['Misterio y Detectives','Sobrenatural','Thriller'],chapters:21,views:'1.5K',viewsNum:1500,rating:4.8,favorites:620,badge:'',status:'completada',desc:'Un detective fantasma, una detective viva, y el caso que lo mató hace diez años.',descShort:'Un detective fantasma y la detective que retoma su caso sin resolverlo.'},
-  {id:25,title:'Sangre de Estrella',slug:'sangre-de-estrella',author:'Alejandra Voss',authorId:25,icon:'🌟',cover:'cv-2',genres:['Fantasía Épica','Romance Oscuro','Acción'],chapters:32,views:'3.4K',viewsNum:3400,rating:4.9,favorites:1430,badge:'',status:'en curso',desc:'Una estrella caída que olvidó lo que era. Un cazador que la encontró antes de que recordara.',descShort:'Una estrella caída sin memoria y el cazador que llegó antes que sus recuerdos.'},
-  {id:26,title:'Protocolo Bestia',slug:'protocolo-bestia',author:'Carlos Mendive',authorId:26,icon:'🐺',cover:'cv-8',genres:['Ciencia Ficción','Acción','Thriller'],chapters:25,views:'2.1K',viewsNum:2100,rating:4.6,favorites:780,badge:'',status:'en curso',desc:'Una soldado a tres activaciones del punto de no retorno. La misión requiere cuatro.',descShort:'Una soldado de élite a tres activaciones del colapso. La misión requiere cuatro.'},
-  {id:27,title:'El Nigromante Gentil',slug:'el-nigromante-gentil',author:'Felipe Soto',authorId:27,icon:'💀',cover:'cv-5',genres:['Fantasía','Romance','Comedia'],chapters:29,views:'2.7K',viewsNum:2700,rating:4.8,favorites:1050,badge:'',status:'en curso',desc:'El nigromante más poderoso del reino se dedica a resucitar mascotas. La paladin enviada a matarlo tiene un problema.',descShort:'El nigromante más poderoso resucita mascotas. La paladin tiene un dilema.'},
-  {id:28,title:'Frecuencia 404',slug:'frecuencia-404',author:'Ana Blanco',authorId:28,icon:'📡',cover:'cv-6',genres:['Thriller','Ciencia Ficción','Misterio'],chapters:17,views:'1.2K',viewsNum:1200,rating:4.7,favorites:430,badge:'new',status:'en curso',desc:'Un audio del futuro. Una periodista con 72 horas para evitar su propio asesinato.',descShort:'Un audio del futuro y 72 horas para evitar el asesinato que contiene.'},
-  {id:29,title:'El Imperio de los Sueños Rotos',slug:'el-imperio-de-los-suenos-rotos',author:'Cristina Morales',authorId:29,icon:'🏰',cover:'cv-1',genres:['Fantasía Épica','Político','Drama'],chapters:40,views:'3.6K',viewsNum:3600,rating:4.8,favorites:1340,badge:'',status:'en curso',desc:'Una emperatriz que puede controlar los sueños de millones. El poder absoluto, la pregunta ética absoluta.',descShort:'Una emperatriz que puede controlar sueños. ¿Debe hacerlo?'},
-  {id:30,title:'Amor en Tiempo de Mutantes',slug:'amor-en-tiempo-de-mutantes',author:'Jorge Castillo',authorId:30,icon:'💥',cover:'cv-4',genres:['Romance','Ciencia Ficción','Acción'],chapters:26,views:'2.3K',viewsNum:2300,rating:4.6,favorites:870,badge:'',status:'en curso',desc:'Su poder neutraliza los de los demás. Se enamoró del más poderoso de todos.',descShort:'Su poder neutraliza superpoderes. Se enamoró del más poderoso de la ciudad.'},
-  {id:31,title:'El Último Exorcista',slug:'el-ultimo-exorcista',author:'Miranda Vela',authorId:31,icon:'🕯️',cover:'cv-3',genres:['Terror Sobrenatural','Acción','Drama'],chapters:23,views:'1.8K',viewsNum:1800,rating:4.7,favorites:660,badge:'',status:'en curso',desc:'El último exorcista que rompió su voto. La entidad que se lo devolvió a cambio de algo inesperado.',descShort:'El último exorcista y el pacto con la entidad que resultó menos malvada.'},
-  {id:32,title:'Mil Años de Silencio',slug:'mil-anos-de-silencio',author:'Elena Voss',authorId:32,icon:'⏳',cover:'cv-5',genres:['Romance Oscuro','Fantasía','Histórico'],chapters:34,views:'4.2K',viewsNum:4200,rating:4.9,favorites:1780,badge:'hot',status:'en curso',desc:'Maldecida a no hablar por mil años. Un lingüista que descifró el idioma que ella inventó para sobrevivir.',descShort:'Mil años de silencio y el lingüista que descifró su idioma secreto.'},
-];
+<!-- ══ USER DROPDOWN ══ -->
+<div id="userDropdown" class="user-dropdown"></div>
 
-const ARCANA_GENRES = [
-  {icon:'🚀',name:'Ciencia Ficción',count:5},
-  {icon:'🐉',name:'Fantasía',count:6},
-  {icon:'💕',name:'Romance',count:5},
-  {icon:'🔪',name:'Thriller',count:4},
-  {icon:'👻',name:'Terror',count:3},
-  {icon:'⚔️',name:'Acción',count:4},
-  {icon:'🏛️',name:'Histórico',count:2},
-  {icon:'🌀',name:'Isekai',count:2},
-  {icon:'🧠',name:'Psicológico',count:2},
-  {icon:'🌸',name:'Slice of Life',count:1},
-  {icon:'🌌',name:'Sobrenatural',count:3},
-  {icon:'💻',name:'Tecnología',count:2},
-];
-</script>
+<script src="js/data.js"></script>
 <script type="module">
 // ── FIREBASE IMPORTS ──
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
@@ -1032,7 +974,14 @@ function renderDropdown(user) {
 }
 
 window.toggleUserDropdown = function() {
-  document.getElementById('userDropdown').classList.toggle('open');
+  const dd = document.getElementById('userDropdown');
+  const btn = document.getElementById('navUserBtn');
+  if (!btn) return;
+  const rect = btn.getBoundingClientRect();
+  dd.style.top = (rect.bottom + 8) + 'px';
+  dd.style.right = (window.innerWidth - rect.right) + 'px';
+  dd.style.position = 'fixed';
+  dd.classList.toggle('open');
 };
 
 document.addEventListener('click', e => {
