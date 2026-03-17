@@ -171,15 +171,18 @@ input, textarea, select { font-family: var(--f-sans); }
 /* Dropdown menú usuario */
 .user-dropdown {
   position: fixed;
-  background: #0f0f28;
-  border: 1px solid rgba(120,80,255,0.35);
+  top: 68px;
+  right: 1rem;
+  left: auto;
+  background: #0d0d26;
+  border: 1px solid rgba(120,80,255,0.4);
   border-radius: var(--r-md); padding: 0.5rem;
-  min-width: 220px;
+  min-width: 230px;
   z-index: 9999;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(120,80,255,0.1);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.9);
   display: none;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 .user-dropdown.open { display: block; animation: dropIn 0.2s ease; }
 @keyframes dropIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
@@ -1029,14 +1032,7 @@ function renderDropdown(user) {
 }
 
 window.toggleUserDropdown = function() {
-  const dd = document.getElementById('userDropdown');
-  const btn = document.getElementById('navUserBtn');
-  if (!btn) return;
-  const rect = btn.getBoundingClientRect();
-  dd.style.top = (rect.bottom + 8) + 'px';
-  dd.style.right = (window.innerWidth - rect.right) + 'px';
-  dd.style.position = 'fixed';
-  dd.classList.toggle('open');
+  document.getElementById('userDropdown').classList.toggle('open');
 };
 
 document.addEventListener('click', e => {
