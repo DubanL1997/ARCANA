@@ -16,193 +16,116 @@
 .dash-main-inner{max-width:860px;}
 .dash-title{font-family:var(--display);font-size:1.6rem;font-weight:900;color:var(--text);letter-spacing:0.04em;margin-bottom:0.3rem;}
 .dash-sub{color:var(--text2);font-size:0.88rem;margin-bottom:2rem;}
-
-/* ── STATS CARDS ── */
 .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2.5rem;}
 .stat-card{padding:1.3rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);}
 .stat-card-n{font-family:var(--display);font-size:1.8rem;font-weight:900;color:var(--text);display:block;margin-bottom:0.2rem;}
 .stat-card-l{font-size:0.68rem;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;}
 .stat-card-trend{font-size:0.72rem;color:var(--teal);margin-top:0.3rem;}
-
-/* ── FORM ── */
 .publish-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .form-section-title{font-family:var(--display);font-size:0.9rem;font-weight:600;color:var(--text);letter-spacing:0.06em;margin:1.5rem 0 1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border2);}
 .form-textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.8rem;color:var(--text);font-family:var(--sans);font-size:0.88rem;resize:vertical;min-height:120px;transition:border-color 0.2s;}
 .form-textarea:focus{outline:none;border-color:var(--purple);}
-.form-textarea::placeholder{color:var(--text3);}
 .form-select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.65rem 0.9rem;color:var(--text2);font-family:var(--sans);font-size:0.88rem;}
 .form-select:focus{outline:none;border-color:var(--purple);}
-.genre-checkboxes{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem;}
-.genre-check{display:none;}
-.genre-check-label{padding:0.25rem 0.7rem;border-radius:50px;font-size:0.68rem;font-weight:500;letter-spacing:0.08em;cursor:pointer;border:1px solid var(--border);color:var(--text3);transition:all 0.2s;}
-.genre-check:checked+.genre-check-label{background:rgba(138,100,255,0.15);border-color:var(--purple);color:var(--purple3);}
-.form-actions{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;}
-
-/* ── MY NOVELS TABLE ── */
 .my-novels-table{width:100%;border-collapse:collapse;}
 .mnt thead tr{border-bottom:1px solid var(--border2);}
 .mnt th{font-size:0.65rem;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;padding:0.6rem 0.8rem;text-align:left;font-weight:600;}
 .mnt td{padding:0.8rem;border-bottom:1px solid var(--border2);font-size:0.82rem;color:var(--text2);}
-.mnt tr:last-child td{border-bottom:none;}
 .mnt tr:hover td{background:rgba(138,100,255,0.03);}
 .mnt .novel-name{color:var(--text);font-weight:500;font-family:var(--display);font-size:0.8rem;letter-spacing:0.03em;}
 .tbl-badge{padding:0.15rem 0.5rem;border-radius:50px;font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}
 .tbl-edit{padding:0.3rem 0.7rem;font-size:0.68rem;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
 .tbl-edit:hover{border-color:var(--purple3);color:var(--purple3);}
-
-@media(max-width:768px){
-  .dash-layout{grid-template-columns:1fr;}
-  .dash-sidebar{position:static;height:auto;display:flex;flex-direction:row;overflow-x:auto;padding:0;}
-  .dash-nav-section{display:none;}
-  .form-row{grid-template-columns:1fr;}
-}
+@media(max-width:768px){ .dash-layout{grid-template-columns:1fr;} .dash-sidebar{position:static;height:auto;display:flex;flex-direction:row;overflow-x:auto;padding:0;} .dash-nav-section{display:none;} .form-row{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
 <nav id="navbar"></nav>
-
 <div class="dash-layout">
   <aside class="dash-sidebar">
     <div class="dash-nav-section">Principal</div>
     <button class="dash-nav-item active" onclick="showPanel('overview')"><span class="icon">📊</span>Resumen</button>
     <button class="dash-nav-item" onclick="showPanel('novels')"><span class="icon">📚</span>Mis novelas</button>
-    <button class="dash-nav-item" onclick="showPanel('publish')"><span class="icon">✍️</span>Publicar novela</button>
+    <button class="dash-nav-item" onclick="preparePublish()"><span class="icon">✍️</span>Publicar novela</button>
     <button class="dash-nav-item" onclick="showPanel('chapters')"><span class="icon">📝</span>Añadir capítulo</button>
     <div class="dash-nav-section">Cuenta</div>
-    <button class="dash-nav-item" onclick="showPanel('profile')"><span class="icon">👤</span>Mi perfil</button>
-    <button class="dash-nav-item" onclick="showPanel('analytics')"><span class="icon">📈</span>Estadísticas</button>
     <button class="dash-nav-item" onclick="window.location.href='index.html'"><span class="icon">🏠</span>Ir a ARCANA</button>
   </aside>
-
   <main class="dash-main" style="background:var(--bg);">
     <div class="dash-main-inner" id="dashContent"></div>
   </main>
 </div>
-
-<div id="auth-modal">
-  <div class="auth-card">
-    <button class="auth-close" onclick="closeAuth()">✕</button>
-    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias</p>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
-    </div>
-    <div id="auth-form-login">
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Iniciando...');closeAuth()">Iniciar sesión</button>
-    </div>
-  </div>
-</div>
 <div id="toast"></div>
-
 <script src="js/data.js"></script>
 <script>
 initCanvas('bg-canvas');
 renderNavbar('dashboard');
-initModals();
+let editingNovelId = null;
 
 const PANELS = {
   overview: ()=>`
     <h1 class="dash-title">Panel de Autor</h1>
-    <p class="dash-sub">Bienvenido a tu espacio de creación en ARCANA.</p>
     <div class="stats-row">
-      <div class="stat-card"><span class="stat-card-n">--</span><span class="stat-card-l">Novelas</span><div class="stat-card-trend">Actualizado</div></div>
-      <div class="stat-card"><span class="stat-card-n">0</span><span class="stat-card-l">Capítulos</span><div class="stat-card-trend">Nuevo autor</div></div>
-      <div class="stat-card"><span class="stat-card-n">0</span><span class="stat-card-l">Lecturas</span><div class="stat-card-trend">Sin datos</div></div>
+      <div class="stat-card"><span class="stat-card-n" id="stat-count">--</span><span class="stat-card-l">Novelas</span></div>
+      <div class="stat-card"><span class="stat-card-n">0</span><span class="stat-card-l">Lecturas</span></div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;">
-      <h3 style="font-family:var(--display);font-size:0.9rem;color:var(--text);letter-spacing:0.06em;margin-bottom:1rem;">Acciones rápidas</h3>
-      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
-        <button class="btn-primary" onclick="showPanel('publish')">✍️ Nueva novela</button>
-        <button class="btn-ghost" onclick="showPanel('chapters')">📝 Añadir capítulo</button>
-      </div>
+      <button class="btn-primary" onclick="preparePublish()">✍️ Nueva novela</button>
     </div>`,
-
   novels: ()=>`
     <h1 class="dash-title">Mis Novelas</h1>
-    <p class="dash-sub">Gestiona tus historias reales desde la base de datos.</p>
-    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
-      <button class="btn-primary" onclick="showPanel('publish')">+ Nueva novela</button>
-    </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
       <table class="my-novels-table mnt">
         <thead><tr><th>Novela</th><th>Estado</th><th>Capítulos</th><th>Acción</th></tr></thead>
-        <tbody id="myNovelsList">
-          <tr><td colspan="4" style="text-align:center; padding:2rem;">Cargando tus historias...</td></tr>
-        </tbody>
+        <tbody id="myNovelsList"><tr><td colspan="4" style="text-align:center; padding:2rem;">Cargando...</td></tr></tbody>
       </table>
     </div>`,
-
   publish: ()=>`
-    <h1 class="dash-title">Publicar Nueva Novela</h1>
+    <h1 class="dash-title" id="pubPanelTitle">Publicar Nueva Novela</h1>
     <div class="publish-form">
-      <div class="form-section-title">Información básica</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Título *</label><input id="pubTitle" class="form-input" type="text" placeholder="El título de tu obra"></div>
-        <div class="form-group"><label class="form-label">Volumen</label><input id="pubVol" class="form-input" type="text" placeholder="Vol. I"></div>
+        <div class="form-group"><label class="form-label">Título *</label><input id="pubTitle" class="form-input" type="text"></div>
+        <div class="form-group"><label class="form-label">Volumen</label><input id="pubVol" class="form-input" type="text"></div>
       </div>
-      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea id="pubDesc" class="form-textarea" placeholder="Descripción completa..."></textarea></div>
+      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea id="pubDesc" class="form-textarea"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input id="pubShortDesc" class="form-input" type="text" placeholder="Una línea para catálogo"></div>
         <div class="form-group"><label class="form-label">Estado</label>
           <select id="pubStatus" class="form-select">
             <option value="en curso">En curso</option>
             <option value="completada">Completada</option>
           </select>
         </div>
+        <div class="form-group"><label class="form-label">Emoji</label><input id="pubIcon" class="form-input" type="text" maxlength="4"></div>
       </div>
-      <div class="form-section-title">Apariencia</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Emoji Portada</label><input id="pubIcon" class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
-        <div class="form-group"><label class="form-label">Color Fondo</label>
-          <select id="pubCoverColor" class="form-select">
-            <option value="cover-1">Púrpura</option><option value="cover-2">Azul</option><option value="cover-3">Rojo</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-actions"><button class="btn-primary" onclick="window.submitNovel()">✦ Publicar ahora</button></div>
+      <div class="form-actions"><button class="btn-primary" id="btnSubmitNovel" onclick="window.submitNovel()">✦ Guardar Novela</button></div>
     </div>`,
-
-  chapters: ()=>`
-    <h1 class="dash-title">Añadir Capítulo</h1>
-    <div class="publish-form">
-      <div class="form-section-title">Novela destino</div>
-      <div class="form-group">
-        <label class="form-label">Selecciona tu novela *</label>
-        <select id="chapNovelSelect" class="form-select">
-          <option value="">Cargando tus novelas...</option>
-        </select>
-      </div>
-      <div class="form-section-title">Contenido del capítulo</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número / Etiqueta</label><input id="chapNum" class="form-input" type="text" placeholder="Capítulo I · Prólogo"></div>
-        <div class="form-group"><label class="form-label">Título del capítulo *</label><input id="chapTitle" class="form-input" type="text" placeholder="El nombre de esta parte"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Texto del capítulo *</label>
-        <textarea id="chapterContent" class="form-textarea" style="min-height:400px;" placeholder="Escribe aquí tu historia..."></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="window.submitChapter()">📝 Publicar capítulo</button>
-      </div>
-    </div>`
+  chapters: ()=>`<h1 class="dash-title">Añadir Capítulo</h1><div class="publish-form">
+    <div class="form-group"><label class="form-label">Novela</label><select id="chapNovelSelect" class="form-select"><option>Cargando...</option></select></div>
+    <div class="form-group"><label class="form-label">Título Capítulo</label><input id="chapTitle" class="form-input" type="text"></div>
+    <div class="form-group"><label class="form-label">Contenido</label><textarea id="chapterContent" class="form-textarea" style="min-height:300px;"></textarea></div>
+    <button class="btn-primary" onclick="window.submitChapter()">📝 Publicar capítulo</button>
+  </div>`
 };
 
-let activePanel = 'overview';
-
 function showPanel(panel){
-  activePanel = panel;
-  document.querySelectorAll('.dash-nav-item').forEach(btn=>{
-    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(panel));
-  });
   document.getElementById('dashContent').innerHTML = PANELS[panel]?.() || PANELS.overview();
-  
-  // Disparar carga de datos
   if((panel==='novels' || panel==='overview') && window.loadMyNovels) window.loadMyNovels();
   if(panel==='chapters' && window.fillNovelSelector) window.fillNovelSelector();
 }
+
+function preparePublish() {
+  editingNovelId = null;
+  showPanel('publish');
+}
+
+window.editNovel = async function(id) {
+  editingNovelId = id;
+  showPanel('publish');
+  document.getElementById('pubPanelTitle').textContent = "Editar Novela";
+  if(window.loadNovelToForm) window.loadNovelToForm(id);
+};
 
 showPanel('overview');
 </script>
@@ -210,7 +133,7 @@ showPanel('overview');
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
   import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-  import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+  import { getFirestore, collection, addDoc, updateDoc, doc, getDoc, serverTimestamp, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
@@ -227,108 +150,78 @@ showPanel('overview');
 
   onAuthStateChanged(auth, user => {
     window._currentUser = user;
-    if(user) {
-        if(activePanel === 'novels' || activePanel === 'overview') window.loadMyNovels();
-        if(activePanel === 'chapters') window.fillNovelSelector();
-    }
+    if(user) window.loadMyNovels();
   });
 
-  // CARGAR NOVELAS REALES EN TABLA
   window.loadMyNovels = async function() {
     const tableBody = document.getElementById('myNovelsList');
     if (!tableBody || !window._currentUser) return;
-
     try {
       const q = query(collection(db, "novels"), where("authorId", "==", window._currentUser.uid));
-      const querySnapshot = await getDocs(q);
-      
-      if (querySnapshot.empty) {
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:2rem;">Aún no has publicado nada.</td></tr>`;
-        return;
-      }
-
-      let html = '';
-      querySnapshot.forEach((doc) => {
-        const n = doc.data();
-        html += `<tr>
-          <td><span class="novel-name">${n.title}</span></td>
-          <td><span class="tbl-badge status-ongoing">${n.status}</span></td>
-          <td>${n.chapters || 0}</td>
-          <td><button class="tbl-edit" onclick="showToast('Edición próximamente')">Editar</button></td>
-        </tr>`;
+      const snap = await getDocs(q);
+      if(document.getElementById('stat-count')) document.getElementById('stat-count').textContent = snap.size;
+      let html = snap.empty ? '<tr><td colspan="4" style="text-align:center;">Sin novelas.</td></tr>' : '';
+      snap.forEach(d => {
+        const n = d.data();
+        html += `<tr><td><span class="novel-name">${n.title}</span></td><td>${n.status}</td><td>${n.chapters || 0}</td>
+        <td><button class="tbl-edit" onclick="window.editNovel('${d.id}')">Editar</button></td></tr>`;
       });
       tableBody.innerHTML = html;
-    } catch (e) { tableBody.innerHTML = `<tr><td colspan="4">Error de base de datos.</td></tr>`; }
+    } catch (e) { console.error(e); }
   };
 
-  // LLENAR SELECTOR DE NOVELAS
-  window.fillNovelSelector = async function() {
-    const select = document.getElementById('chapNovelSelect');
-    if (!select || !window._currentUser) return;
+  window.loadNovelToForm = async function(id) {
+    const d = await getDoc(doc(db, "novels", id));
+    if(d.exists()){
+      const n = d.data();
+      document.getElementById('pubTitle').value = n.title;
+      document.getElementById('pubVol').value = n.volSubtitle || '';
+      document.getElementById('pubDesc').value = n.desc;
+      document.getElementById('pubStatus').value = n.status;
+      document.getElementById('pubIcon').value = n.icon;
+    }
+  };
 
+  window.submitNovel = async function() {
+    const data = {
+      title: document.getElementById('pubTitle').value.trim(),
+      volSubtitle: document.getElementById('pubVol').value.trim(),
+      desc: document.getElementById('pubDesc').value.trim(),
+      status: document.getElementById('pubStatus').value,
+      icon: document.getElementById('pubIcon').value || '🔮',
+      lastUpdate: serverTimestamp()
+    };
     try {
-        const q = query(collection(db, "novels"), where("authorId", "==", window._currentUser.uid));
-        const snap = await getDocs(q);
-        let html = '<option value="">Selecciona una novela</option>';
-        snap.forEach(doc => {
-            html += `<option value="${doc.id}">${doc.data().title}</option>`;
-        });
-        select.innerHTML = html;
-    } catch(e) { select.innerHTML = '<option>Error al cargar novelas</option>'; }
+      if(editingNovelId) {
+        await updateDoc(doc(db, "novels", editingNovelId), data);
+        showToast("✦ Cambios guardados");
+      } else {
+        await addDoc(collection(db, "novels"), { ...data, authorId: window._currentUser.uid, author: window._currentUser.displayName, chapters: 0, createdAt: serverTimestamp() });
+        showToast("✦ Novela publicada");
+      }
+      showPanel('novels');
+    } catch (e) { showToast("Error al guardar"); }
   };
 
-  // PUBLICAR CAPÍTULO
-  window.submitChapter = async function() {
-    if (!window._currentUser) { showToast('Inicia sesión primero'); return; }
+  window.fillNovelSelector = async function() {
+    const s = document.getElementById('chapNovelSelect');
+    if(!s || !window._currentUser) return;
+    const q = query(collection(db, "novels"), where("authorId", "==", window._currentUser.uid));
+    const snap = await getDocs(q);
+    s.innerHTML = snap.empty ? '<option>Crea una novela primero</option>' : '<option value="">Selecciona...</option>';
+    snap.forEach(d => s.innerHTML += `<option value="${d.id}">${d.data().title}</option>`);
+  };
 
+  window.submitChapter = async function() {
     const novelId = document.getElementById('chapNovelSelect').value;
     const title = document.getElementById('chapTitle').value.trim();
     const content = document.getElementById('chapterContent').value.trim();
-    const num = document.getElementById('chapNum').value.trim();
-
-    if (!novelId || !title || !content) { showToast('Llena los campos obligatorios (*)'); return; }
-
+    if(!novelId || !title || !content) return showToast("Llena los campos");
     try {
-      showToast('Publicando capítulo...', 'info');
-      await addDoc(collection(db, 'chapters'), {
-        novelId, title, content, numberLabel: num,
-        authorId: window._currentUser.uid,
-        createdAt: serverTimestamp()
-      });
-      showToast(`✦ "${title}" publicado exitosamente`);
+      await addDoc(collection(db, "chapters"), { novelId, title, content, authorId: window._currentUser.uid, createdAt: serverTimestamp() });
+      showToast("✦ Capítulo publicado");
       showPanel('novels');
-    } catch (e) { showToast('Error al publicar capítulo'); }
-  };
-
-  // PUBLICAR NOVELA
-  window.submitNovel = async function() {
-    if (!window._currentUser) { showToast('Inicia sesión primero'); return; }
-
-    const title = document.getElementById('pubTitle').value.trim();
-    const desc = document.getElementById('pubDesc').value.trim();
-    
-    if (!title || !desc) { showToast('Llena los campos obligatorios'); return; }
-
-    const novelData = {
-      title, desc,
-      volSubtitle: document.getElementById('pubVol').value.trim(),
-      descShort: document.getElementById('pubShortDesc').value.trim() || title,
-      status: document.getElementById('pubStatus').value,
-      icon: document.getElementById('pubIcon').value || '🔮',
-      cover: document.getElementById('pubCoverColor').value,
-      author: window._currentUser.displayName || 'Autor ARCANA',
-      authorId: window._currentUser.uid, 
-      chapters: 0,
-      createdAt: serverTimestamp(),
-      genres: ['General'], tags: []
-    };
-
-    try {
-      showToast('Publicando...', 'info');
-      await addDoc(collection(db, 'novels'), novelData);
-      showToast(`✦ "${title}" publicada exitosamente`);
-      showPanel('novels');
-    } catch (error) { showToast('Error al publicar'); }
+    } catch (e) { showToast("Error"); }
   };
 </script>
 </body>
