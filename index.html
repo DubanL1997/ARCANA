@@ -170,10 +170,10 @@ input, textarea, select { font-family: var(--f-sans); }
 
 /* Dropdown menú usuario */
 .user-dropdown {
-  position: absolute; top: calc(100% + 8px); right: 0;
+  position: fixed;
   background: var(--bg-2); border: 1px solid var(--b-2);
   border-radius: var(--r-md); padding: 0.5rem;
-  min-width: 200px; z-index: 300;
+  min-width: 200px; max-width: calc(100vw - 16px); z-index: 300;
   box-shadow: var(--shadow-lg);
   display: none;
 }
@@ -978,9 +978,22 @@ window.toggleUserDropdown = function() {
   const btn = document.getElementById('navUserBtn');
   if (!btn) return;
   const rect = btn.getBoundingClientRect();
-  dd.style.top = (rect.bottom + 8) + 'px';
-  dd.style.right = (window.innerWidth - rect.right) + 'px';
+  const ddWidth = 220; // min-width del dropdown
+  // Calcular right sin salirse del viewport
+  const rightFromViewport = window.innerWidth - rect.right;
+  const safeRight = Math.max(8, rightFromViewport); // mínimo 8px del borde
+  // Si el dropdown se saldría por la izquierda, anclar a la izquierda en vez
+  const leftAnchor = rect.right - ddWidth;
   dd.style.position = 'fixed';
+  dd.style.top = (rect.bottom + 8) + 'px';
+  if (leftAnchor < 8) {
+    // En móvil: alinear al borde izquierdo del botón o a 8px del borde
+    dd.style.left = Math.max(8, rect.left) + 'px';
+    dd.style.right = 'auto';
+  } else {
+    dd.style.right = safeRight + 'px';
+    dd.style.left = 'auto';
+  }
   dd.classList.toggle('open');
 };
 
