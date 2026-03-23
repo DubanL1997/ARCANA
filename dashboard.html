@@ -166,7 +166,28 @@ const PANELS = {
       <div class="form-actions"><button class="btn-primary" onclick="window.submitNovel()">✦ Publicar ahora</button></div>
     </div>`,
 
-  chapters: ()=>`<h1>Próximamente</h1><p>El sistema de capítulos se habilitará en el siguiente paso.</p>`
+  chapters: ()=>`
+    <h1 class="dash-title">Añadir Capítulo</h1>
+    <div class="publish-form">
+      <div class="form-section-title">Novela destino</div>
+      <div class="form-group">
+        <label class="form-label">Selecciona tu novela *</label>
+        <select id="chapNovelSelect" class="form-select">
+          <option value="">Cargando tus novelas...</option>
+        </select>
+      </div>
+      <div class="form-section-title">Contenido del capítulo</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Número / Etiqueta</label><input id="chapNum" class="form-input" type="text" placeholder="Capítulo I · Prólogo"></div>
+        <div class="form-group"><label class="form-label">Título del capítulo *</label><input id="chapTitle" class="form-input" type="text" placeholder="El nombre de esta parte"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Texto del capítulo *</label>
+        <textarea id="chapterContent" class="form-textarea" style="min-height:400px;" placeholder="Escribe aquí tu historia..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="window.submitChapter()">📝 Publicar capítulo</button>
+      </div>
+    </div>`
 };
 
 let activePanel = 'overview';
@@ -177,8 +198,10 @@ function showPanel(panel){
     btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(panel));
   });
   document.getElementById('dashContent').innerHTML = PANELS[panel]?.() || PANELS.overview();
-  // Disparar carga de datos si existe la función global
+  
+  // Disparar carga de datos
   if((panel==='novels' || panel==='overview') && window.loadMyNovels) window.loadMyNovels();
+  if(panel==='chapters' && window.fillNovelSelector) window.fillNovelSelector();
 }
 
 showPanel('overview');
@@ -204,10 +227,13 @@ showPanel('overview');
 
   onAuthStateChanged(auth, user => {
     window._currentUser = user;
-    if(user) window.loadMyNovels();
+    if(user) {
+        if(activePanel === 'novels' || activePanel === 'overview') window.loadMyNovels();
+        if(activePanel === 'chapters') window.fillNovelSelector();
+    }
   });
 
-  // CARGAR NOVELAS REALES
+  // CARGAR NOVELAS REALES EN TABLA
   window.loadMyNovels = async function() {
     const tableBody = document.getElementById('myNovelsList');
     if (!tableBody || !window._currentUser) return;
@@ -232,12 +258,51 @@ showPanel('overview');
         </tr>`;
       });
       tableBody.innerHTML = html;
-    } catch (e) { tableBody.innerHTML = `<tr><td colspan="4">Error al conectar con la base de datos.</td></tr>`; }
+    } catch (e) { tableBody.innerHTML = `<tr><td colspan="4">Error de base de datos.</td></tr>`; }
+  };
+
+  // LLENAR SELECTOR DE NOVELAS
+  window.fillNovelSelector = async function() {
+    const select = document.getElementById('chapNovelSelect');
+    if (!select || !window._currentUser) return;
+
+    try {
+        const q = query(collection(db, "novels"), where("authorId", "==", window._currentUser.uid));
+        const snap = await getDocs(q);
+        let html = '<option value="">Selecciona una novela</option>';
+        snap.forEach(doc => {
+            html += `<option value="${doc.id}">${doc.data().title}</option>`;
+        });
+        select.innerHTML = html;
+    } catch(e) { select.innerHTML = '<option>Error al cargar novelas</option>'; }
+  };
+
+  // PUBLICAR CAPÍTULO
+  window.submitChapter = async function() {
+    if (!window._currentUser) { showToast('Inicia sesión primero'); return; }
+
+    const novelId = document.getElementById('chapNovelSelect').value;
+    const title = document.getElementById('chapTitle').value.trim();
+    const content = document.getElementById('chapterContent').value.trim();
+    const num = document.getElementById('chapNum').value.trim();
+
+    if (!novelId || !title || !content) { showToast('Llena los campos obligatorios (*)'); return; }
+
+    try {
+      showToast('Publicando capítulo...', 'info');
+      await addDoc(collection(db, 'chapters'), {
+        novelId, title, content, numberLabel: num,
+        authorId: window._currentUser.uid,
+        createdAt: serverTimestamp()
+      });
+      showToast(`✦ "${title}" publicado exitosamente`);
+      showPanel('novels');
+    } catch (e) { showToast('Error al publicar capítulo'); }
   };
 
   // PUBLICAR NOVELA
   window.submitNovel = async function() {
-    if (!window._currentUser) { showToast('Inicia sesión en la página principal primero', 'error'); return; }
+    if (!window._currentUser) { showToast('Inicia sesión primero'); return; }
 
     const title = document.getElementById('pubTitle').value.trim();
     const desc = document.getElementById('pubDesc').value.trim();
@@ -245,8 +310,7 @@ showPanel('overview');
     if (!title || !desc) { showToast('Llena los campos obligatorios'); return; }
 
     const novelData = {
-      title,
-      desc,
+      title, desc,
       volSubtitle: document.getElementById('pubVol').value.trim(),
       descShort: document.getElementById('pubShortDesc').value.trim() || title,
       status: document.getElementById('pubStatus').value,
