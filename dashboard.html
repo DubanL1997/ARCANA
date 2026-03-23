@@ -162,17 +162,17 @@ const PANELS = {
     <div class="publish-form">
       <div class="form-section-title">Información básica</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Título de la novela *</label><input class="form-input" type="text" placeholder="El título de tu obra"></div>
-        <div class="form-group"><label class="form-label">Subtítulo / Volumen</label><input class="form-input" type="text" placeholder="Vol. I — Subtítulo opcional"></div>
+        <div class="form-group"><label class="form-label">Título de la novela *</label><input id="pubTitle" class="form-input" type="text" placeholder="El título de tu obra"></div>
+        <div class="form-group"><label class="form-label">Subtítulo / Volumen</label><input id="pubVol" class="form-input" type="text" placeholder="Vol. I — Subtítulo opcional"></div>
       </div>
-      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea class="form-textarea" placeholder="Describe tu novela en 2-4 párrafos. Este texto aparecerá en la página de la novela y en el catálogo."></textarea></div>
+      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea id="pubDesc" class="form-textarea" placeholder="Describe tu novela en 2-4 párrafos..."></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input class="form-input" type="text" placeholder="Una línea para el catálogo (máx. 100 caracteres)"></div>
+        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input id="pubShortDesc" class="form-input" type="text" placeholder="Una línea para el catálogo (máx. 100 caracteres)"></div>
         <div class="form-group"><label class="form-label">Estado</label>
-          <select class="form-select">
-            <option>En curso</option>
-            <option>Completada</option>
-            <option>Pausada</option>
+          <select id="pubStatus" class="form-select">
+            <option value="en curso">En curso</option>
+            <option value="completada">Completada</option>
+            <option value="pausada">Pausada</option>
           </select>
         </div>
       </div>
@@ -181,16 +181,16 @@ const PANELS = {
         <label class="form-label">Géneros (selecciona los que apliquen)</label>
         <div class="genre-checkboxes">
           ${['Ciencia Ficción','Fantasía','Romance','Thriller','Terror','Acción','Histórico','Isekai','Psicológico','Sobrenatural','Misterio','Aventura'].map(g=>`
-            <input type="checkbox" class="genre-check" id="g_${g}" name="genre">
+            <input type="checkbox" class="genre-check" id="g_${g}" value="${g}">
             <label class="genre-check-label" for="g_${g}">${g}</label>`).join('')}
         </div>
       </div>
-      <div class="form-group"><label class="form-label">Etiquetas (separadas por coma)</label><input class="form-input" type="text" placeholder="IA, colombia, himalaya, misterio..."></div>
+      <div class="form-group"><label class="form-label">Etiquetas (separadas por coma)</label><input id="pubTags" class="form-input" type="text" placeholder="IA, colombia, himalaya, misterio..."></div>
       <div class="form-section-title">Portada</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Ícono de portada (emoji)</label><input class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
+        <div class="form-group"><label class="form-label">Ícono de portada (emoji)</label><input id="pubIcon" class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
         <div class="form-group"><label class="form-label">Color de portada</label>
-          <select class="form-select">
+          <select id="pubCoverColor" class="form-select">
             <option value="cover-1">Púrpura oscuro</option>
             <option value="cover-2">Azul noche</option>
             <option value="cover-3">Rojo sangre</option>
@@ -203,8 +203,7 @@ const PANELS = {
         </div>
       </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="submitNovel()">✦ Publicar novela</button>
-        <button class="btn-ghost" onclick="showToast('Borrador guardado')">💾 Guardar borrador</button>
+        <button class="btn-primary" onclick="window.submitNovel()">✦ Publicar novela</button>
       </div>
     </div>`,
 
@@ -302,13 +301,6 @@ function showPanel(panel){
   });
   document.getElementById('dashContent').innerHTML = PANELS[panel]?.() || PANELS.overview();
 }
-
-function submitNovel(){
-  const title = document.querySelector('.form-input')?.value?.trim();
-  if(!title){showToast('Escribe el título de tu novela');return;}
-  showToast(`✦ "${title}" publicada en ARCANA`);
-  setTimeout(()=>showPanel('novels'),1500);
-}
 function submitChapter(){
   const content = document.getElementById('chapterContent')?.value?.trim();
   if(!content){showToast('Escribe el contenido del capítulo');return;}
@@ -319,6 +311,100 @@ function previewChapter(){
 }
 
 showPanel('overview');
+</script>
+
+<script type="module">
+  // 1. Importamos las herramientas de Firebase
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+  // 2. Tu configuración de ARCANA
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+    authDomain: "arcana-553dd.firebaseapp.com",
+    projectId: "arcana-553dd",
+    storageBucket: "arcana-553dd.firebasestorage.app",
+    messagingSenderId: "674195855924",
+    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
+  };
+
+  // Inicializamos Firebase y Firestore
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Mantenemos al usuario actual en memoria
+  onAuthStateChanged(auth, user => {
+    window._currentUser = user;
+  });
+
+  // 3. La función mágica que guarda la novela
+  window.submitNovel = async function() {
+    // Verificamos que el usuario esté logueado
+    if (!window._currentUser) {
+      showToast('Debes iniciar sesión para publicar', 'error');
+      openAuth('login');
+      return;
+    }
+
+    // Capturamos lo que el usuario escribió
+    const title = document.getElementById('pubTitle').value.trim();
+    const desc = document.getElementById('pubDesc').value.trim();
+    const shortDesc = document.getElementById('pubShortDesc').value.trim();
+    
+    // Validamos campos obligatorios
+    if (!title || !desc || !shortDesc) {
+      showToast('Por favor llena los campos obligatorios (*)');
+      return;
+    }
+
+    // Capturamos los géneros seleccionados (checkboxes)
+    const genreElements = document.querySelectorAll('.genre-check:checked');
+    const genres = Array.from(genreElements).map(el => el.value);
+
+    // Capturamos las etiquetas y las convertimos en un arreglo
+    const tagsRaw = document.getElementById('pubTags').value;
+    const tags = tagsRaw.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
+
+    // Preparamos el paquete de datos exacto que irá a la base de datos
+    const novelData = {
+      title: title,
+      volSubtitle: document.getElementById('pubVol').value.trim(),
+      desc: desc,
+      descShort: shortDesc,
+      status: document.getElementById('pubStatus').value,
+      icon: document.getElementById('pubIcon').value || '🔮',
+      cover: document.getElementById('pubCoverColor').value,
+      genres: genres,
+      tags: tags,
+      
+      // Datos automáticos y estadísticas iniciales
+      author: window._currentUser.displayName || 'Autor Anónimo',
+      authorId: window._currentUser.uid, 
+      chapters: 0,
+      viewsNum: 0,
+      rating: 0,
+      favorites: 0,
+      wordCount: '0 palabras',
+      createdAt: serverTimestamp(),
+      lastUpdate: serverTimestamp()
+    };
+
+    try {
+      showToast('Publicando novela...', 'info');
+      // ¡Enviamos a Firestore a la colección "novels"!
+      const docRef = await addDoc(collection(db, 'novels'), novelData);
+      
+      showToast(`✦ "${title}" publicada exitosamente`);
+      
+      // Limpiamos el formulario y volvemos a la vista de "Mis novelas"
+      showPanel('novels');
+    } catch (error) {
+      console.error("Error al publicar: ", error);
+      showToast('Hubo un error al publicar tu novela');
+    }
+  };
 </script>
 </body>
 </html>
