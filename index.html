@@ -5,14 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARCANA — Novelas que Trascienden</title>
 <link rel="stylesheet" href="css/arcana.css">
-<style>
-/* Estilos específicos para la sección dinámica de novedades */
-.novel-grid-dynamic { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
-#hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 5rem 1.5rem; position: relative; overflow: hidden; }
-.hero-inner { position: relative; z-index: 2; max-width: 860px; text-align: center; }
-.hero-title { font-family: var(--display); font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 900; line-height: 0.9; margin-bottom: 1rem; }
-.hero-title span { background: linear-gradient(135deg, #fff, var(--purple3), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-</style>
 </head>
 <body>
 
@@ -60,31 +52,18 @@
 </section>
 
 <footer id="footer"></footer>
-<div id="auth-modal"></div> <div id="toast"></div>
+<div id="auth-modal"></div>
+<div id="toast"></div>
 
-<script src="js/data.js"></script>
 <script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-  import { getFirestore, collection, query, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+  import { db, auth, ARCANA_GENRES, ARCANA_NOVELS } from './js/data.js';
+  import { collection, query, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
-    authDomain: "arcana-553dd.firebaseapp.com",
-    projectId: "arcana-553dd",
-    storageBucket: "arcana-553dd.firebasestorage.app",
-    messagingSenderId: "674195855924",
-    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-
-  // Escuchar estado de autenticación para la Navbar global
+  // Sincronizar estado de usuario globalmente
   onAuthStateChanged(auth, user => {
     window._currentUser = user;
-    window.dispatchEvent(new CustomEvent('arcana:authchange', { detail: user }));
+    renderNavbar('home'); // Asegura que la navbar sepa quién eres
   });
 
   async function initHomePage() {
@@ -92,45 +71,42 @@
     const novelCountEl = document.getElementById('total-novels');
 
     try {
-      // 1. Cargar las 4 novelas más recientes de Firebase
+      // 1. Cargar novelas de Firebase
       const q = query(collection(db, "novels"), orderBy("createdAt", "desc"), limit(4));
       const snap = await getDocs(q);
       
-      // 2. Obtener el conteo total (Firebase + Locales)
-      const totalNovelsCount = snap.size + (window.ARCANA_NOVELS ? ARCANA_NOVELS.length : 0);
-      if(novelCountEl) novelCountEl.textContent = totalNovelsCount;
+      const fbNovels = [];
+      snap.forEach(doc => fbNovels.push({ id: doc.id, ...doc.data() }));
 
-      if (snap.empty) {
-        container.innerHTML = `<div style="grid-column:1/-1; text-align:center;">Explora el catálogo para ver las historias disponibles.</div>`;
+      // 2. Conteo total real
+      const totalCount = fbNovels.length + ARCANA_NOVELS.length;
+      if(novelCountEl) novelCountEl.textContent = totalCount;
+
+      // 3. Renderizar novedades
+      if (fbNovels.length === 0) {
+        container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem;">Explora el catálogo para ver historias disponibles.</div>`;
       } else {
-        let html = '';
-        snap.forEach(doc => {
-          const n = doc.data();
-          // Usamos la función novelCardHTML definida en tu data.js para mantener el estilo
-          html += novelCardHTML({ id: doc.id, ...n });
-        });
-        container.innerHTML = html;
+        container.innerHTML = fbNovels.map(n => novelCardHTML(n)).join('');
       }
     } catch (e) {
-      console.error("Error cargando novedades:", e);
-      container.innerHTML = `<div style="grid-column:1/-1; text-align:center;">Conectando con el archivo local...</div>`;
+      console.error("Error crítico:", e);
+      container.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--rose);">Error de conexión con el Archivo Astral.</div>`;
     }
   }
 
-  // Renderizar Géneros desde data.js
+  // Renderizar Géneros
   const genresGrid = document.getElementById('genres-grid');
-  if(genresGrid && window.ARCANA_GENRES) {
+  if(genresGrid && ARCANA_GENRES) {
     genresGrid.innerHTML = ARCANA_GENRES.map(g => `
       <div class="novel-card" style="padding:1.5rem; text-align:center;" onclick="window.location.href='catalog.html?genre=${g.name}'">
         <div style="font-size:2.5rem; margin-bottom:1rem;">${g.icon}</div>
         <div class="novel-title">${g.name}</div>
-        <div class="section-label" style="font-size:0.5rem; justify-content:center;">${g.count} Historias</div>
       </div>
     `).join('');
   }
 
+  // Inicialización visual
   initCanvas('bg-canvas');
-  renderNavbar('home');
   renderFooter();
   initHomePage();
 </script>
