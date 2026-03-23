@@ -3,38 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perfil de Autor — ARCANA</title>
+<title>Perfil — ARCANA</title>
 <link rel="stylesheet" href="css/arcana.css">
 <style>
 .profile-hero{position:relative;z-index:1;padding:5rem 2rem 3rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);}
 .profile-hero-inner{max-width:900px;margin:0 auto;}
-.profile-banner{height:200px;border-radius:var(--r);background:linear-gradient(135deg,var(--surface),rgba(138,100,255,0.15),var(--surface));border:1px solid var(--border);margin-bottom:-60px;position:relative;overflow:hidden;}
-.profile-banner::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(138,100,255,0.15),transparent 60%);}
-.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem 2rem 2rem;display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:start;}
-.profile-avatar{width:100px;height:100px;border-radius:50%;background:var(--bg2);border:3px solid var(--bg2);display:flex;align-items:center;justify-content:center;font-size:2.8rem;margin-top:-50px;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
-.profile-name{font-family:var(--display);font-size:1.5rem;font-weight:900;color:var(--text);letter-spacing:0.04em;margin-bottom:0.2rem;}
-.profile-username{font-family:var(--mono);font-size:0.75rem;color:var(--purple3);letter-spacing:0.1em;margin-bottom:0.8rem;}
-.profile-bio{font-family:var(--serif);font-style:italic;font-size:0.95rem;color:var(--text2);line-height:1.65;max-width:500px;margin-bottom:1rem;}
-.profile-stats{display:flex;gap:2rem;flex-wrap:wrap;}
-.pstat{text-align:center;}
-.pstat-n{font-family:var(--display);font-size:1.2rem;font-weight:900;color:var(--text);display:block;}
-.pstat-l{font-size:0.62rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
-.profile-actions{display:flex;flex-direction:column;gap:0.5rem;padding-top:1.5rem;}
-.btn-follow{padding:0.55rem 1.5rem;font-size:0.8rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;letter-spacing:0.05em;transition:all 0.2s;}
-.btn-follow:hover{transform:translateY(-1px);}
-.btn-message{padding:0.55rem 1.5rem;font-size:0.8rem;font-weight:500;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
-.btn-message:hover{border-color:var(--purple3);color:var(--text);}
+.profile-banner{height:160px;border-radius:var(--r);background:linear-gradient(135deg,var(--surface),var(--bg3));border:1px solid var(--border);margin-bottom:-50px;}
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:2rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;}
+.profile-avatar-big{width:120px;height:120px;border-radius:50%;background:var(--bg2);border:4px solid var(--surface);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3rem;margin-top:-60px;box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+.profile-avatar-big img{width:100%;height:100%;object-fit:cover;}
+.profile-info-main{margin-top:1rem;}
+.profile-name-big{font-family:var(--display);font-size:2rem;font-weight:900;color:var(--text);margin-bottom:0.2rem;}
+.profile-bio-text{font-family:var(--serif);font-size:1.05rem;color:var(--text2);line-height:1.6;margin:1rem 0;}
+.profile-stats-row{display:flex;gap:2rem;margin-top:1.5rem;}
+.p-stat{display:flex;flex-direction:column;}
+.p-stat-n{font-family:var(--display);font-size:1.4rem;font-weight:700;color:var(--text);}
+.p-stat-l{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);}
 
-.profile-content{position:relative;z-index:1;padding:2rem;max-width:900px;margin:0 auto;}
-.profile-tabs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:2rem;}
-.ptab{padding:0.7rem 1.2rem;font-size:0.8rem;font-weight:600;background:none;border:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;letter-spacing:0.05em;}
-.ptab.active{color:var(--purple3);border-bottom-color:var(--purple);}
-
-@media(max-width:600px){
-  .profile-card{grid-template-columns:1fr;text-align:center;}
-  .profile-avatar{margin:0 auto -50px;}
-  .profile-actions{flex-direction:row;justify-content:center;}
-}
+.profile-content-area{max-width:900px;margin:0 auto;padding:3rem 2rem;}
+.tab-nav{display:flex;gap:2rem;border-bottom:1px solid var(--border2);margin-bottom:2rem;}
+.tab-link{padding:1rem 0;font-size:0.85rem;font-weight:600;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.2s;}
+.tab-link.active{color:var(--purple3);border-bottom-color:var(--purple);}
 </style>
 </head>
 <body>
@@ -44,99 +33,94 @@
 <div class="profile-hero">
   <div class="profile-hero-inner">
     <div class="profile-banner"></div>
-    <div class="profile-card" id="profileCard">
-      <div style="text-align:center;color:var(--text3);padding:2rem;grid-column:1/-1;">Cargando...</div>
+    <div class="profile-card" id="profileHeader">
+      <div style="padding:2rem; color:var(--text3);">Cargando identidad...</div>
     </div>
   </div>
 </div>
 
-<div style="position:relative;z-index:1;padding:0 2rem 5rem;background:var(--bg2);">
-  <div class="profile-content">
-    <div class="profile-tabs">
-      <button class="ptab active" id="ptab-novels" onclick="showTab('novels')">📚 Novelas</button>
-      <button class="ptab" id="ptab-about" onclick="showTab('about')">👤 Sobre el autor</button>
-    </div>
-    <div id="tab-novels"></div>
-    <div id="tab-about" style="display:none"></div>
+<div class="profile-content-area">
+  <div class="tab-nav">
+    <button class="tab-link active">Mis Publicaciones</button>
   </div>
+  <div id="authorNovelsGrid" class="novels-grid">
+    </div>
 </div>
 
 <footer id="footer"></footer>
-<div id="auth-modal">
-  <div class="auth-card">
-    <button class="auth-close" onclick="closeAuth()">✕</button>
-    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias</p>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
-    </div>
-    <div id="auth-form-login">
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
-    </div>
-    <div id="auth-form-register" style="display:none">
-      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text"></div>
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
-    </div>
-  </div>
-</div>
 <div id="toast"></div>
+
 <script src="js/data.js"></script>
-<script>
-initCanvas('bg-canvas');
-renderNavbar();
-renderFooter();
-initModals();
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 
-const authorId = getIdFromUrl();
-const author = getAuthorById(authorId) || ARCANA_AUTHORS[0];
-const authorNovels = getNovelsByAuthor(author.id);
-document.title = `${author.name} — ARCANA`;
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+    authDomain: "arcana-553dd.firebaseapp.com",
+    projectId: "arcana-553dd",
+    storageBucket: "arcana-553dd.firebasestorage.app",
+    messagingSenderId: "674195855924",
+    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
+  };
 
-document.getElementById('profileCard').innerHTML=`
-  <div class="profile-avatar">${author.icon}</div>
-  <div>
-    <div class="profile-name">${author.name}</div>
-    <div class="profile-username">@${author.username}</div>
-    <p class="profile-bio">${author.bio}</p>
-    <div class="profile-stats">
-      <div class="pstat"><span class="pstat-n">${authorNovels.length}</span><span class="pstat-l">Novelas</span></div>
-      <div class="pstat"><span class="pstat-n">${author.followers}</span><span class="pstat-l">Seguidores</span></div>
-      <div class="pstat"><span class="pstat-n">${authorNovels.reduce((a,n)=>a+n.favorites,0)}</span><span class="pstat-l">Favoritos</span></div>
-      <div class="pstat"><span class="pstat-n">${authorNovels.reduce((a,n)=>a+n.chapters,0)}</span><span class="pstat-l">Capítulos</span></div>
-    </div>
-  </div>
-  <div class="profile-actions">
-    <button class="btn-follow" onclick="showToast('✦ Siguiendo a ${author.name}')">+ Seguir</button>
-    <button class="btn-message" onclick="showToast('Función próximamente')">💬 Mensaje</button>
-  </div>`;
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-document.getElementById('tab-novels').innerHTML=`
-  <div class="novels-grid">${authorNovels.map(n=>novelCardHTML(n)).join('')}</div>`;
-
-document.getElementById('tab-about').innerHTML=`
-  <div style="max-width:600px;">
-    <h3 style="font-family:var(--display);color:var(--text);margin-bottom:1rem;letter-spacing:0.06em;">Sobre ${author.name}</h3>
-    <p style="font-family:var(--serif);font-style:italic;color:var(--text2);line-height:1.8;font-size:1.05rem;">${author.bio}</p>
-    <div style="margin-top:2rem;padding:1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);">
-      <div style="font-size:0.65rem;letter-spacing:0.3em;color:var(--text3);text-transform:uppercase;margin-bottom:0.8rem;">Estadísticas del autor</div>
-      <div style="display:flex;gap:2rem;flex-wrap:wrap;">
-        <span style="font-size:0.82rem;color:var(--text2);">📚 ${authorNovels.length} obras publicadas</span>
-        <span style="font-size:0.82rem;color:var(--text2);">👥 ${author.followers} seguidores</span>
-        <span style="font-size:0.82rem;color:var(--text2);">⭐ Promedio ${(authorNovels.reduce((a,n)=>a+n.rating,0)/authorNovels.length).toFixed(1)}/5.0</span>
-      </div>
-    </div>
-  </div>`;
-
-function showTab(tab){
-  ['novels','about'].forEach(t=>{
-    document.getElementById(`ptab-${t}`).classList.toggle('active',t===tab);
-    document.getElementById(`tab-${t}`).style.display=t===tab?'block':'none';
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      renderProfile(user);
+      loadAuthorNovels(user.uid);
+    } else {
+      window.location.href = 'index.html'; // Redirigir si no hay sesión
+    }
   });
-}
+
+  function renderProfile(user) {
+    const header = document.getElementById('profileHeader');
+    header.innerHTML = `
+      <div class="profile-avatar-big">
+        ${user.photoURL ? `<img src="${user.photoURL}">` : `<span>${user.displayName?.charAt(0) || 'U'}</span>`}
+      </div>
+      <div class="profile-info-main">
+        <h1 class="profile-name-big">${user.displayName || 'Escritor de ARCANA'}</h1>
+        <p class="profile-bio-text">Explorando mundos a través de la escritura en la plataforma ARCANA.</p>
+        <div class="profile-stats-row">
+          <div class="p-stat"><span class="p-stat-n" id="novelCount">--</span><span class="p-stat-l">Novelas</span></div>
+          <div class="p-stat"><span class="p-stat-n">0</span><span class="p-stat-l">Seguidores</span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadAuthorNovels(uid) {
+    const grid = document.getElementById('authorNovelsGrid');
+    try {
+      const q = query(collection(db, "novels"), where("authorId", "==", uid));
+      const snap = await getDocs(q);
+      
+      document.getElementById('novelCount').textContent = snap.size;
+
+      if (snap.empty) {
+        grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text3); padding:4rem;">Aún no has publicado ninguna historia.</p>`;
+        return;
+      }
+
+      let html = '';
+      snap.forEach(doc => {
+        html += novelCardHTML({ id: doc.id, ...doc.data() });
+      });
+      grid.innerHTML = html;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  initCanvas('bg-canvas');
+  renderNavbar('profile');
+  renderFooter();
 </script>
 </body>
 </html>

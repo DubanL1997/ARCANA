@@ -62,7 +62,7 @@
 <div class="filters-bar">
   <div class="filter-group">
     <span class="filter-label">Género</span>
-    <select class="filter-select" id="genreFilter" onchange="applyFilters()">
+    <select class="filter-select" id="genreFilter" onchange="window.applyFilters()">
       <option value="">Todos</option>
       <option>Ciencia Ficción</option>
       <option>Fantasía</option>
@@ -76,7 +76,7 @@
   </div>
   <div class="filter-group">
     <span class="filter-label">Estado</span>
-    <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+    <select class="filter-select" id="statusFilter" onchange="window.applyFilters()">
       <option value="">Todos</option>
       <option value="en curso">En curso</option>
       <option value="completada">Completadas</option>
@@ -84,7 +84,7 @@
   </div>
   <div class="filter-group">
     <span class="filter-label">Ordenar</span>
-    <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+    <select class="filter-select" id="sortFilter" onchange="window.applyFilters()">
       <option value="views">Más leídas</option>
       <option value="rating">Mejor valoradas</option>
       <option value="new">Más nuevas</option>
@@ -92,9 +92,9 @@
     </select>
   </div>
   <div class="search-bar">
-    <input type="text" id="searchFilter" placeholder="Buscar por título, autor o género..." oninput="applyFilters()">
+    <input type="text" id="searchFilter" placeholder="Buscar por título, autor o género..." oninput="window.applyFilters()">
   </div>
-  <span class="results-count" id="resultsCount">12 novelas</span>
+  <span class="results-count" id="resultsCount">Cargando...</span>
   <div class="view-toggle">
     <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Cuadrícula">⊞</button>
     <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="Lista">☰</button>
@@ -108,101 +108,119 @@
 </div>
 
 <footer id="footer"></footer>
-<div id="auth-modal">
-  <div class="auth-card">
-    <button class="auth-close" onclick="closeAuth()">✕</button>
-    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias que trascienden</p>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
-    </div>
-    <div id="auth-form-login">
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"></div>
-      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
-    </div>
-    <div id="auth-form-register" style="display:none">
-      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text" placeholder="Tu nombre"></div>
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
-    </div>
-  </div>
-</div>
+<div id="auth-modal"></div>
 <div id="toast"></div>
+
 <script src="js/data.js"></script>
-<script>
-initCanvas('bg-canvas');
-renderNavbar('catalog');
-renderFooter();
-initModals();
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+  import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 
-// Check URL params
-const urlParams = new URLSearchParams(window.location.search);
-if(urlParams.get('genre')) document.getElementById('genreFilter').value = urlParams.get('genre');
-if(urlParams.get('filter')==='new') document.getElementById('sortFilter').value = 'new';
-if(urlParams.get('filter')==='completed') document.getElementById('statusFilter').value = 'completada';
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+    authDomain: "arcana-553dd.firebaseapp.com",
+    projectId: "arcana-553dd",
+    storageBucket: "arcana-553dd.firebasestorage.app",
+    messagingSenderId: "674195855924",
+    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
+  };
 
-let currentView = 'grid';
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-function applyFilters(){
-  const genre = document.getElementById('genreFilter').value;
-  const status = document.getElementById('statusFilter').value;
-  const sort = document.getElementById('sortFilter').value;
-  const search = document.getElementById('searchFilter').value.toLowerCase();
+  let allNovels = [];
+  let currentView = 'grid';
 
-  let filtered = [...ARCANA_NOVELS];
-  if(genre) filtered = filtered.filter(n=>n.genres.includes(genre));
-  if(status) filtered = filtered.filter(n=>n.status===status);
-  if(search) filtered = filtered.filter(n=>n.title.toLowerCase().includes(search)||n.author.toLowerCase().includes(search)||n.genres.some(g=>g.toLowerCase().includes(search)));
+  onAuthStateChanged(auth, (user) => {
+    window._currentUser = user;
+    window.dispatchEvent(new CustomEvent('arcana:authchange', { detail: user }));
+  });
 
-  if(sort==='views') filtered.sort((a,b)=>b.viewsNum-a.viewsNum);
-  else if(sort==='rating') filtered.sort((a,b)=>b.rating-a.rating);
-  else if(sort==='favorites') filtered.sort((a,b)=>b.favorites-a.favorites);
-  else if(sort==='new') filtered.sort((a,b)=>b.id-a.id);
+  async function loadLibrary() {
+    try {
+      // 1. Obtener de Firebase
+      const snap = await getDocs(collection(db, "novels"));
+      const fbNovels = [];
+      snap.forEach(doc => fbNovels.push({ id: doc.id, ...doc.data() }));
 
-  document.getElementById('resultsCount').textContent = `${filtered.length} novela${filtered.length!==1?'s':''}`;
-  renderCatalog(filtered);
-}
-
-function renderCatalog(novels){
-  const container = document.getElementById('novelsCatalog');
-  if(!novels.length){
-    container.innerHTML=`<div class="no-results"><span style="font-size:2.5rem">🔍</span><p>No se encontraron novelas con esos filtros.</p></div>`;
-    return;
+      // 2. Combinar con locales de data.js
+      allNovels = [...ARCANA_NOVELS, ...fbNovels];
+      
+      // 3. Aplicar filtros iniciales
+      window.applyFilters();
+    } catch (e) {
+      console.error(e);
+      showToast("Error conectando con la biblioteca");
+    }
   }
-  if(currentView==='grid'){
-    container.className='novels-grid';
-    container.innerHTML=novels.map(n=>novelCardHTML(n)).join('');
-  } else {
-    container.className='novels-list';
-    container.innerHTML=novels.map(n=>`
-      <div class="novel-list-item" onclick="window.location.href='novel.html?id=${n.id}'">
-        <div class="list-cover ${n.cover}"><span>${n.icon}</span></div>
-        <div>
-          <div class="list-title">${n.title}</div>
-          <div class="list-author">${n.author} · ${n.genres.slice(0,2).join(', ')}</div>
-          <p class="list-desc">${n.descShort}</p>
-          <div style="margin-top:0.4rem;">${n.genres.map((g,i)=>`<span class="genre-mini">${g}</span>`).slice(0,3).join('')}</div>
-        </div>
-        <div class="list-meta">
-          <span class="list-stat">⭐ ${n.rating}</span>
-          <span class="list-stat">👁 ${n.views}</span>
-          <span class="list-stat">📖 ${n.chapters} cap.</span>
-          ${n.badge?`<span class="novel-cover-badge badge-${n.badge}" style="position:static">${n.badge==='new'?'NUEVO':n.badge==='hot'?'HOT':'COMPLETA'}</span>`:''}
-        </div>
-      </div>`).join('');
+
+  window.applyFilters = function() {
+    const genre = document.getElementById('genreFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    const sort = document.getElementById('sortFilter').value;
+    const search = document.getElementById('searchFilter').value.toLowerCase();
+
+    let filtered = [...allNovels];
+    
+    if(genre) filtered = filtered.filter(n => n.genres && n.genres.includes(genre));
+    if(status) filtered = filtered.filter(n => n.status === status);
+    if(search) filtered = filtered.filter(n => 
+      n.title.toLowerCase().includes(search) || 
+      n.author.toLowerCase().includes(search) || 
+      (n.genres && n.genres.some(g => g.toLowerCase().includes(search)))
+    );
+
+    if(sort === 'views') filtered.sort((a,b) => (b.viewsNum || 0) - (a.viewsNum || 0));
+    else if(sort === 'rating') filtered.sort((a,b) => (b.rating || 0) - (a.rating || 0));
+    else if(sort === 'favorites') filtered.sort((a,b) => (b.favorites || 0) - (a.favorites || 0));
+    else if(sort === 'new') filtered.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+    document.getElementById('resultsCount').textContent = `${filtered.length} novela${filtered.length!==1?'s':''}`;
+    renderCatalog(filtered);
+  };
+
+  function renderCatalog(novels) {
+    const container = document.getElementById('novelsCatalog');
+    if(!novels.length) {
+      container.innerHTML = `<div class="no-results"><span style="font-size:2.5rem">🔍</span><p>No se encontraron novelas con esos filtros.</p></div>`;
+      return;
+    }
+
+    if(currentView === 'grid') {
+      container.className = 'novels-grid';
+      container.innerHTML = novels.map(n => novelCardHTML(n)).join('');
+    } else {
+      container.className = 'novels-list';
+      container.innerHTML = novels.map(n => `
+        <div class="novel-list-item" onclick="window.location.href='novel.html?id=${n.id}'">
+          <div class="list-cover ${n.cover || 'cover-1'}"><span>${n.icon || '🔮'}</span></div>
+          <div>
+            <div class="list-title">${n.title}</div>
+            <div class="list-author">${n.author} · ${n.genres ? n.genres.slice(0,2).join(', ') : ''}</div>
+            <p class="list-desc">${n.descShort || n.desc || ''}</p>
+          </div>
+          <div class="list-meta">
+            <span class="list-stat">⭐ ${n.rating || 0}</span>
+            <span class="list-stat">👁 ${n.views || 0}</span>
+          </div>
+        </div>`).join('');
+    }
   }
-}
 
-function setView(v){
-  currentView=v;
-  document.getElementById('gridViewBtn').classList.toggle('active',v==='grid');
-  document.getElementById('listViewBtn').classList.toggle('active',v==='list');
-  applyFilters();
-}
+  window.setView = function(v) {
+    currentView = v;
+    document.getElementById('gridViewBtn').classList.toggle('active', v==='grid');
+    document.getElementById('listViewBtn').classList.toggle('active', v==='list');
+    window.applyFilters();
+  };
 
-applyFilters();
+  // Inicializar
+  initCanvas('bg-canvas');
+  renderNavbar('catalog');
+  renderFooter();
+  loadLibrary();
 </script>
 </body>
 </html>
