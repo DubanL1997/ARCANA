@@ -11,60 +11,39 @@
 .novel-big-cover{aspect-ratio:2/3;border-radius:var(--r);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
 .novel-big-cover-glow{position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(138,100,255,0.2),transparent 60%);}
 .novel-big-icon{font-size:5rem;filter:drop-shadow(0 0 25px rgba(138,100,255,0.5));position:relative;z-index:1;}
-.novel-big-label{font-family:var(--display);font-size:0.72rem;font-weight:900;color:var(--purple3);text-align:center;padding:0 1rem;position:relative;z-index:1;letter-spacing:0.08em;}
-.novel-info-title{font-family:var(--display);font-size:clamp(1.8rem,4vw,2.5rem);font-weight:900;color:var(--text);letter-spacing:0.04em;line-height:1.1;margin-bottom:0.4rem;}
-.novel-info-author{font-size:0.88rem;color:var(--text2);margin-bottom:1rem;}
-.novel-info-author a{color:var(--purple3);font-weight:600;}
-.novel-meta-row{display:flex;flex-wrap:wrap;gap:1.2rem;margin:1.2rem 0;}
-.nmeta{display:flex;align-items:center;gap:0.35rem;font-size:0.78rem;color:var(--text2);}
-.nmeta strong{color:var(--text);font-weight:700;}
-.status-badge{display:inline-block;padding:0.2rem 0.7rem;border-radius:50px;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}
-.status-ongoing{background:rgba(64,208,192,0.15);color:var(--teal);border:1px solid rgba(64,208,192,0.25);}
-.status-completed{background:rgba(138,100,255,0.15);color:var(--purple3);border:1px solid rgba(138,100,255,0.25);}
-.novel-desc{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--text2);line-height:1.8;margin:1.2rem 0;}
-.novel-action-btns{display:flex;gap:0.8rem;flex-wrap:wrap;margin-top:1.5rem;}
-.btn-start{padding:0.7rem 1.8rem;font-size:0.85rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;letter-spacing:0.05em;box-shadow:0 3px 14px rgba(138,100,255,0.3);transition:all 0.2s;}
-.btn-start:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(138,100,255,0.45);}
-.btn-outline{padding:0.7rem 1.2rem;font-size:0.82rem;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
-.btn-outline:hover{border-color:var(--purple3);color:var(--text);}
+.novel-header-info{position:relative;z-index:1;}
+.novel-status-tag{display:inline-block;padding:0.2rem 0.6rem;background:rgba(138,100,255,0.1);border:1px solid var(--border);border-radius:50px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple3);margin-bottom:1rem;}
+.novel-full-title{font-family:var(--display);font-size:2.8rem;font-weight:900;color:var(--text);line-height:1.1;letter-spacing:0.02em;margin-bottom:0.4rem;}
+.novel-full-subtitle{font-family:var(--display);font-size:1rem;color:var(--text2);margin-bottom:1.5rem;letter-spacing:0.1em;text-transform:uppercase;}
+.novel-meta-row{display:flex;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+.novel-meta-item{display:flex;flex-direction:column;gap:0.2rem;}
+.novel-meta-label{font-size:0.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;}
+.novel-meta-val{font-size:0.85rem;color:var(--text);font-weight:500;}
+.novel-actions{display:flex;gap:0.8rem;flex-wrap:wrap;}
 
-/* ── CHAPTERS LIST ── */
-.chapters-section{position:relative;z-index:1;padding:3rem 2rem;}
-.chapters-inner{max-width:1000px;margin:0 auto;}
-.chapters-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
-.ch-count{font-size:0.78rem;color:var(--text3);}
-.chapters-list{display:flex;flex-direction:column;gap:0.5rem;}
-.ch-item{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);cursor:pointer;transition:all 0.2s;}
-.ch-item:hover{background:var(--surface2);border-color:rgba(138,100,255,0.2);}
-.ch-item-num{font-family:var(--mono);font-size:0.65rem;color:var(--text3);min-width:60px;letter-spacing:0.1em;}
-.ch-item-title{flex:1;font-size:0.88rem;color:var(--text);font-weight:500;}
-.ch-item-meta{font-size:0.68rem;color:var(--text3);white-space:nowrap;}
-.ch-item-new{padding:0.1rem 0.5rem;background:var(--rose);color:#fff;border-radius:50px;font-size:0.55rem;font-weight:700;letter-spacing:0.1em;}
+.novel-body{max-width:1000px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 300px;gap:4rem;}
+.novel-section-title{font-family:var(--display);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--text3);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.8rem;}
+.novel-section-title::after{content:'';flex:1;height:1px;background:var(--border2);}
+.novel-synopsis{font-size:0.95rem;line-height:1.7;color:var(--text2);margin-bottom:3rem;white-space:pre-wrap;}
+.novel-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem;}
+.novel-tag{font-size:0.65rem;padding:0.2rem 0.6rem;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--text3);transition:all 0.2s;}
+.novel-tag:hover{border-color:var(--purple);color:var(--text);}
 
-/* ── COMMENTS ── */
-.comments-section{position:relative;z-index:1;padding:2rem 2rem 5rem;border-top:1px solid var(--border2);}
-.comments-inner{max-width:1000px;margin:0 auto;}
-.comment-input-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:2rem;}
-.comment-textarea{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.8rem;color:var(--text);font-family:var(--sans);font-size:0.88rem;resize:vertical;min-height:80px;transition:border-color 0.2s;}
-.comment-textarea:focus{outline:none;border-color:var(--purple);}
-.comment-textarea::placeholder{color:var(--text3);}
-.comment-submit{margin-top:0.8rem;padding:0.5rem 1.2rem;font-size:0.78rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;letter-spacing:0.05em;transition:all 0.2s;}
-.comment-submit:hover{transform:translateY(-1px);}
-.comment-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border2);}
-.comment-item:last-child{border-bottom:none;}
-.comment-avatar{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
-.comment-body{flex:1;}
-.comment-meta{display:flex;align-items:center;gap:0.8rem;margin-bottom:0.4rem;}
-.comment-user{font-size:0.8rem;font-weight:700;color:var(--text);}
-.comment-date{font-size:0.65rem;color:var(--text3);}
-.comment-text{font-family:var(--serif);font-size:0.95rem;color:var(--text2);line-height:1.6;}
-.comment-actions{display:flex;gap:1rem;margin-top:0.4rem;}
-.comment-action{font-size:0.65rem;color:var(--text3);background:none;border:none;transition:color 0.2s;}
-.comment-action:hover{color:var(--purple3);}
+.chapter-list{display:flex;flex-direction:column;gap:0.5rem;}
+.chapter-item{padding:1rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r2);display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;text-decoration:none;}
+.chapter-item:hover{border-color:var(--purple);background:rgba(138,100,255,0.04);}
+.chapter-name{font-size:0.88rem;color:var(--text);font-weight:500;}
+.chapter-date{font-size:0.7rem;color:var(--text3);}
 
-@media(max-width:768px){
-  .novel-hero-inner{grid-template-columns:1fr;}
-  .novel-big-cover{max-width:160px;margin:0 auto;}
+.novel-side-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem;}
+.side-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+@media(max-width:850px){
+  .novel-hero-inner{grid-template-columns:1fr;text-align:center;}
+  .novel-big-cover{width:180px;margin:0 auto;}
+  .novel-meta-row{justify-content:center;}
+  .novel-actions{justify-content:center;}
+  .novel-body{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -72,157 +51,123 @@
 <canvas id="bg-canvas"></canvas>
 <nav id="navbar"></nav>
 
-<div class="novel-hero">
-  <div class="novel-hero-inner" id="novelHero">
-    <div style="text-align:center;color:var(--text3);padding:3rem;">Cargando...</div>
-  </div>
+<div id="novel-content">
+  <div style="padding:10rem; text-align:center; color:var(--text3);">Cargando historia...</div>
 </div>
 
-<div class="chapters-section" style="background:var(--bg2);">
-  <div class="chapters-inner">
-    <div class="chapters-header">
-      <div><div class="section-label">Contenido</div><h2 class="section-title">Lista de Capítulos</h2></div>
-      <span class="ch-count" id="chCount"></span>
-    </div>
-    <div class="chapters-list" id="chaptersList"></div>
-  </div>
-</div>
-
-<div class="comments-section">
-  <div class="comments-inner">
-    <div class="section-label">Comunidad</div>
-    <h2 class="section-title" style="margin-bottom:1.5rem;">Comentarios</h2>
-    <div class="comment-input-wrap">
-      <textarea class="comment-textarea" placeholder="Escribe un comentario... (requiere cuenta)" id="commentInput"></textarea>
-      <button class="comment-submit" onclick="submitComment()">Publicar comentario</button>
-    </div>
-    <div id="commentsList"></div>
-  </div>
-</div>
-
-<footer id="footer"></footer>
-<div id="auth-modal">
-  <div class="auth-card">
-    <button class="auth-close" onclick="closeAuth()">✕</button>
-    <h2 class="auth-title">ARCANA</h2><p class="auth-sub">Tu portal a historias que trascienden</p>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Iniciar sesión</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Registrarse</button>
-    </div>
-    <div id="auth-form-login">
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"></div>
-      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
-    </div>
-    <div id="auth-form-register" style="display:none">
-      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text" placeholder="Tu nombre"></div>
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"></div>
-      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
-    </div>
-  </div>
-</div>
-<div id="toast"></div>
 <script src="js/data.js"></script>
-<script>
-initCanvas('bg-canvas');
-renderNavbar();
-renderFooter();
-initModals();
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-const novelId = getIdFromUrl();
-const novel = getNovelById(novelId) || ARCANA_NOVELS[0];
-document.title = `${novel.title} — ARCANA`;
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+    authDomain: "arcana-553dd.firebaseapp.com",
+    projectId: "arcana-553dd",
+    storageBucket: "arcana-553dd.firebasestorage.app",
+    messagingSenderId: "674195855924",
+    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
+  };
 
-// Hero
-document.getElementById('novelHero').innerHTML = `
-  <div class="novel-big-cover ${novel.cover}">
-    <div class="novel-big-cover-glow"></div>
-    <span class="novel-big-icon">${novel.icon}</span>
-    <div class="novel-big-label">${novel.title.toUpperCase()}</div>
-  </div>
-  <div>
-    <div style="margin-bottom:1rem;">
-      ${novel.genres.map((g,i)=>`<span class="genre-tag ${['purple','rose','teal','gold'][i%4]}">${g}</span>`).join('')}
-      <span class="status-badge ${novel.status==='completada'?'status-completed':'status-ongoing'}" style="margin-left:0.3rem;">${novel.status}</span>
-    </div>
-    <h1 class="novel-info-title">${novel.title}</h1>
-    <p class="novel-info-author">por <a href="profile.html?id=${novel.authorId}">${novel.author}</a></p>
-    <div class="novel-meta-row">
-      <span class="nmeta">⭐ <strong>${novel.rating}</strong></span>
-      <span class="nmeta">👁 <strong>${novel.views}</strong> lectores</span>
-      <span class="nmeta">📖 <strong>${novel.chapters}</strong> capítulos</span>
-      <span class="nmeta">❤️ <strong>${novel.favorites}</strong> favoritos</span>
-      <span class="nmeta">📝 <strong>${novel.wordCount}</strong></span>
-    </div>
-    <p class="novel-desc">${novel.desc}</p>
-    <div style="margin-bottom:1rem;">
-      ${novel.tags.map(t=>`<span style="display:inline-block;margin:0.15rem;padding:0.15rem 0.5rem;border-radius:3px;background:rgba(138,100,255,0.08);color:var(--text3);font-size:0.62rem;letter-spacing:0.05em;">#${t}</span>`).join('')}
-    </div>
-    <p style="font-size:0.72rem;color:var(--text3);margin-bottom:1.2rem;">📅 Publicado: ${novel.publishDate} · Última actualización: ${novel.lastUpdate}</p>
-    <div class="novel-action-btns">
-      <a href="reader.html?id=${novel.id}&ch=0" class="btn-start">📖 Leer desde el principio</a>
-      <a href="reader.html?id=${novel.id}&ch=${novel.chapters-1}" class="btn-start" style="background:linear-gradient(135deg,#304080,#4060c0);">▶ Último capítulo</a>
-      <button class="btn-outline" id="favBtn" onclick="toggleFav(this)">♡ Añadir a favoritos</button>
-    </div>
-  </div>`;
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-// Chapters
-const chTitles = ['La Última Noche del Vidente','La Señal','El Correo Imposible','Los Llamados','El Arquitecto','El Código Dentro del Código','La Orden del Umbral','El Encuentro','A 11.000 Metros','Katmandú','La Montaña que Respira','Treinta Minutos','La Pared','El Primer Instinto','La Biblioteca','El Guardián','El Despertar de ORION','Epílogo'];
-const chLabels = ['Prólogo','Cap. I','Cap. II','Cap. III','Cap. IV','Cap. V','Cap. VI','Cap. VII','Cap. VIII','Cap. IX','Cap. X','Cap. XI','Cap. XII','Cap. XIII','Cap. XIV','Cap. XV','Cap. XVI','Epílogo'];
-const totalChs = Math.min(novel.chapters + 2, chTitles.length);
-document.getElementById('chCount').textContent = `${totalChs} capítulos`;
-document.getElementById('chaptersList').innerHTML = Array.from({length:totalChs},(_, i)=>`
-  <div class="ch-item" onclick="window.location.href='reader.html?id=${novel.id}&ch=${i}'">
-    <span class="ch-item-num">${chLabels[i]||`Cap. ${i}`}</span>
-    <span class="ch-item-title">${chTitles[i]||`Capítulo ${i+1}`}</span>
-    ${i>=totalChs-2?`<span class="ch-item-new">NUEVO</span>`:''}
-    <span class="ch-item-meta">${Math.floor(Math.random()*3000+800)} palabras</span>
-  </div>`).join('');
+  async function loadNovel() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    
+    if(!id) {
+        window.location.href = 'catalog.html';
+        return;
+    }
 
-// Comments
-const sampleComments=[
-  {user:'Luna_K', avatar:'🌙', date:'Hace 2 horas', text:'El capítulo XIII me dejó sin palabras. Cuando ORION dice "No sé por qué dije que sí. Creo que eso significa que empiezo a entender qué es el instinto"... eso me llegó profundo.', likes:24},
-  {user:'StarReader', avatar:'⭐', date:'Hace 5 horas', text:'La relación entre Daniel y Elena es exactamente el tipo de romance que me gusta — construido desde el respeto intelectual, no desde un flechazo. Ojalá más historias fueran así.', likes:18},
-  {user:'CosmicFox', avatar:'🦊', date:'Hace 1 día', text:'¿Alguien más piensa que el "error" de ORION en realidad fue completamente intencional? Como si ya supiera lo que iba a pasar y eligiera no calcularlo para que fuera auténtico.', likes:31},
-  {user:'Alejandro_M', avatar:'🔭', date:'Hace 2 días', text:'El detalle de La Candelaria, Bogotá es increíble. Se nota que el autor conoce bien esos cerros. Da una autenticidad que pocas novelas tienen.', likes:15},
-];
-document.getElementById('commentsList').innerHTML=sampleComments.map(c=>`
-  <div class="comment-item">
-    <div class="comment-avatar">${c.avatar}</div>
-    <div class="comment-body">
-      <div class="comment-meta"><span class="comment-user">${c.user}</span><span class="comment-date">${c.date}</span></div>
-      <p class="comment-text">${c.text}</p>
-      <div class="comment-actions">
-        <button class="comment-action" onclick="likeComment(this,${c.likes})">👍 ${c.likes}</button>
-        <button class="comment-action">💬 Responder</button>
-        <button class="comment-action">🚩 Reportar</button>
+    let novelData = null;
+
+    // 1. Intentar cargar desde Firebase
+    try {
+      const docRef = doc(db, "novels", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        novelData = { id: docSnap.id, ...docSnap.data() };
+      }
+    } catch (e) { console.error("Error Firebase:", e); }
+
+    // 2. Si no existe, buscar en data.js
+    if (!novelData && window.ARCANA_NOVELS) {
+      novelData = ARCANA_NOVELS.find(n => n.id == id);
+    }
+
+    if (novelData) {
+      renderNovelPage(novelData);
+    } else {
+      document.getElementById('novel-content').innerHTML = `<div style="padding:10rem; text-align:center;">Historia no encontrada.</div>`;
+    }
+  }
+
+  function renderNovelPage(n) {
+    const content = document.getElementById('novel-content');
+    document.title = `${n.title} — ARCANA`;
+
+    content.innerHTML = `
+      <div class="novel-hero">
+        <div class="novel-hero-inner">
+          <div class="novel-big-cover ${n.cover || 'cover-1'}">
+            <div class="novel-big-cover-glow"></div>
+            <div class="novel-big-icon">${n.icon || '🔮'}</div>
+          </div>
+          <div class="novel-header-info">
+            <span class="novel-status-tag">${n.status}</span>
+            <h1 class="novel-full-title">${n.title}</h1>
+            <div class="novel-full-subtitle">${n.volSubtitle || ''}</div>
+            <div class="novel-meta-row">
+              <div class="novel-meta-item"><span class="novel-meta-label">Autor</span><span class="novel-meta-val">${n.author}</span></div>
+              <div class="novel-meta-item"><span class="novel-meta-label">Géneros</span><span class="novel-meta-val">${n.genres ? n.genres.join(', ') : 'General'}</span></div>
+              <div class="novel-meta-item"><span class="novel-meta-label">Valoración</span><span class="novel-meta-val">⭐ ${n.rating || '0'}</span></div>
+            </div>
+            <div class="novel-actions">
+              <button class="btn-primary" onclick="window.location.href='reader.html?novel=${n.id}&ch=1'">Comenzar lectura</button>
+              <button class="btn-ghost" onclick="toggleFav(this)">♡ Añadir a favoritos</button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>`).join('');
 
-function likeComment(btn, orig){
-  const liked = btn.dataset.liked;
-  if(liked){btn.textContent=`👍 ${orig}`;delete btn.dataset.liked;}
-  else{btn.textContent=`👍 ${orig+1}`;btn.dataset.liked='1';}
-}
-function submitComment(){
-  const t=document.getElementById('commentInput').value.trim();
-  if(!t){showToast('Escribe algo primero');return;}
-  const list=document.getElementById('commentsList');
-  const div=document.createElement('div');div.className='comment-item';
-  div.innerHTML=`<div class="comment-avatar">😊</div><div class="comment-body"><div class="comment-meta"><span class="comment-user">Tú</span><span class="comment-date">Justo ahora</span></div><p class="comment-text">${t}</p></div>`;
-  list.prepend(div);
-  document.getElementById('commentInput').value='';
-  showToast('✦ Comentario publicado');
-}
-function toggleFav(btn){
-  const active=btn.textContent.includes('♥');
-  btn.textContent=active?'♡ Añadir a favoritos':'♥ En favoritos';
-  btn.style.color=active?'':'var(--rose)';
-  btn.style.borderColor=active?'':'var(--rose)';
-  showToast(active?'Eliminado de favoritos':'❤️ Añadido a favoritos');
-}
+      <div class="novel-body">
+        <div class="novel-main-col">
+          <div class="novel-section-title">Sinopsis</div>
+          <div class="novel-synopsis">${n.desc}</div>
+          
+          <div class="novel-section-title">Índice de capítulos</div>
+          <div class="chapter-list">
+            ${n.chapters > 0 ? 
+              `<a href="#" class="chapter-item"><span class="chapter-name">Próximamente: Capítulos de Firebase</span></a>` :
+              `<div style="color:var(--text3); font-size:0.85rem;">Esta obra aún no tiene capítulos publicados.</div>`
+            }
+          </div>
+        </div>
+
+        <aside class="novel-sidebar">
+          <div class="novel-side-card">
+            <div class="side-stat-grid">
+              <div><div class="novel-meta-label">Lecturas</div><div class="novel-meta-val">${n.viewsNum || 0}</div></div>
+              <div><div class="novel-meta-label">Favoritos</div><div class="novel-meta-val">${n.favorites || 0}</div></div>
+            </div>
+          </div>
+          <div class="novel-section-title">Etiquetas</div>
+          <div class="novel-tags">
+            ${n.tags ? n.tags.map(t => `<span class="novel-tag">#${t}</span>`).join('') : ''}
+          </div>
+        </aside>
+      </div>
+    `;
+  }
+
+  // Inicializar
+  initCanvas('bg-canvas');
+  renderNavbar('novel');
+  loadNovel();
 </script>
+
+<div id="toast"></div>
 </body>
 </html>
