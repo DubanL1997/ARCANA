@@ -64,7 +64,6 @@
 <nav id="navbar"></nav>
 
 <div class="dash-layout">
-  <!-- SIDEBAR -->
   <aside class="dash-sidebar">
     <div class="dash-nav-section">Principal</div>
     <button class="dash-nav-item active" onclick="showPanel('overview')"><span class="icon">📊</span>Resumen</button>
@@ -77,11 +76,8 @@
     <button class="dash-nav-item" onclick="window.location.href='index.html'"><span class="icon">🏠</span>Ir a ARCANA</button>
   </aside>
 
-  <!-- MAIN -->
   <main class="dash-main" style="background:var(--bg);">
-    <div class="dash-main-inner" id="dashContent">
-      <!-- Se renderiza con JS -->
-    </div>
+    <div class="dash-main-inner" id="dashContent"></div>
   </main>
 </div>
 
@@ -96,17 +92,12 @@
     <div id="auth-form-login">
       <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
       <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Bienvenido');closeAuth()">Iniciar sesión</button>
-    </div>
-    <div id="auth-form-register" style="display:none">
-      <div class="form-group"><label class="form-label">Usuario</label><input class="form-input" type="text"></div>
-      <div class="form-group"><label class="form-label">Correo</label><input class="form-input" type="email"></div>
-      <div class="form-group"><label class="form-label">Contraseña</label><input class="form-input" type="password"></div>
-      <button class="btn-auth" onclick="showToast('✦ Cuenta creada');closeAuth()">Crear cuenta</button>
+      <button class="btn-auth" onclick="showToast('✦ Iniciando...');closeAuth()">Iniciar sesión</button>
     </div>
   </div>
 </div>
 <div id="toast"></div>
+
 <script src="js/data.js"></script>
 <script>
 initCanvas('bg-canvas');
@@ -118,178 +109,64 @@ const PANELS = {
     <h1 class="dash-title">Panel de Autor</h1>
     <p class="dash-sub">Bienvenido a tu espacio de creación en ARCANA.</p>
     <div class="stats-row">
-      <div class="stat-card"><span class="stat-card-n">1</span><span class="stat-card-l">Novelas</span><div class="stat-card-trend">↑ Activa</div></div>
-      <div class="stat-card"><span class="stat-card-n">16</span><span class="stat-card-l">Capítulos</span><div class="stat-card-trend">↑ Último hace 2 días</div></div>
-      <div class="stat-card"><span class="stat-card-n">2.4K</span><span class="stat-card-l">Lecturas</span><div class="stat-card-trend">↑ +120 esta semana</div></div>
-      <div class="stat-card"><span class="stat-card-n">847</span><span class="stat-card-l">Favoritos</span><div class="stat-card-trend">↑ +34 esta semana</div></div>
-      <div class="stat-card"><span class="stat-card-n">4.9</span><span class="stat-card-l">Valoración</span><div class="stat-card-trend">★★★★★</div></div>
+      <div class="stat-card"><span class="stat-card-n">--</span><span class="stat-card-l">Novelas</span><div class="stat-card-trend">Actualizado</div></div>
+      <div class="stat-card"><span class="stat-card-n">0</span><span class="stat-card-l">Capítulos</span><div class="stat-card-trend">Nuevo autor</div></div>
+      <div class="stat-card"><span class="stat-card-n">0</span><span class="stat-card-l">Lecturas</span><div class="stat-card-trend">Sin datos</div></div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:1.5rem;">
       <h3 style="font-family:var(--display);font-size:0.9rem;color:var(--text);letter-spacing:0.06em;margin-bottom:1rem;">Acciones rápidas</h3>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
         <button class="btn-primary" onclick="showPanel('publish')">✍️ Nueva novela</button>
         <button class="btn-ghost" onclick="showPanel('chapters')">📝 Añadir capítulo</button>
-        <a href="novel.html?id=1" class="btn-ghost" style="display:inline-flex;align-items:center;">👁 Ver mi novela</a>
       </div>
     </div>`,
 
   novels: ()=>`
     <h1 class="dash-title">Mis Novelas</h1>
-    <p class="dash-sub">Gestiona tus obras publicadas en ARCANA.</p>
+    <p class="dash-sub">Gestiona tus historias reales desde la base de datos.</p>
     <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
       <button class="btn-primary" onclick="showPanel('publish')">+ Nueva novela</button>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
       <table class="my-novels-table mnt">
-        <thead><tr>
-          <th>Novela</th><th>Estado</th><th>Capítulos</th><th>Lecturas</th><th>Favoritos</th><th>Valoración</th><th>Acción</th>
-        </tr></thead>
-        <tbody>
-          <tr>
-            <td><span class="novel-name">Quartetas del Destino</span></td>
-            <td><span class="tbl-badge status-ongoing">En curso</span></td>
-            <td>16</td><td>2.4K</td><td>847</td>
-            <td>⭐ 4.9</td>
-            <td><button class="tbl-edit" onclick="showPanel('chapters')">Editar</button></td>
-          </tr>
+        <thead><tr><th>Novela</th><th>Estado</th><th>Capítulos</th><th>Acción</th></tr></thead>
+        <tbody id="myNovelsList">
+          <tr><td colspan="4" style="text-align:center; padding:2rem;">Cargando tus historias...</td></tr>
         </tbody>
       </table>
     </div>`,
 
   publish: ()=>`
     <h1 class="dash-title">Publicar Nueva Novela</h1>
-    <p class="dash-sub">Comparte tu historia con la comunidad de ARCANA.</p>
     <div class="publish-form">
       <div class="form-section-title">Información básica</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Título de la novela *</label><input id="pubTitle" class="form-input" type="text" placeholder="El título de tu obra"></div>
-        <div class="form-group"><label class="form-label">Subtítulo / Volumen</label><input id="pubVol" class="form-input" type="text" placeholder="Vol. I — Subtítulo opcional"></div>
+        <div class="form-group"><label class="form-label">Título *</label><input id="pubTitle" class="form-input" type="text" placeholder="El título de tu obra"></div>
+        <div class="form-group"><label class="form-label">Volumen</label><input id="pubVol" class="form-input" type="text" placeholder="Vol. I"></div>
       </div>
-      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea id="pubDesc" class="form-textarea" placeholder="Describe tu novela en 2-4 párrafos..."></textarea></div>
+      <div class="form-group"><label class="form-label">Sinopsis *</label><textarea id="pubDesc" class="form-textarea" placeholder="Descripción completa..."></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input id="pubShortDesc" class="form-input" type="text" placeholder="Una línea para el catálogo (máx. 100 caracteres)"></div>
+        <div class="form-group"><label class="form-label">Sinopsis corta *</label><input id="pubShortDesc" class="form-input" type="text" placeholder="Una línea para catálogo"></div>
         <div class="form-group"><label class="form-label">Estado</label>
           <select id="pubStatus" class="form-select">
             <option value="en curso">En curso</option>
             <option value="completada">Completada</option>
-            <option value="pausada">Pausada</option>
           </select>
         </div>
       </div>
-      <div class="form-section-title">Géneros y etiquetas</div>
-      <div class="form-group">
-        <label class="form-label">Géneros (selecciona los que apliquen)</label>
-        <div class="genre-checkboxes">
-          ${['Ciencia Ficción','Fantasía','Romance','Thriller','Terror','Acción','Histórico','Isekai','Psicológico','Sobrenatural','Misterio','Aventura'].map(g=>`
-            <input type="checkbox" class="genre-check" id="g_${g}" value="${g}">
-            <label class="genre-check-label" for="g_${g}">${g}</label>`).join('')}
-        </div>
-      </div>
-      <div class="form-group"><label class="form-label">Etiquetas (separadas por coma)</label><input id="pubTags" class="form-input" type="text" placeholder="IA, colombia, himalaya, misterio..."></div>
-      <div class="form-section-title">Portada</div>
+      <div class="form-section-title">Apariencia</div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Ícono de portada (emoji)</label><input id="pubIcon" class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
-        <div class="form-group"><label class="form-label">Color de portada</label>
+        <div class="form-group"><label class="form-label">Emoji Portada</label><input id="pubIcon" class="form-input" type="text" placeholder="🔮" maxlength="4"></div>
+        <div class="form-group"><label class="form-label">Color Fondo</label>
           <select id="pubCoverColor" class="form-select">
-            <option value="cover-1">Púrpura oscuro</option>
-            <option value="cover-2">Azul noche</option>
-            <option value="cover-3">Rojo sangre</option>
-            <option value="cover-4">Verde bosque</option>
-            <option value="cover-5">Dorado antiguo</option>
-            <option value="cover-6">Teal profundo</option>
-            <option value="cover-7">Violeta místico</option>
-            <option value="cover-8">Ámbar crepúsculo</option>
+            <option value="cover-1">Púrpura</option><option value="cover-2">Azul</option><option value="cover-3">Rojo</option>
           </select>
         </div>
       </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="window.submitNovel()">✦ Publicar novela</button>
-      </div>
+      <div class="form-actions"><button class="btn-primary" onclick="window.submitNovel()">✦ Publicar ahora</button></div>
     </div>`,
 
-  chapters: ()=>`
-    <h1 class="dash-title">Añadir Capítulo</h1>
-    <p class="dash-sub">Escribe y publica un nuevo capítulo para tu novela.</p>
-    <div class="publish-form">
-      <div class="form-section-title">Seleccionar novela</div>
-      <div class="form-group"><label class="form-label">Novela</label>
-        <select class="form-select"><option>Quartetas del Destino</option></select>
-      </div>
-      <div class="form-section-title">Información del capítulo</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Número / Etiqueta</label><input class="form-input" type="text" placeholder="Capítulo XVII · o · Epílogo"></div>
-        <div class="form-group"><label class="form-label">Título del capítulo *</label><input class="form-input" type="text" placeholder="El título del capítulo"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Subtítulo / Ubicación</label><input class="form-input" type="text" placeholder="Bogotá · Tres meses después · etc."></div>
-      <div class="form-section-title">Contenido</div>
-      <div class="form-group"><label class="form-label">Texto del capítulo *</label>
-        <textarea class="form-textarea" id="chapterContent" style="min-height:400px;" placeholder="Escribe aquí el contenido de tu capítulo...
-
-Puedes usar texto plano. El formato se aplicará automáticamente.
-La primera letra de la primera palabra del capítulo tendrá drop cap automáticamente.
-
-Consejos:
-• Usa líneas en blanco para separar párrafos
-• Las cursivas y negritas se pueden agregar con *cursiva* y **negrita**
-• Separa escenas con: · · · ·"></textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Estado</label>
-          <select class="form-select"><option>Publicar ahora</option><option>Guardar borrador</option><option>Programar publicación</option></select>
-        </div>
-        <div class="form-group"><label class="form-label">Nota del autor (opcional)</label><input class="form-input" type="text" placeholder="Un mensaje para tus lectores"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="submitChapter()">📝 Publicar capítulo</button>
-        <button class="btn-ghost" onclick="showToast('Borrador guardado')">💾 Guardar borrador</button>
-        <button class="btn-ghost" onclick="previewChapter()">👁 Vista previa</button>
-      </div>
-    </div>`,
-
-  profile: ()=>`
-    <h1 class="dash-title">Mi Perfil</h1>
-    <p class="dash-sub">Personaliza cómo te ven los lectores de ARCANA.</p>
-    <div class="publish-form">
-      <div class="form-section-title">Información pública</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Nombre de autor</label><input class="form-input" type="text" value="Duban L." placeholder="Tu nombre público"></div>
-        <div class="form-group"><label class="form-label">Nombre de usuario</label><input class="form-input" type="text" value="dubanl1997" placeholder="@usuario"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Biografía</label><textarea class="form-textarea" placeholder="Cuéntales a tus lectores sobre ti...">Apasionado por el misterio, la IA y las historias que mezclan ciencia con lo ancestral.</textarea></div>
-      <div class="form-group"><label class="form-label">Ícono de perfil (emoji)</label><input class="form-input" type="text" value="🔮" maxlength="4"></div>
-      <div class="form-section-title">Cuenta</div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="tu@correo.com"></div>
-        <div class="form-group"><label class="form-label">Nueva contraseña</label><input class="form-input" type="password" placeholder="Dejar vacío para no cambiar"></div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="showToast('✦ Perfil actualizado')">Guardar cambios</button>
-      </div>
-    </div>`,
-
-  analytics: ()=>`
-    <h1 class="dash-title">Estadísticas</h1>
-    <p class="dash-sub">Así va el rendimiento de tus novelas en ARCANA.</p>
-    <div class="stats-row">
-      <div class="stat-card"><span class="stat-card-n">2.4K</span><span class="stat-card-l">Lecturas totales</span><div class="stat-card-trend">↑ +120 esta semana</div></div>
-      <div class="stat-card"><span class="stat-card-n">847</span><span class="stat-card-l">Favoritos</span><div class="stat-card-trend">↑ +34 esta semana</div></div>
-      <div class="stat-card"><span class="stat-card-n">4.9</span><span class="stat-card-l">Valoración media</span><div class="stat-card-trend">★★★★★</div></div>
-      <div class="stat-card"><span class="stat-card-n">156</span><span class="stat-card-l">Comentarios</span><div class="stat-card-trend">↑ +12 esta semana</div></div>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-top:1rem;">
-      <h3 style="font-family:var(--display);font-size:0.88rem;color:var(--text);letter-spacing:0.06em;margin-bottom:1.2rem;">Lecturas por capítulo</h3>
-      ${Array.from({length:16},(_,i)=>{
-        const reads = Math.floor(2400 - i*60 + Math.random()*100);
-        const pct = (reads/2400*100).toFixed(0);
-        return `<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;">
-          <span style="font-family:var(--mono);font-size:0.65rem;color:var(--text3);min-width:60px;">Cap. ${i===0?'Pról.':i}</span>
-          <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;">
-            <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--purple2),var(--purple));border-radius:3px;"></div>
-          </div>
-          <span style="font-size:0.68rem;color:var(--text2);min-width:40px;text-align:right;">${reads}</span>
-        </div>`;
-      }).join('')}
-    </div>`
+  chapters: ()=>`<h1>Próximamente</h1><p>El sistema de capítulos se habilitará en el siguiente paso.</p>`
 };
 
 let activePanel = 'overview';
@@ -300,26 +177,18 @@ function showPanel(panel){
     btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(panel));
   });
   document.getElementById('dashContent').innerHTML = PANELS[panel]?.() || PANELS.overview();
-}
-function submitChapter(){
-  const content = document.getElementById('chapterContent')?.value?.trim();
-  if(!content){showToast('Escribe el contenido del capítulo');return;}
-  showToast('✦ Capítulo publicado correctamente');
-}
-function previewChapter(){
-  showToast('Vista previa próximamente');
+  // Disparar carga de datos si existe la función global
+  if((panel==='novels' || panel==='overview') && window.loadMyNovels) window.loadMyNovels();
 }
 
 showPanel('overview');
 </script>
 
 <script type="module">
-  // 1. Importamos las herramientas de Firebase
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
   import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+  import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-  // 2. Tu configuración de ARCANA
   const firebaseConfig = {
     apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
     authDomain: "arcana-553dd.firebaseapp.com",
@@ -329,81 +198,73 @@ showPanel('overview');
     appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
   };
 
-  // Inicializamos Firebase y Firestore
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Mantenemos al usuario actual en memoria
   onAuthStateChanged(auth, user => {
     window._currentUser = user;
+    if(user) window.loadMyNovels();
   });
 
-  // 3. La función mágica que guarda la novela
-  window.submitNovel = async function() {
-    // Verificamos que el usuario esté logueado
-    if (!window._currentUser) {
-      showToast('Debes iniciar sesión para publicar', 'error');
-      openAuth('login');
-      return;
-    }
+  // CARGAR NOVELAS REALES
+  window.loadMyNovels = async function() {
+    const tableBody = document.getElementById('myNovelsList');
+    if (!tableBody || !window._currentUser) return;
 
-    // Capturamos lo que el usuario escribió
+    try {
+      const q = query(collection(db, "novels"), where("authorId", "==", window._currentUser.uid));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:2rem;">Aún no has publicado nada.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      querySnapshot.forEach((doc) => {
+        const n = doc.data();
+        html += `<tr>
+          <td><span class="novel-name">${n.title}</span></td>
+          <td><span class="tbl-badge status-ongoing">${n.status}</span></td>
+          <td>${n.chapters || 0}</td>
+          <td><button class="tbl-edit" onclick="showToast('Edición próximamente')">Editar</button></td>
+        </tr>`;
+      });
+      tableBody.innerHTML = html;
+    } catch (e) { tableBody.innerHTML = `<tr><td colspan="4">Error al conectar con la base de datos.</td></tr>`; }
+  };
+
+  // PUBLICAR NOVELA
+  window.submitNovel = async function() {
+    if (!window._currentUser) { showToast('Inicia sesión en la página principal primero', 'error'); return; }
+
     const title = document.getElementById('pubTitle').value.trim();
     const desc = document.getElementById('pubDesc').value.trim();
-    const shortDesc = document.getElementById('pubShortDesc').value.trim();
     
-    // Validamos campos obligatorios
-    if (!title || !desc || !shortDesc) {
-      showToast('Por favor llena los campos obligatorios (*)');
-      return;
-    }
+    if (!title || !desc) { showToast('Llena los campos obligatorios'); return; }
 
-    // Capturamos los géneros seleccionados (checkboxes)
-    const genreElements = document.querySelectorAll('.genre-check:checked');
-    const genres = Array.from(genreElements).map(el => el.value);
-
-    // Capturamos las etiquetas y las convertimos en un arreglo
-    const tagsRaw = document.getElementById('pubTags').value;
-    const tags = tagsRaw.split(',').map(tag => tag.trim()).filter(tag => tag !== "");
-
-    // Preparamos el paquete de datos exacto que irá a la base de datos
     const novelData = {
-      title: title,
+      title,
+      desc,
       volSubtitle: document.getElementById('pubVol').value.trim(),
-      desc: desc,
-      descShort: shortDesc,
+      descShort: document.getElementById('pubShortDesc').value.trim() || title,
       status: document.getElementById('pubStatus').value,
       icon: document.getElementById('pubIcon').value || '🔮',
       cover: document.getElementById('pubCoverColor').value,
-      genres: genres,
-      tags: tags,
-      
-      // Datos automáticos y estadísticas iniciales
-      author: window._currentUser.displayName || 'Autor Anónimo',
+      author: window._currentUser.displayName || 'Autor ARCANA',
       authorId: window._currentUser.uid, 
       chapters: 0,
-      viewsNum: 0,
-      rating: 0,
-      favorites: 0,
-      wordCount: '0 palabras',
       createdAt: serverTimestamp(),
-      lastUpdate: serverTimestamp()
+      genres: ['General'], tags: []
     };
 
     try {
-      showToast('Publicando novela...', 'info');
-      // ¡Enviamos a Firestore a la colección "novels"!
-      const docRef = await addDoc(collection(db, 'novels'), novelData);
-      
+      showToast('Publicando...', 'info');
+      await addDoc(collection(db, 'novels'), novelData);
       showToast(`✦ "${title}" publicada exitosamente`);
-      
-      // Limpiamos el formulario y volvemos a la vista de "Mis novelas"
       showPanel('novels');
-    } catch (error) {
-      console.error("Error al publicar: ", error);
-      showToast('Hubo un error al publicar tu novela');
-    }
+    } catch (error) { showToast('Error al publicar'); }
   };
 </script>
 </body>
