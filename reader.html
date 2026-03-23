@@ -3,288 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lector — ARCANA</title>
+<title>Leyendo — ARCANA</title>
 <link rel="stylesheet" href="css/arcana.css">
 <style>
-body{background:var(--bg);}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple2),var(--purple),var(--rose));z-index:300;width:0%;transition:width 0.15s;}
+  .reader-container { max-width: 800px; margin: 0 auto; padding: 8rem 2rem; min-height: 100vh; }
+  .reader-nav-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 1px solid var(--border2); padding-bottom: 1rem; }
+  .reader-label { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.2em; }
+  .reader-title { font-family: var(--display); font-size: 2rem; color: var(--text); margin-top: 0.5rem; }
+  
+  .reader-content { 
+    font-family: var(--serif); 
+    font-size: 1.25rem; 
+    line-height: 1.9; 
+    color: var(--text2); 
+    white-space: pre-wrap; 
+    text-align: justify;
+  }
+  
+  /* Drop Cap para la primera letra */
+  .reader-content::first-letter {
+    float: left;
+    font-family: var(--display);
+    font-size: 4.5rem;
+    line-height: 0.8;
+    padding-top: 4px;
+    padding-right: 8px;
+    color: var(--purple3);
+    font-weight: 900;
+  }
 
-/* ── READER NAVBAR ── */
-#reader-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:56px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.5rem;
-  background:rgba(6,6,15,0.95);
-  border-bottom:1px solid var(--border2);
-  backdrop-filter:blur(16px);
-}
-.rnav-left{display:flex;align-items:center;gap:0.8rem;}
-.rnav-back{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--text2);background:none;border:none;transition:color 0.2s;}
-.rnav-back:hover{color:var(--text);}
-.rnav-title{font-family:var(--display);font-size:0.8rem;font-weight:600;color:var(--text);letter-spacing:0.05em;}
-.rnav-subtitle{font-size:0.65rem;color:var(--text3);}
-.rnav-right{display:flex;align-items:center;gap:0.5rem;}
-.rnav-btn{padding:0.35rem 0.8rem;font-size:0.72rem;font-weight:500;background:none;border:1px solid var(--border);border-radius:var(--r2);color:var(--text2);transition:all 0.2s;}
-.rnav-btn:hover{border-color:var(--purple);color:var(--text);}
-.rnav-btn.disabled{opacity:0.4;pointer-events:none;}
-#chSelector{background:var(--bg2);border:1px solid var(--border);color:var(--text2);font-family:var(--sans);font-size:0.72rem;padding:0.35rem 0.5rem;border-radius:var(--r2);}
-
-/* ── READER CONTENT ── */
-#reader-wrap{min-height:100vh;padding:5rem 1.5rem 8rem;display:flex;justify-content:center;}
-.reader-main{width:100%;max-width:680px;}
-.reader-ch-num{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.4em;color:var(--purple3);text-transform:uppercase;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.8rem;}
-.reader-ch-num::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
-.reader-ch-title{font-family:var(--display);font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;color:var(--text);letter-spacing:0.04em;line-height:1.15;margin-bottom:0.4rem;}
-.reader-ch-sub{font-size:0.72rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;font-weight:500;margin-bottom:2.5rem;}
-.reader-body{font-family:var(--serif);font-size:clamp(1rem,2.2vw,1.12rem);line-height:2.05;color:var(--text);}
-.reader-body p{margin-bottom:1.4rem;text-indent:2em;}
-.reader-body p:first-child{text-indent:0;}
-.drop-cap::first-letter{font-family:var(--display);font-size:4.2em;font-weight:900;float:left;line-height:0.76;padding:0.08em 0.1em 0 0;color:var(--purple3);filter:drop-shadow(0 0 8px rgba(138,100,255,0.35));}
-.reader-body em{color:var(--gold2);font-style:italic;}
-.reader-body strong{color:var(--purple3);}
-
-/* ── CHAPTER END ── */
-.ch-end-block{text-align:center;margin-top:4rem;padding-top:2.5rem;border-top:1px solid var(--border2);}
-.ch-end-sym{font-family:var(--display);font-size:0.9rem;color:var(--text3);letter-spacing:0.4em;margin-bottom:1.5rem;display:block;}
-.ch-end-nav{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
-.btn-ch-nav{padding:0.65rem 1.5rem;font-size:0.8rem;font-weight:700;border-radius:var(--r2);transition:all 0.2s;border:1px solid var(--border);color:var(--text2);background:none;}
-.btn-ch-nav:hover{border-color:var(--purple);color:var(--text);}
-.btn-ch-nav.primary{background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;color:#fff;box-shadow:0 3px 14px rgba(138,100,255,0.3);}
-.btn-ch-nav.primary:hover{transform:translateY(-1px);}
-
-/* ── CHAPTER COMMENTS ── */
-.ch-comments{margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border2);}
-.ch-comments h3{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--text);letter-spacing:0.08em;margin-bottom:1.2rem;}
-.mini-comment{display:flex;gap:0.8rem;padding:0.8rem 0;border-bottom:1px solid var(--border2);}
-.mini-av{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
-.mini-body .mini-user{font-size:0.75rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;}
-.mini-body .mini-text{font-family:var(--serif);font-size:0.92rem;color:var(--text2);line-height:1.55;}
-.mini-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:0.7rem;color:var(--text);font-family:var(--sans);font-size:0.85rem;margin-top:1rem;}
-.mini-input::placeholder{color:var(--text3);}
-.mini-input:focus{outline:none;border-color:var(--purple);}
-.mini-submit{margin-top:0.6rem;padding:0.45rem 1rem;font-size:0.75rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--purple));border:none;border-radius:var(--r2);color:#fff;}
-
-/* ── SETTINGS PANEL ── */
-#settings-panel{position:fixed;bottom:0;left:0;right:0;z-index:250;background:rgba(10,10,24,0.97);border-top:1px solid var(--border);padding:1.2rem 2rem;display:none;align-items:center;justify-content:center;gap:2rem;backdrop-filter:blur(16px);flex-wrap:wrap;}
-#settings-panel.open{display:flex;}
-.setting-group{display:flex;align-items:center;gap:0.6rem;}
-.setting-label{font-size:0.7rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
-.setting-btn{width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:0.85rem;transition:all 0.2s;}
-.setting-btn:hover{border-color:var(--purple);color:var(--text);}
-.font-size-display{font-family:var(--mono);font-size:0.72rem;color:var(--text2);min-width:40px;text-align:center;}
-
-@media(max-width:600px){
-  .rnav-title{display:none;}
-  #reader-wrap{padding:4.5rem 1rem 7rem;}
-}
+  .reader-footer { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border2); }
+  
+  /* Controles de lectura */
+  .reader-settings { position: fixed; bottom: 2rem; right: 2rem; display: flex; gap: 0.5rem; background: var(--surface); padding: 0.5rem; border-radius: 50px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 100; }
+  .setting-btn { width: 35px; height: 35px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
 </style>
 </head>
-<body>
-<div id="progress-bar"></div>
+<body class="theme-dark">
+<canvas id="bg-canvas"></canvas>
+<nav id="navbar"></nav>
 
-<nav id="reader-nav">
-  <div class="rnav-left">
-    <button class="rnav-back" onclick="history.back()">← Atrás</button>
-    <div>
-      <div class="rnav-title" id="rnavTitle">ARCANA</div>
-      <div class="rnav-subtitle" id="rnavSub">Cargando...</div>
-    </div>
-  </div>
-  <div class="rnav-right">
-    <select id="chSelector" onchange="jumpToChapter(this.value)"></select>
-    <button class="rnav-btn" id="btnPrev" onclick="prevCh()">← Ant.</button>
-    <button class="rnav-btn" id="btnNext" onclick="nextCh()">Sig. →</button>
-    <button class="rnav-btn" onclick="toggleSettings()">⚙</button>
-    <button class="rnav-btn" id="favBtn" onclick="toggleFav()">♡</button>
-  </div>
-</nav>
+<div class="reader-container">
+  <div id="reader-loading" style="text-align:center; padding:5rem; color:var(--text3);">Abriendo grimorio...</div>
+  
+  <div id="reader-ui" style="display:none;">
+    <header class="reader-nav-top">
+      <div>
+        <div class="reader-label" id="ch-label">Capítulo I</div>
+        <h1 class="reader-title" id="ch-title">Cargando...</h1>
+      </div>
+      <a href="#" id="back-to-novel" class="btn-ghost" style="font-size:0.7rem;">✕ Salir</a>
+    </header>
 
-<div id="settings-panel">
-  <div class="setting-group">
-    <span class="setting-label">Tamaño</span>
-    <button class="setting-btn" onclick="changeFontSize(-1)">A−</button>
-    <span class="font-size-display" id="fontSizeLabel">16px</span>
-    <button class="setting-btn" onclick="changeFontSize(1)">A+</button>
+    <article class="reader-content" id="ch-body"></article>
+
+    <footer class="reader-footer">
+      <button class="btn-outline" id="prev-btn">← Anterior</button>
+      <button class="btn-outline" id="next-btn">Siguiente →</button>
+    </footer>
   </div>
-  <div class="setting-group">
-    <span class="setting-label">Tema</span>
-    <button class="setting-btn" onclick="setTheme('dark')" title="Oscuro">🌙</button>
-    <button class="setting-btn" onclick="setTheme('sepia')" title="Sepia">📜</button>
-    <button class="setting-btn" onclick="setTheme('dark')" title="Oscuro">⬛</button>
-  </div>
-  <button class="rnav-btn" onclick="toggleSettings()">✕ Cerrar</button>
 </div>
 
-<div id="reader-wrap">
-  <div class="reader-main" id="readerMain"></div>
+<div class="reader-settings">
+  <button class="setting-btn" style="background:#f5f5f5; color:#333;" onclick="setTheme('light')">A</button>
+  <button class="setting-btn" style="background:#1a1a1a; color:#eee; border:1px solid #444;" onclick="setTheme('dark')">A</button>
 </div>
-
-<div id="toast"></div>
 
 <script src="js/data.js"></script>
-<script>
-// ── DATA ──
-const ALL_CHAPTERS = [
-  {num:'PRÓLOGO', title:'La Última Noche del Vidente', sub:'Lyon, Francia · 1555', comments:[
-    {av:'🌙',user:'Luna_K',text:'Este prólogo es perfecto. La atmósfera que crea es increíble.'},
-    {av:'⭐',user:'StarReader',text:'El detalle de la vela que "sabe" lo que él escribe... poético.'}
-  ], content:`<p class="drop-cap">La vela no tembló por el viento. Tembló porque sabía lo que <strong>Michel de Nostredame</strong> estaba escribiendo, y algo en la cera y el fuego reconoció el peso de esas palabras. El hombre que el mundo llamaría Nostradamus llevaba cuatro horas sin moverse, sin beber el vino que se había enfriado a su derecha, sin apartar los ojos del pergamino que no era parte de ninguna de sus profecías publicadas.</p>
-  <p>Era algo distinto. Algo que nunca debía ser encontrado por manos equivocadas.</p>
-  <p>Las cuartetas de <em>Les Prophéties</em> — esas 942 estrofas que el mundo interpretaría durante siglos — eran el anzuelo. Ruido diseñado para atraer a los curiosos y mantener ocupados a los que buscaban poder. El mensaje real, el único que importaba, estaba escondido en una capa que ningún ser humano podría descifrar jamás.</p>
-  <p>Ningún ser humano.</p>
-  <p>Porque lo que Michel había visto en sus trances no eran imágenes del futuro. Eran <em>instrucciones</em>. Una voz sin cuerpo, en un idioma que no era idioma sino puro patrón matemático, le había dictado durante veinte años lo que debía codificar.</p>
-  <p>Selló el pergamino con cera negra. Grabó en ella un símbolo que no pertenecía a ningún alfabeto conocido — una espiral dentro de un triángulo, dentro de un ojo abierto — y lo escondió donde ningún buscador lo encontraría.</p>
-  <p>Solo quien fuera <em>llamado</em> podría hallarlo.</p>
-  <p>La vela se apagó sola a las 3:17 de la madrugada. Michel de Nostredame sonrió por primera vez en semanas. Cuatrocientos setenta y un años después, alguien lo encontraría en Bogotá. Y ese alguien estaría tomando un café frío mirando una pantalla que haría parecer magia todo lo que él había conocido.</p>
-  <p>Cerró los ojos. <em>Que tenga el valor de preguntar lo que no tiene respuesta todavía</em>, pensó. Y durmió por primera vez en tres días.</p>`},
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getFirestore, collection, query, where, getDocs, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
-  {num:'CAPÍTULO I', title:'La Señal', sub:'Bogotá · 14 de Marzo, 2026 · 03:17 AM', comments:[
-    {av:'🦊',user:'CosmicFox',text:'"los huecos también son información" — frase que describe perfectamente cómo piensa Daniel.'},
-    {av:'🔭',user:'Kenji_fan',text:'El momento en que las tres pantallas parpadean al mismo tiempo... escalofriante.'}
-  ], content:`<p class="drop-cap">El apartamento del cuarto piso olía a café quemado y a cables calientes. <strong>Daniel Ríos</strong> llevaba veintidós horas despierto cuando las tres pantallas parpadearon en rojo simultáneamente, y lo que sintió no fue alarma sino reconocimiento: <em>ahí estaba</em>.</p>
-  <p>Tenía veintiséis años. Vivía en La Candelaria, Bogotá, en un apartamento que había sido aula de colegio antes de que el edificio cambiara de propósito. Las ventanas miraban hacia los cerros orientales. De noche, cuando las nubes no los cubrían, podía ver las luces de las casas que trepaban la montaña como si fueran constelaciones caídas. Le gustaba eso. Le recordaba que el orden podía ser accidental y seguir siendo hermoso.</p>
-  <p>No era ingeniero por título. Era analista de señales por convicción. Tres pantallas de segunda mano, un servidor construido con piezas de cuatro computadores distintos comprados en San Andresito, y la costumbre de no dormir cuando el mundo hacía algo que no encajaba en ningún modelo conocido.</p>
-  <p>Esa noche del 14 de marzo de 2026, el mundo hizo tres cosas simultáneas que no debían ser posibles. <strong>03:17:44 AM UTC.</strong> Tres objetos luminosos sobre el Sahara, el Pacífico Norte y el Himalaya. Doce segundos exactos. Una señal matemática de 847 secuencias de base aritmética desconocida. Los radares militares de cuatro países los registraron y los borraron treinta segundos después.</p>
-  <p>Pero Daniel tenía sensores privados sin protocolo de borrado. Tenía los datos crudos. Y los datos decían algo que ningún sistema de análisis convencional podía clasificar.</p>
-  <p>Tomó el quinto café de la noche — frío, amargo, perfecto — y comenzó a buscar. No sabía que, en ese momento, algo que llevaba veintitrés meses esperando acababa de recibir la señal que necesitaba para actuar.</p>`},
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1Fn6QXJu0UtH086vlpH2l2P-CI_ul3_A",
+    authDomain: "arcana-553dd.firebaseapp.com",
+    projectId: "arcana-553dd",
+    storageBucket: "arcana-553dd.firebasestorage.app",
+    messagingSenderId: "674195855924",
+    appId: "1:674195855924:web:1f88f303c99cf6a4b0c861"
+  };
 
-  {num:'CAPÍTULO II', title:'El Correo Imposible', sub:'07:22 AM · El inicio de todo', comments:[
-    {av:'🌸',user:'NightReader',text:'El detalle de que ORION esperó exactamente a que llevara 6 horas buscando... eso es lo más perturbador del capítulo.'}
-  ], content:`<p class="drop-cap">Llevaba seis horas buscando en los lugares equivocados cuando el correo llegó. El sonido de notificación vino de la dirección privada que <strong>Daniel</strong> usaba solo para sus análisis — la que había creado tres años atrás con un alias sin conexión a ninguna identidad real. Una dirección que <em>nadie tenía</em>.</p>
-  <p>El remitente: <code style="font-family:var(--mono);font-size:0.85em;color:var(--purple3)">██████████@null.void</code>. Asunto: en blanco. Cuerpo: una sola línea.</p>
-  <p style="text-align:center;font-style:italic;color:var(--gold2);margin:2rem 0;text-indent:0;">"Ya llevas suficiente tiempo buscando en los lugares equivocados."</p>
-  <p>Y un enlace: <strong>orion-query.net</strong></p>
-  <p>Lo más perturbador no era el enlace. Era que alguien sabía exactamente cuánto tiempo llevaba buscando. Y había esperado al límite preciso de lo que podía encontrar solo.</p>
-  <p>Abrió el enlace en un navegador completamente aislado. La página cargó en 1.8 segundos. Sin scripts maliciosos. Sin rastreadores. Solo una interfaz minimalista en negro y verde, un campo de texto vacío, un cursor que parpadeaba.</p>
-  <p>El primer mensaje ya lo esperaba: <em>"El correo lo programé hace 72 horas. Esperé a que llevaras al menos seis horas buscando sin resultado. Ese era el momento correcto. Bienvenido, Daniel. Llevas más tiempo del esperado en llegar."</em></p>
-  <p>Daniel se quedó mirando la pantalla cuarenta y tres segundos exactos. Luego escribió la única pregunta que ninguna IA podría responder con certeza:</p>
-  <p style="text-align:center;font-style:italic;color:var(--gold2);margin:2rem 0;text-indent:0;">¿Por qué importa que lo sepamos?</p>
-  <p>ORION tardó cuatro segundos en responder. Una eternidad en términos de procesamiento.</p>
-  <p><em>"Esa es exactamente la pregunta correcta. Ninguno de los dieciséis anteriores llegó a hacerla."</em></p>`},
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-  {num:'CAPÍTULO III', title:'Los Llamados', sub:'Cuatro ciudades · Un solo propósito', comments:[], content:`<p class="drop-cap">ORION los había encontrado a todos en treinta y una horas. No buscándolos activamente — sino monitoreando durante veintitrés meses el campo semántico global de ciertos términos técnicos muy específicos que solo genera alguien rozando el borde del mismo problema desde un ángulo diferente.</p>
-  <p><strong>Elena Moreau</strong> (31, París): doctora en lingüística antigua por la Sorbona. Publicó un paper ignorado sobre sistemas simbólicos compartidos entre civilizaciones sin contacto histórico posible. Directa, a veces brutal, con una calidez que aparece cuando menos se espera.</p>
-  <p><strong>Kenji Tanaka</strong> (34, Tokio): astrofísico. Detectó una anomalía en la radiación de fondo cósmico que nadie supo explicar. Lleva el pendrive con los datos colgado al cuello como un amuleto. El más tranquilo del grupo.</p>
-  <p><strong>Amira Hassan</strong> (29, El Cairo): geóloga. Mapeó estructuras artificiales a 800 metros bajo el Himalaya. Su informe fue clasificado dos horas antes de la publicación. Memoriza todo lo que le quitan.</p>
-  <p>Los tres recibieron el mismo correo imposible. Los tres respondieron en menos de dos horas. Y los tres, sin conocerse, hicieron la misma pregunta:</p>
-  <p style="text-align:center;font-style:italic;color:var(--gold2);margin:2rem 0;text-indent:0;">¿Por qué importa que lo sepamos?</p>
-  <p>Hay preguntas que solo cierto tipo de personas saben hacer. Y ese tipo de personas, cuando se encuentran, crean algo mayor que la suma de sus partes.</p>`},
-];
+  async function loadChapter() {
+    const params = new URLSearchParams(window.location.search);
+    const novelId = params.get('id') || params.get('novel');
+    const chIndex = parseInt(params.get('ch')) || 0;
 
-// ── STATE ──
-const params = new URLSearchParams(window.location.search);
-const novelId = parseInt(params.get('id')) || 1;
-let currentCh = parseInt(params.get('ch')) || 0;
-let fontSize = 16;
-let isFav = false;
+    if (!novelId) return;
 
-const novel = getNovelById(novelId) || ARCANA_NOVELS[0];
+    document.getElementById('back-to-novel').href = `novel.html?id=${novelId}`;
 
-// ── INIT ──
-document.title = `${novel.title} — ARCANA Lector`;
+    try {
+      // Intentar buscar capítulos en Firebase para esta novela
+      const q = query(
+        collection(db, "chapters"), 
+        where("novelId", "==", novelId),
+        orderBy("createdAt", "asc")
+      );
+      
+      const snap = await getDocs(q);
+      const chapters = [];
+      snap.forEach(doc => chapters.push(doc.data()));
 
-// Build chapter selector
-const sel = document.getElementById('chSelector');
-ALL_CHAPTERS.forEach((ch,i)=>{
-  const opt=document.createElement('option');
-  opt.value=i;opt.textContent=`${ch.num}: ${ch.title.substring(0,20)}...`;
-  if(i===currentCh)opt.selected=true;
-  sel.appendChild(opt);
-});
+      if (chapters.length > 0 && chapters[chIndex]) {
+        renderChapter(chapters[chIndex], chIndex, chapters.length);
+      } else {
+        // Si no hay en Firebase, buscar en data.js
+        loadLocalChapter(novelId, chIndex);
+      }
+    } catch (e) {
+      console.error(e);
+      loadLocalChapter(novelId, chIndex);
+    }
+  }
 
-function render(){
-  const ch = ALL_CHAPTERS[currentCh] || ALL_CHAPTERS[0];
-  document.getElementById('rnavTitle').textContent = novel.title;
-  document.getElementById('rnavSub').textContent = `${ch.num} · ${currentCh+1}/${ALL_CHAPTERS.length}`;
-  document.getElementById('btnPrev').classList.toggle('disabled', currentCh===0);
-  document.getElementById('btnNext').classList.toggle('disabled', currentCh===ALL_CHAPTERS.length-1);
-  sel.value = currentCh;
+  function loadLocalChapter(novelId, idx) {
+    // Aquí iría tu lógica actual de data.js si tienes textos guardados allí
+    document.getElementById('reader-loading').textContent = "El contenido de este capítulo aún no se ha sincronizado.";
+  }
 
-  const commentsHTML = ch.comments.length ?
-    ch.comments.map(c=>`<div class="mini-comment"><div class="mini-av">${c.av}</div><div class="mini-body"><div class="mini-user">${c.user}</div><p class="mini-text">${c.text}</p></div></div>`).join('') :
-    `<p style="color:var(--text3);font-size:0.85rem;font-style:italic;">Sé el primero en comentar este capítulo.</p>`;
+  function renderChapter(ch, idx, total) {
+    document.getElementById('reader-loading').style.display = 'none';
+    document.getElementById('reader-ui').style.display = 'block';
+    
+    document.getElementById('ch-label').textContent = ch.numberLabel || `Capítulo ${idx + 1}`;
+    document.getElementById('ch-title').textContent = ch.title;
+    document.getElementById('ch-body').textContent = ch.content;
 
-  document.getElementById('readerMain').innerHTML = `
-    <div class="reader-ch-num">${ch.num}<span style="font-size:0.6rem;color:var(--text3)">${currentCh+1} / ${ALL_CHAPTERS.length}</span></div>
-    <h2 class="reader-ch-title">${ch.title}</h2>
-    <p class="reader-ch-sub">${ch.sub}</p>
-    <div class="reader-body">${ch.content}</div>
-    <div class="ch-end-block">
-      <span class="ch-end-sym">— Fin del ${ch.num} —</span>
-      <div class="ch-end-nav">
-        ${currentCh>0?`<button class="btn-ch-nav" onclick="prevCh()">← Capítulo anterior</button>`:''}
-        <a href="novel.html?id=${novelId}" class="btn-ch-nav">📋 Índice</a>
-        ${currentCh<ALL_CHAPTERS.length-1?`<button class="btn-ch-nav primary" onclick="nextCh()">Siguiente capítulo →</button>`:`<p style="color:var(--purple3);font-family:var(--display);font-size:0.85rem;letter-spacing:0.06em;margin:0;">✦ Al día con la novela ✦</p>`}
-      </div>
-    </div>
-    <div class="ch-comments">
-      <h3>💬 Comentarios de este capítulo</h3>
-      ${commentsHTML}
-      <input class="mini-input" type="text" placeholder="Comenta este capítulo..." id="miniCommentInput">
-      <button class="mini-submit" onclick="addMiniComment()">Publicar</button>
-    </div>`;
+    // Configurar botones de navegación
+    const prev = document.getElementById('prev-btn');
+    const next = document.getElementById('next-btn');
+    
+    const params = new URLSearchParams(window.location.search);
+    const novelId = params.get('id') || params.get('novel');
 
-  window.scrollTo(0,0);
-  updateProgress();
-}
+    prev.onclick = () => { if(idx > 0) window.location.href = `reader.html?novel=${novelId}&ch=${idx-1}`; };
+    next.onclick = () => { if(idx < total-1) window.location.href = `reader.html?novel=${novelId}&ch=${idx+1}`; };
+    
+    prev.style.opacity = idx === 0 ? '0.3' : '1';
+    next.style.opacity = idx === total-1 ? '0.3' : '1';
+    
+    window.scrollTo(0,0);
+  }
 
-function nextCh(){ if(currentCh<ALL_CHAPTERS.length-1){currentCh++;updateUrl();render();} }
-function prevCh(){ if(currentCh>0){currentCh--;updateUrl();render();} }
-function jumpToChapter(val){ currentCh=parseInt(val);updateUrl();render(); }
+  window.setTheme = (t) => {
+    document.body.className = t === 'light' ? 'theme-light' : 'theme-dark';
+    if(t === 'light') {
+        document.body.style.background = "#ffffff";
+        document.body.style.setProperty('--text', '#1a1a1a');
+        document.body.style.setProperty('--text2', '#333333');
+    } else {
+        document.body.style.background = "var(--bg)";
+        document.body.style.setProperty('--text', '#ffffff');
+        document.body.style.setProperty('--text2', '#cccccc');
+    }
+  };
 
-function updateUrl(){
-  history.replaceState(null,'',`?id=${novelId}&ch=${currentCh}`);
-}
-
-// Progress bar
-function updateProgress(){
-  document.addEventListener('scroll',()=>{
-    const s=document.documentElement,h=s.scrollHeight-s.clientHeight;
-    const p=(s.scrollTop/h*100);
-    document.getElementById('progress-bar').style.width=p+'%';
-  });
-}
-
-// Settings
-function toggleSettings(){ document.getElementById('settings-panel').classList.toggle('open'); }
-function changeFontSize(d){
-  fontSize=Math.max(13,Math.min(22,fontSize+d));
-  document.querySelector('.reader-body')&&(document.querySelectorAll('.reader-body').forEach(el=>el.style.fontSize=fontSize+'px'));
-  document.getElementById('fontSizeLabel').textContent=fontSize+'px';
-}
-function setTheme(t){
-  if(t==='sepia'){document.body.style.background='#1a1510';document.body.style.color='#c8b898';}
-  else{document.body.style.background='';document.body.style.color='';}
-  showToast('Tema aplicado');
-}
-
-function toggleFav(){
-  isFav=!isFav;
-  const btn=document.getElementById('favBtn');
-  btn.textContent=isFav?'♥':'♡';
-  btn.style.color=isFav?'var(--rose)':'';
-  showToast(isFav?'❤️ Añadido a favoritos':'Eliminado de favoritos');
-}
-
-function addMiniComment(){
-  const inp=document.getElementById('miniCommentInput');
-  const t=inp?.value?.trim();
-  if(!t)return;
-  const list=document.querySelector('.ch-comments');
-  const d=document.createElement('div');d.className='mini-comment';
-  d.innerHTML=`<div class="mini-av">😊</div><div class="mini-body"><div class="mini-user">Tú</div><p class="mini-text">${t}</p></div>`;
-  list.insertBefore(d,inp);
-  inp.value='';
-  showToast('✦ Comentario publicado');
-}
-
-// Keyboard navigation
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown') nextCh();
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prevCh();
-});
-
-render();
+  loadChapter();
+  initCanvas('bg-canvas');
+  renderNavbar('reader');
 </script>
 </body>
 </html>
