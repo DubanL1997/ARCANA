@@ -935,6 +935,8 @@ const googleProvider = new GoogleAuthProvider();
 onAuthStateChanged(auth, user => {
   renderNavUser(user);
   window._currentUser = user;
+  window._navSignOut = () => signOut(auth);
+  window.dispatchEvent(new CustomEvent("arcana:authchange", {detail: user}));
 });
 
 // ── RENDER NAV USER ──

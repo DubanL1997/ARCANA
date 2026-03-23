@@ -191,3 +191,51 @@ img{display:block;max-width:100%;}
   .footer-top{grid-template-columns:1fr;}
   #navbar{padding:0 1rem;}
 }
+
+/* ── USER DROPDOWN GLOBAL (todas las páginas) ── */
+.nav-user-btn {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.4rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; cursor: pointer; transition: border-color 0.2s;
+}
+.nav-user-btn:hover { border-color: var(--purple); }
+.nav-avatar-sm {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple2), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff;
+  overflow: hidden; flex-shrink: 0;
+}
+.nav-avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
+.nav-username-sm {
+  font-size: 0.78rem; font-weight: 600; color: var(--text);
+  max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nav-chevron { font-size: 0.55rem; color: var(--text3); }
+
+/* Dropdown — position:fixed, posicionado por JS */
+.user-dropdown-global {
+  position: fixed;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.4rem;
+  width: 220px; max-width: calc(100vw - 16px);
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  display: none;
+}
+.user-dropdown-global.open { display: block; animation: dropIn 0.18s ease; }
+@keyframes dropIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+.ddi {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.5rem 0.7rem; border-radius: var(--r2);
+  font-size: 0.82rem; color: var(--text2); cursor: pointer;
+  text-decoration: none; transition: background 0.15s, color 0.15s;
+}
+.ddi:hover { background: rgba(138,100,255,0.1); color: var(--text); }
+.ddi.danger:hover { background: rgba(255,96,144,0.1); color: var(--rose); }
+.ddi-divider { height: 1px; background: var(--border2); margin: 0.3rem 0; }
+.ddi-info { padding: 0.6rem 0.7rem 0.4rem; }
+.ddi-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.ddi-email { font-size: 0.68rem; color: var(--text3); margin-top: 0.1rem; }

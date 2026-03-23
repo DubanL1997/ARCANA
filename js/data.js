@@ -870,12 +870,84 @@ function renderNavbar(activePage=''){
       <a href="index.html#genres" class="nav-link">Géneros</a>
       <a href="dashboard.html" class="nav-link ${activePage==='dashboard'?'active':''}">Publicar</a>
     </div>
-    <div class="nav-actions">
+    <div class="nav-actions" id="navActions">
       <button class="btn-ghost" onclick="openAuth('login')">Iniciar sesión</button>
       <button class="btn-primary" onclick="openAuth('register')">Registrarse</button>
     </div>
   `;
+  // Crear dropdown global si no existe
+  if(!document.getElementById('globalUserDropdown')){
+    const dd=document.createElement('div');
+    dd.id='globalUserDropdown';
+    dd.className='user-dropdown-global';
+    document.body.appendChild(dd);
+  }
+  // Si ya hay usuario autenticado en memoria, mostrarlo
+  if(window._currentUser!==undefined) _renderNavUser(window._currentUser);
+  // Escuchar evento de cambio de auth que dispara index.html
+  window.addEventListener('arcana:authchange',e=>_renderNavUser(e.detail),{once:false});
 }
+
+function _renderNavUser(user){
+  const actions=document.getElementById('navActions');
+  if(!actions)return;
+  if(user){
+    const initials=(user.displayName||user.email||'U').charAt(0).toUpperCase();
+    actions.innerHTML=`
+      <div class="nav-user-btn" id="navUserBtn" onclick="toggleNavDropdown()">
+        <div class="nav-avatar-sm">${user.photoURL?`<img src="${user.photoURL}" alt="av">`:`<span>${initials}</span>`}</div>
+        <span class="nav-username-sm">${user.displayName||'Mi cuenta'}</span>
+        <span class="nav-chevron">&#9660;</span>
+      </div>`;
+    const dd=document.getElementById('globalUserDropdown');
+    if(dd) dd.innerHTML=`
+      <div class="ddi-info">
+        <div class="ddi-name">${user.displayName||'Mi cuenta'}</div>
+        <div class="ddi-email">${user.email||''}</div>
+      </div>
+      <div class="ddi-divider"></div>
+      <a href="profile.html" class="ddi">&#128100; Mi perfil</a>
+      <a href="dashboard.html" class="ddi">&#9997;&#65039; Mis novelas</a>
+      <a href="profile.html?tab=favorites" class="ddi">&#10084;&#65039; Favoritos</a>
+      <a href="profile.html?tab=progress" class="ddi">&#128214; Progreso</a>
+      <div class="ddi-divider"></div>
+      <div class="ddi danger" onclick="window._navSignOut&&window._navSignOut()">&#128682; Cerrar sesi\u00f3n</div>`;
+  } else {
+    actions.innerHTML=`
+      <button class="btn-ghost" onclick="openAuth('login')">Iniciar sesi\u00f3n</button>
+      <button class="btn-primary" onclick="openAuth('register')">Registrarse</button>`;
+  }
+}
+
+window.toggleNavDropdown=function(){
+  const dd=document.getElementById('globalUserDropdown');
+  const btn=document.getElementById('navUserBtn');
+  if(!dd||!btn)return;
+  const isOpen=dd.classList.contains('open');
+  dd.classList.toggle('open',!isOpen);
+  if(!isOpen){
+    const rect=btn.getBoundingClientRect();
+    const ddW=220;
+    dd.style.top=(rect.bottom+6)+'px';
+    const rightSpace=window.innerWidth-rect.right;
+    if(rightSpace<ddW){
+      // No cabe a la derecha — alinear por izquierda del botón
+      dd.style.right='auto';
+      dd.style.left=Math.max(8,rect.right-ddW)+'px';
+    } else {
+      dd.style.left='auto';
+      dd.style.right=Math.max(8,window.innerWidth-rect.right)+'px';
+    }
+  }
+};
+
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('globalUserDropdown');
+  if(!dd)return;
+  if(!e.target.closest('#navUserBtn')&&!e.target.closest('#globalUserDropdown')){
+    dd.classList.remove('open');
+  }
+});
 
 /* ── FOOTER RENDER ── */
 function renderFooter(){
